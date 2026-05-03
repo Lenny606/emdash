@@ -1,8 +1,9 @@
 ---
 import { getEmDashEntry, getEntryTerms, getSeoMeta, decodeSlug, getSiteSettings } from "emdash";
 import Image from "../../components/Image.astro";
-import { PortableText, WidgetArea } from "emdash/ui";
+import { PortableText } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
+import Sidebar from "../../components/Sidebar.astro";
 import { resolveStarterSiteIdentity } from "../../utils/site-identity";
 
 const slug = decodeSlug(Astro.params.slug);
@@ -40,7 +41,7 @@ const categories = await getEntryTerms("posts", post.data.id, "category");
 	image={seo.ogImage}
 	content={{ collection: "posts", id: post.data.id, slug }}
 >
-	<div style="display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;">
+	<div class="with-sidebar">
 		<article class="block" style="padding: 0; overflow: hidden;">
 					<div {...post.edit.featured_image} class="image-wrapper" style="border-bottom: var(--border-width) solid var(--border-color);">
 						<Image image={post.data.featured_image} />
@@ -89,17 +90,6 @@ const categories = await getEntryTerms("posts", post.data.id, "category");
 			</div>
 		</article>
 
-		<aside>
-			<div class="block" style="background: var(--accent-1);">
-				<h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">SIDEBAR</h3>
-				<WidgetArea name="sidebar" />
-			</div>
-			
-			<div class="block" style="background: #000; color: #fff; transform: rotate(1deg);">
-				<h3 style="color: var(--accent-2);">STAY UPDATED</h3>
-				<p style="margin-bottom: 1rem;">Join our brutalist newsletter for more raw updates.</p>
-				<button style="width: 100%; background: var(--accent-3); color: #000;">SUBSCRIBE</button>
-			</div>
-		</aside>
+		<Sidebar />
 	</div>
 </Base>

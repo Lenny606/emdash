@@ -399,3 +399,124 @@ button:active {
     grid-template-columns: 1fr;
   }
 }
+
+/* Sidebar Layout & Component */
+.with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 4rem;
+  align-items: start;
+}
+
+.sidebar {
+  width: 100%;
+}
+
+.sidebar-sticky {
+  position: sticky;
+  top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.sidebar-section {
+  background: var(--bg-color);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 6px 6px 0px var(--shadow-color);
+  padding: 1.5rem;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  background: var(--accent-2);
+  padding: 0.4rem 0.8rem;
+  display: inline-block;
+  border: 2px solid var(--border-color);
+  box-shadow: 4px 4px 0px var(--shadow-color);
+  width: fit-content;
+  transform: rotate(-1deg);
+}
+
+.sidebar-promo {
+  background: #000;
+  color: #fff;
+  padding: 2rem;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 8px 8px 0px var(--accent-3);
+  transform: rotate(1deg);
+  transition: transform 0.2s ease;
+}
+
+.sidebar-promo:hover {
+  transform: rotate(0deg);
+}
+
+.promo-title {
+  color: var(--accent-1);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.sidebar-promo p {
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.promo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.promo-form input {
+  background: #fff;
+  border: 2px solid var(--border-color);
+  color: #000;
+  font-weight: 900;
+}
+
+.promo-form button {
+  width: 100%;
+  background: var(--accent-3);
+  color: #000;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.social-links a {
+  background: var(--accent-1);
+  padding: 0.5rem;
+  border: 2px solid var(--border-color);
+  text-align: center;
+  font-size: 0.8rem;
+  box-shadow: 3px 3px 0px var(--shadow-color);
+}
+
+.social-links a:hover {
+  background: var(--bg-color);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--shadow-color);
+}
+
+@media (max-width: 1000px) {
+  .with-sidebar {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .sidebar-sticky {
+    position: static;
+  }
+  
+  .sidebar-promo {
+    transform: none;
+  }
+}

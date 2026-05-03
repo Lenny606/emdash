@@ -2,6 +2,7 @@
 import { getTerm, getEmDashCollection, decodeSlug } from "emdash";
 import Image from "../../components/Image.astro";
 import Base from "../../layouts/Base.astro";
+import Sidebar from "../../components/Sidebar.astro";
 
 const slug = decodeSlug(Astro.params.slug);
 const term = slug ? await getTerm("category", slug) : null;
@@ -17,41 +18,46 @@ const { entries: posts } = await getEmDashCollection("posts", {
 ---
 
 <Base title={`${term.label} posts`} description={`Posts in ${term.label}`}>
-	<div style="margin-bottom: 4rem;">
-		<h1 style="background: var(--accent-1); display: inline-block; padding: 0.5rem 1.5rem; border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color); margin-bottom: 0.5rem;">CATEGORY: {term.label.toUpperCase()}</h1>
-		<div style="font-family: var(--font-mono); font-weight: 900; text-transform: uppercase;">{posts.length} {posts.length === 1 ? "entry" : "entries"} found</div>
-	</div>
-
-	{
-		posts.length === 0 ? (
-			<div class="block">
-				<p>No posts in this category yet.</p>
+	<div class="with-sidebar">
+		<div>
+			<div style="margin-bottom: 4rem;">
+				<h1 style="background: var(--accent-1); display: inline-block; padding: 0.5rem 1.5rem; border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color); margin-bottom: 0.5rem;">CATEGORY: {term.label.toUpperCase()}</h1>
+				<div style="font-family: var(--font-mono); font-weight: 900; text-transform: uppercase;">{posts.length} {posts.length === 1 ? "entry" : "entries"} found</div>
 			</div>
-		) : (
-			<ul class="post-list">
-				{posts.map((post) => (
-					<li class="post-card">
-						<a href={`/posts/${post.id}`} style="display: block; height: 100%;">
-								<div class="image-wrapper">
-									<Image image={post.data.featured_image} />
-								</div>
-							<div class="content">
-								{post.data.publishedAt && (
-									<time datetime={post.data.publishedAt.toISOString()}>
-										{post.data.publishedAt.toLocaleDateString("en-US", {
-											year: "numeric",
-											month: "long",
-											day: "numeric",
-										})}
-									</time>
-								)}
-								<h2>{post.data.title}</h2>
-								{post.data.excerpt && <p style="font-weight: 500;">{post.data.excerpt}</p>}
-							</div>
-						</a>
-					</li>
-				))}
-			</ul>
-		)
-	}
+
+			{
+				posts.length === 0 ? (
+					<div class="block">
+						<p>No posts in this category yet.</p>
+					</div>
+				) : (
+					<ul class="post-list">
+						{posts.map((post) => (
+							<li class="post-card">
+								<a href={`/posts/${post.id}`} style="display: block; height: 100%;">
+										<div class="image-wrapper">
+											<Image image={post.data.featured_image} />
+										</div>
+									<div class="content">
+										{post.data.publishedAt && (
+											<time datetime={post.data.publishedAt.toISOString()}>
+												{post.data.publishedAt.toLocaleDateString("en-US", {
+													year: "numeric",
+													month: "long",
+													day: "numeric",
+												})}
+											</time>
+										)}
+										<h2>{post.data.title}</h2>
+										{post.data.excerpt && <p style="font-weight: 500;">{post.data.excerpt}</p>}
+									</div>
+								</a>
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</div>
+		<Sidebar />
+	</div>
 </Base>
