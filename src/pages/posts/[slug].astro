@@ -39,53 +39,70 @@ const categories = await getEntryTerms("posts", post.data.id, "category");
 	image={seo.ogImage}
 	content={{ collection: "posts", id: post.data.id, slug }}
 >
-	<article>
-		{
-			post.data.featured_image && (
-				<div {...post.edit.featured_image}>
-					<Image image={post.data.featured_image} />
+	<div style="display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;">
+		<article class="block" style="padding: 0; overflow: hidden;">
+			{
+				post.data.featured_image && (
+					<div {...post.edit.featured_image} class="image-wrapper" style="border-bottom: var(--border-width) solid var(--border-color);">
+						<Image image={post.data.featured_image} />
+					</div>
+				)
+			}
+
+			<div style="padding: 2.5rem;">
+				<div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem;">
+					{
+						post.data.publishedAt && (
+							<time datetime={post.data.publishedAt.toISOString()} style="font-family: var(--font-mono); font-weight: bold; background: var(--accent-3); padding: 0.25rem 0.75rem; border: 2px solid var(--border-color);">
+								{post.data.publishedAt.toLocaleDateString("en-US", {
+									year: "numeric",
+									month: "long",
+									day: "numeric",
+								})}
+							</time>
+						)
+					}
+					{
+						categories.length > 0 && (
+							<div style="display: flex; gap: 0.5rem;">
+								{categories.map((c) => (
+									<a href={`/category/${c.slug}`} style="background: var(--accent-1); padding: 0.25rem 0.75rem; border: 2px solid var(--border-color); font-size: 0.8rem; text-transform: uppercase;">{c.label}</a>
+								))}
+							</div>
+						)
+					}
 				</div>
-			)
-		}
 
-		<h1 {...post.edit.title}>{post.data.title}</h1>
+				<h1 {...post.edit.title} style="font-size: 4rem; margin-bottom: 2rem; line-height: 1;">{post.data.title}</h1>
 
-		{
-			post.data.publishedAt && (
-				<time datetime={post.data.publishedAt.toISOString()}>
-					{post.data.publishedAt.toLocaleDateString("en-US", {
-						year: "numeric",
-						month: "long",
-						day: "numeric",
-					})}
-				</time>
-			)
-		}
-
-		{
-			categories.length > 0 && (
-				<div>
-					{categories.map((c) => (
-						<a href={`/category/${c.slug}`}>{c.label}</a>
-					))}
+				<div class="portable-text">
+					<PortableText value={post.data.content} />
 				</div>
-			)
-		}
 
-		<PortableText value={post.data.content} />
+				{
+					tags.length > 0 && (
+						<div style="margin-top: 4rem; padding-top: 2rem; border-top: 2px dashed var(--border-color); display: flex; gap: 0.75rem; align-items: center;">
+							<span style="font-weight: 900; text-transform: uppercase;">Tags:</span>
+							{tags.map((t) => (
+								<a href={`/tag/${t.slug}`} style="background: var(--accent-2); padding: 0.1rem 0.5rem; border: 2px solid var(--border-color); font-size: 0.9rem;">#{t.label}</a>
+							))}
+						</div>
+					)
+				}
+			</div>
+		</article>
 
-		{
-			tags.length > 0 && (
-				<div>
-					{tags.map((t) => (
-						<a href={`/tag/${t.slug}`}>{t.label}</a>
-					))}
-				</div>
-			)
-		}
-	</article>
-
-	<aside>
-		<WidgetArea name="sidebar" />
-	</aside>
+		<aside>
+			<div class="block" style="background: var(--accent-1);">
+				<h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">SIDEBAR</h3>
+				<WidgetArea name="sidebar" />
+			</div>
+			
+			<div class="block" style="background: #000; color: #fff; transform: rotate(1deg);">
+				<h3 style="color: var(--accent-2);">STAY UPDATED</h3>
+				<p style="margin-bottom: 1rem;">Join our brutalist newsletter for more raw updates.</p>
+				<button style="width: 100%; background: var(--accent-3); color: #000;">SUBSCRIBE</button>
+			</div>
+		</aside>
+	</div>
 </Base>

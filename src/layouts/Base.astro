@@ -9,6 +9,7 @@ import {
 import { createPublicPageContext } from "emdash/page";
 import LiveSearch from "emdash/ui/search";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
+import "../styles/global.css";
 
 interface Props {
 	title: string;
@@ -46,6 +47,9 @@ const pageCtx = createPublicPageContext({
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
 		<title>{fullTitle}</title>
 		{pageDescription && <meta name="description" content={pageDescription} />}
 		{canonical && <link rel="canonical" href={canonical} />}
@@ -56,20 +60,24 @@ const pageCtx = createPublicPageContext({
 
 		<header>
 			<nav>
-				<a href="/">
+				<a href="/" style="font-size: 1.5rem; text-transform: uppercase;">
 					{siteLogo
-						? <img src={siteLogo.url} alt={siteLogo.alt || siteTitle} style="height:48px;width:auto;margin:-8px 0;display:block;" />
-						: siteTitle
+						? <img src={siteLogo.url} alt={siteLogo.alt || siteTitle} style="height:48px;width:auto;display:block;" />
+						: <span>{siteTitle}</span>
 					}
 				</a>
-				{
-					menu?.items.map((item) => (
-						<a href={item.url} target={item.target}>
-							{item.label}
-						</a>
-					))
-				}
-				<LiveSearch placeholder="Search..." collections={["posts", "pages"]} />
+				<div style="flex-grow: 1; display: flex; gap: 1rem;">
+					{
+						menu?.items.map((item) => (
+							<a href={item.url} target={item.target}>
+								{item.label}
+							</a>
+						))
+					}
+				</div>
+				<div class="search-container">
+					<LiveSearch placeholder="SEARCH..." collections={["posts", "pages"]} />
+				</div>
 			</nav>
 		</header>
 
@@ -77,8 +85,11 @@ const pageCtx = createPublicPageContext({
 			<slot />
 		</main>
 
-		<footer>
-			<WidgetArea name="sidebar" />
+		<footer class="widget-area">
+			<div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+				<WidgetArea name="sidebar" />
+				<p style="margin-top: 2rem; font-weight: 900; text-transform: uppercase;">&copy; {new Date().getFullYear()} {siteTitle}. ALL RIGHTS RESERVED.</p>
+			</div>
 		</footer>
 
 		<EmDashBodyEnd page={pageCtx} />

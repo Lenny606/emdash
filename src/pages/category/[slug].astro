@@ -17,23 +17,40 @@ const { entries: posts } = await getEmDashCollection("posts", {
 ---
 
 <Base title={`${term.label} posts`} description={`Posts in ${term.label}`}>
-	<h1>{term.label}</h1>
-	<p>{posts.length} {posts.length === 1 ? "post" : "posts"}</p>
+	<div style="margin-bottom: 4rem;">
+		<h1 style="background: var(--accent-1); display: inline-block; padding: 0.5rem 1.5rem; border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color); margin-bottom: 0.5rem;">CATEGORY: {term.label.toUpperCase()}</h1>
+		<div style="font-family: var(--font-mono); font-weight: 900; text-transform: uppercase;">{posts.length} {posts.length === 1 ? "entry" : "entries"} found</div>
+	</div>
 
 	{
 		posts.length === 0 ? (
-			<p>No posts in this category yet.</p>
+			<div class="block">
+				<p>No posts in this category yet.</p>
+			</div>
 		) : (
-			<ul>
+			<ul class="post-list">
 				{posts.map((post) => (
-					<li>
-						<a href={`/posts/${post.id}`}>
+					<li class="post-card">
+						<a href={`/posts/${post.id}`} style="display: block; height: 100%;">
 							{post.data.featured_image && (
-								<Image image={post.data.featured_image} />
+								<div class="image-wrapper">
+									<Image image={post.data.featured_image} />
+								</div>
 							)}
-							<h2>{post.data.title}</h2>
+							<div class="content">
+								{post.data.publishedAt && (
+									<time datetime={post.data.publishedAt.toISOString()}>
+										{post.data.publishedAt.toLocaleDateString("en-US", {
+											year: "numeric",
+											month: "long",
+											day: "numeric",
+										})}
+									</time>
+								)}
+								<h2>{post.data.title}</h2>
+								{post.data.excerpt && <p style="font-weight: 500;">{post.data.excerpt}</p>}
+							</div>
 						</a>
-						{post.data.excerpt && <p>{post.data.excerpt}</p>}
 					</li>
 				))}
 			</ul>

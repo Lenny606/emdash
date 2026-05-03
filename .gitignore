@@ -3,7 +3,8 @@ dist
 .astro
 uploads
 data.db
-
+*.db-wal
+*.db-shm
 # Environment
 .env
 .env.*

@@ -1,0 +1,202 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --accent-1: #ffea00; /* Neon Yellow */
+  --accent-2: #00ff00; /* Neon Green */
+  --accent-3: #ff00ff; /* Neon Magenta */
+  --border-width: 3px;
+  --border-color: #000000;
+  --shadow-offset: 6px;
+  --shadow-color: #000000;
+  
+  --font-heading: 'Arial Black', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  padding: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+h1 { font-size: clamp(2.5rem, 8vw, 5rem); }
+h2 { font-size: clamp(2rem, 6vw, 3.5rem); }
+h3 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+
+a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 800;
+  transition: transform 0.1s ease;
+}
+
+a:hover {
+  transform: translate(-2px, -2px);
+}
+
+/* Brutalist Block Pattern */
+.block {
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color);
+  padding: 1.5rem;
+  background-color: #fff;
+  margin-bottom: 2rem;
+}
+
+/* Header & Nav */
+header {
+  border-bottom: var(--border-width) solid var(--border-color);
+  padding: 1rem 0;
+  margin-bottom: 3rem;
+  background: var(--accent-1);
+}
+
+nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+nav a {
+  padding: 0.5rem 1rem;
+  border: var(--border-width) solid transparent;
+}
+
+nav a:hover {
+  background: var(--bg-color);
+  border-color: var(--border-color);
+  box-shadow: 4px 4px 0px var(--shadow-color);
+}
+
+/* Main Layout */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+}
+
+.post-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2.5rem;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color);
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.post-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0px var(--shadow-color);
+}
+
+.post-card .image-wrapper {
+  border-bottom: var(--border-width) solid var(--border-color);
+  background: var(--accent-2);
+}
+
+.post-card .content {
+  padding: 1.5rem;
+}
+
+.post-card h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.post-card time {
+  font-family: var(--font-mono);
+  font-weight: bold;
+  background: var(--accent-3);
+  padding: 0.25rem 0.5rem;
+  border: 2px solid var(--border-color);
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+/* Single Post Area */
+article h1 {
+  background: var(--accent-1);
+  padding: 1rem;
+  display: inline-block;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color);
+  margin-bottom: 2rem;
+}
+
+.portable-text {
+  font-size: 1.25rem;
+  max-width: 800px;
+}
+
+.portable-text p {
+  margin-bottom: 1.5rem;
+}
+
+.portable-text img {
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color);
+  max-width: 100%;
+  height: auto;
+  margin: 2rem 0;
+}
+
+/* Forms & Inputs */
+input, button {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: var(--border-width) solid var(--border-color);
+  outline: none;
+}
+
+button {
+  background: var(--accent-2);
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px var(--shadow-color);
+  transition: all 0.1s;
+}
+
+button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--shadow-color);
+}
+
+/* Widget Areas */
+.widget-area {
+  margin-top: 5rem;
+  padding: 3rem 0;
+  border-top: var(--border-width) solid var(--border-color);
+}
