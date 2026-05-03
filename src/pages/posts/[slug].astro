@@ -1,6 +1,7 @@
 ---
 import { getEmDashEntry, getEntryTerms, getSeoMeta, decodeSlug, getSiteSettings } from "emdash";
-import { Image, PortableText, WidgetArea } from "emdash/ui";
+import Image from "../../components/Image.astro";
+import { PortableText, WidgetArea } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
 import { resolveStarterSiteIdentity } from "../../utils/site-identity";
 
@@ -41,13 +42,9 @@ const categories = await getEntryTerms("posts", post.data.id, "category");
 >
 	<div style="display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;">
 		<article class="block" style="padding: 0; overflow: hidden;">
-			{
-				post.data.featured_image && (
 					<div {...post.edit.featured_image} class="image-wrapper" style="border-bottom: var(--border-width) solid var(--border-color);">
 						<Image image={post.data.featured_image} />
 					</div>
-				)
-			}
 
 			<div style="padding: 2.5rem;">
 				<div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem;">

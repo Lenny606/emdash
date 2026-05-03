@@ -104,6 +104,7 @@
 				{ "type": "custom", "label": "Domů", "url": "/" },
 				{ "type": "custom", "label": "Články", "url": "/posts" },
 				{ "type": "custom", "label": "Kategorie", "url": "/category" },
+				{ "type": "custom", "label": "Tagy", "url": "/tag" },
 				{ "type": "custom", "label": "O nás", "url": "/about" }
 			]
 		}
@@ -209,7 +210,7 @@
 				"data": {
 					"title": "Proč by se měl každý programátor naučit základy ML",
 					"excerpt": "Strojové učení už není jen pro vědce. Stává se běžnou součástí softwarového inženýrství.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1551288049-bbbda536339a?auto=format&fit=crop&w=1600&q=80", "alt": "Data Science" },
+					"featured_image": { "src": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80", "alt": "Data Science" },
 					"content": [
 						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Znalost toho, jak modely fungují, vám pomůže lépe integrovat AI funkce do vašich aplikací a pochopit jejich omezení.", "_key": "e1" }], "_key": "e0" }
 					]

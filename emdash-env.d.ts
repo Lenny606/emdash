@@ -5,7 +5,7 @@
 
 import type { ContentBylineCredit, PortableTextBlock } from "emdash";
 
-export interface Page {
+export interface Stránka {
   id: string;
   slug: string | null;
   status: string;
@@ -17,7 +17,7 @@ export interface Page {
   bylines?: ContentBylineCredit[];
 }
 
-export interface Post {
+export interface Článek {
   id: string;
   slug: string | null;
   status: string;
@@ -33,7 +33,7 @@ export interface Post {
 
 declare module "emdash" {
   interface EmDashCollections {
-    pages: Page;
-    posts: Post;
+    pages: Stránka;
+    posts: Článek;
   }
 }

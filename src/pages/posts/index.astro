@@ -1,6 +1,6 @@
 ---
 import { getEmDashCollection, getTermsForEntries } from "emdash";
-import { Image } from "emdash/ui";
+import Image from "../../components/Image.astro";
 import Base from "../../layouts/Base.astro";
 
 const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
@@ -34,11 +34,9 @@ const postsWithTags = posts.map((post) => ({
 				{postsWithTags.map(({ post, tags }) => (
 					<li class="post-card">
 						<a href={`/posts/${post.id}`} style="display: block; height: 100%;">
-							{post.data.featured_image && (
 								<div class="image-wrapper">
 									<Image image={post.data.featured_image} />
 								</div>
-							)}
 							<div class="content">
 								{post.data.publishedAt && (
 									<time datetime={post.data.publishedAt.toISOString()}>
