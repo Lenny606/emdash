@@ -88,10 +88,25 @@ const pageCtx = createPublicPageContext({
 			<slot />
 		</main>
 
-		<footer class="widget-area">
-			<div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
-				<WidgetArea name="sidebar" />
-				<p style="margin-top: 2rem; font-weight: 900; text-transform: uppercase;">&copy; {new Date().getFullYear()} {siteTitle}. ALL RIGHTS RESERVED.</p>
+		<footer class="site-footer">
+			<div class="footer-container">
+				<div class="footer-branding">
+					<a href="/" class="footer-logo">
+						{siteLogo
+							? <img src={siteLogo.url} alt={siteLogo.alt || siteTitle} />
+							: <span>{siteTitle}</span>
+						}
+					</a>
+					{siteTagline && <p class="footer-tagline">{siteTagline}</p>}
+				</div>
+				<div class="footer-widgets">
+					<WidgetArea name="sidebar" />
+				</div>
+			</div>
+			<div class="footer-bottom">
+				<div class="footer-container">
+					<p>&copy; {new Date().getFullYear()} {siteTitle}. ALL RIGHTS RESERVED.</p>
+				</div>
 			</div>
 		</footer>
 
