@@ -74,6 +74,9 @@ const pageCtx = createPublicPageContext({
 							</a>
 						))
 					}
+					<a href="/category">CATEGORIES</a>
+					<a href="/tag">TAGS</a>
+					<a href="/search">SEARCH</a>
 				</div>
 				<div class="search-container">
 					<LiveSearch placeholder="SEARCH..." collections={["posts", "pages"]} />
@@ -93,5 +96,18 @@ const pageCtx = createPublicPageContext({
 		</footer>
 
 		<EmDashBodyEnd page={pageCtx} />
+
+		<script is:inline>
+			// Handle Enter key in the search input to redirect to the search page
+			document.addEventListener("keydown", (e) => {
+				if (e.key === "Enter" && e.target.closest(".search-container")) {
+					const input = e.target;
+					const query = (input.value || "").trim();
+					if (query) {
+						window.location.href = `/search?q=${encodeURIComponent(query)}`;
+					}
+				}
+			});
+		</script>
 	</body>
 </html>

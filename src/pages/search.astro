@@ -1,0 +1,80 @@
+---
+import { search } from "emdash";
+import { Image } from "emdash/ui";
+import Base from "../layouts/Base.astro";
+
+const query = Astro.url.searchParams.get("q") || "";
+let results = [];
+let total = 0;
+
+if (query) {
+	const searchResponse = await search(query, {
+		collections: ["posts", "pages"],
+		status: "published",
+		limit: 20,
+	});
+	results = searchResponse?.results || [];
+	total = searchResponse?.total || 0;
+	console.log('SEARCH RESULTS:', JSON.stringify(results, null, 2));
+}
+---
+
+<Base title={`Search: ${query || "..."}`}>
+	<div style="margin-bottom: 4rem;">
+		<h1 style="background: var(--accent-1); display: inline-block; padding: 0.5rem 1.5rem; border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color); margin-bottom: 1rem;">SEARCH RESULTS</h1>
+		<form action="/search" method="GET" style="display: flex; gap: 1rem; max-width: 600px;">
+			<input 
+				type="text" 
+				name="q" 
+				value={query} 
+				placeholder="ENTER QUERY..." 
+				style="flex-grow: 1; background: #fff; font-weight: 900; text-transform: uppercase;"
+			/>
+			<button type="submit">SEARCH</button>
+		</form>
+	</div>
+
+	{query ? (
+		<div>
+			<p style="font-family: var(--font-mono); font-weight: 900; text-transform: uppercase; margin-bottom: 2rem;">
+				FOUND {total} {total === 1 ? "RESULT" : "RESULTS"} FOR "{query.toUpperCase()}"
+			</p>
+			
+			<div class="post-list">
+				{results.map((result) => result && (
+					<div class="post-card">
+						<a href={result.collection === "posts" ? `/posts/${result.slug || result.id}` : `/${result.slug || result.id}`} style="display: block; height: 100%;">
+							<div class="content">
+								<span style="background: #000; color: #fff; padding: 0.1rem 0.5rem; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 1rem; display: inline-block;">
+									{result.collection}
+								</span>
+								<h2 style="font-size: 1.5rem;">{result.title}</h2>
+								<div class="snippet" style="font-size: 0.9rem; line-height: 1.4;" set:html={result.snippet} />
+								<div style="margin-top: 1.5rem; font-weight: 900; text-decoration: underline;">VIEW {result.collection?.toUpperCase() || "CONTENT"} &rarr;</div>
+							</div>
+						</a>
+					</div>
+				))}
+			</div>
+
+			{results.length === 0 && (
+				<div class="block" style="background: var(--accent-3); color: #fff;">
+					<p style="font-size: 1.5rem; font-weight: 900;">NO MATCHES FOUND. TRY AGAIN WITH DIFFERENT KEYWORDS.</p>
+				</div>
+			)}
+		</div>
+	) : (
+		<div class="block">
+			<p style="font-size: 1.25rem;">ENTER A SEARCH TERM ABOVE TO BEGIN YOUR RAW DATA EXTRACTION.</p>
+		</div>
+	)}
+</Base>
+
+<style is:global>
+	.snippet mark {
+		background: var(--accent-1);
+		color: #000;
+		font-weight: 900;
+		padding: 0 0.2rem;
+	}
+</style>
