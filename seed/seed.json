@@ -2,62 +2,62 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "Starter",
-		"description": "A minimal EmDash starter with posts and pages",
-		"author": "EmDash"
+		"name": "AI & Programming Starter",
+		"description": "An EmDash starter populated with AI, Machine Learning and Future of Coding content",
+		"author": "Antigravity Senior Copywriter"
 	},
 	"settings": {
-		"title": "My Site",
-		"tagline": "Built with EmDash"
+		"title": "AI Dev Pulse",
+		"tagline": "Budoucnost programování v éře umělé inteligence"
 	},
 	"collections": [
 		{
 			"slug": "posts",
-			"label": "Posts",
-			"labelSingular": "Post",
+			"label": "Články",
+			"labelSingular": "Článek",
 			"supports": ["drafts", "revisions", "search", "seo"],
 			"fields": [
 				{
 					"slug": "title",
-					"label": "Title",
+					"label": "Titulek",
 					"type": "string",
 					"required": true,
 					"searchable": true
 				},
 				{
 					"slug": "featured_image",
-					"label": "Featured Image",
+					"label": "Náhledový obrázek",
 					"type": "image"
 				},
 				{
 					"slug": "content",
-					"label": "Content",
+					"label": "Obsah",
 					"type": "portableText",
 					"searchable": true
 				},
 				{
 					"slug": "excerpt",
-					"label": "Excerpt",
+					"label": "Perex",
 					"type": "text"
 				}
 			]
 		},
 		{
 			"slug": "pages",
-			"label": "Pages",
-			"labelSingular": "Page",
+			"label": "Stránky",
+			"labelSingular": "Stránka",
 			"supports": ["drafts", "revisions", "search"],
 			"fields": [
 				{
 					"slug": "title",
-					"label": "Title",
+					"label": "Titulek",
 					"type": "string",
 					"required": true,
 					"searchable": true
 				},
 				{
 					"slug": "content",
-					"label": "Content",
+					"label": "Obsah",
 					"type": "portableText",
 					"searchable": true
 				}
@@ -67,59 +67,44 @@
 	"taxonomies": [
 		{
 			"name": "category",
-			"label": "Categories",
-			"labelSingular": "Category",
+			"label": "Kategorie",
+			"labelSingular": "Kategorie",
 			"hierarchical": true,
 			"collections": ["posts"],
 			"terms": [
-				{
-					"slug": "general",
-					"label": "General"
-				},
-				{
-					"slug": "updates",
-					"label": "Updates"
-				}
+				{ "slug": "ai-programming", "label": "AI v Programování" },
+				{ "slug": "machine-learning", "label": "Strojové Učení" },
+				{ "slug": "future-of-coding", "label": "Budoucnost Kódování" },
+				{ "slug": "ai-tools", "label": "AI Nástroje" },
+				{ "slug": "general", "label": "Obecné" }
 			]
 		},
 		{
 			"name": "tag",
-			"label": "Tags",
+			"label": "Tagy",
 			"labelSingular": "Tag",
 			"hierarchical": false,
 			"collections": ["posts"],
 			"terms": [
-				{
-					"slug": "starter",
-					"label": "Starter"
-				},
-				{
-					"slug": "example",
-					"label": "Example"
-				}
+				{ "slug": "copilot", "label": "Copilot" },
+				{ "slug": "productivity", "label": "Produktivita" },
+				{ "slug": "neural-networks", "label": "Neurální Sítě" },
+				{ "slug": "llm", "label": "LLM" },
+				{ "slug": "ethics", "label": "Etika" },
+				{ "slug": "automation", "label": "Automatizace" },
+				{ "slug": "coding", "label": "Kódování" }
 			]
 		}
 	],
 	"menus": [
 		{
 			"name": "primary",
-			"label": "Primary Navigation",
+			"label": "Hlavní navigace",
 			"items": [
-				{
-					"type": "custom",
-					"label": "Home",
-					"url": "/"
-				},
-				{
-					"type": "custom",
-					"label": "Posts",
-					"url": "/posts"
-				},
-				{
-					"type": "custom",
-					"label": "About",
-					"url": "/about"
-				}
+				{ "type": "custom", "label": "Domů", "url": "/" },
+				{ "type": "custom", "label": "Články", "url": "/posts" },
+				{ "type": "custom", "label": "Kategorie", "url": "/category" },
+				{ "type": "custom", "label": "O nás", "url": "/about" }
 			]
 		}
 	],
@@ -129,24 +114,9 @@
 			"label": "Sidebar",
 			"description": "Sidebar widget area",
 			"widgets": [
-				{
-					"type": "component",
-					"componentId": "core:search",
-					"title": "Search"
-				},
-				{
-					"type": "component",
-					"componentId": "core:categories",
-					"title": "Categories"
-				},
-				{
-					"type": "component",
-					"componentId": "core:recent-posts",
-					"title": "Recent Posts",
-					"settings": {
-						"count": 5
-					}
-				}
+				{ "type": "component", "componentId": "core:search", "title": "Hledat" },
+				{ "type": "component", "componentId": "core:categories", "title": "Kategorie" },
+				{ "type": "component", "componentId": "core:recent-posts", "title": "Nejnovější články", "settings": { "count": 5 } }
 			]
 		}
 	],
@@ -157,18 +127,12 @@
 				"slug": "about",
 				"status": "published",
 				"data": {
-					"title": "About",
+					"title": "O projektu AI Dev Pulse",
 					"content": [
 						{
 							"_type": "block",
 							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "This is the about page. Edit it in the admin panel or replace this template with your own design.",
-									"_key": "k1"
-								}
-							],
+							"children": [{ "_type": "span", "text": "Tento projekt vznikl jako ukázka využití EmDash CMS pro tvorbu moderního technologického magazínu.", "_key": "k1" }],
 							"_key": "k0"
 						}
 					]
@@ -177,55 +141,180 @@
 		],
 		"posts": [
 			{
-				"id": "post-1",
-				"slug": "welcome",
+				"id": "ai-post-1",
+				"slug": "jak-github-copilot-meni-rutinu",
 				"status": "published",
 				"data": {
-					"title": "Welcome",
-					"excerpt": "Your first post. Replace this with your own content.",
+					"title": "Jak GitHub Copilot mění každodenní rutinu vývojáře",
+					"excerpt": "Jak umělá inteligence pomáhá psát kód rychleji a efektivněji v reálném světě.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80", "alt": "AI Visualization" },
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "This is a starter post. The templates in this project show the basic patterns for querying and rendering EmDash content. Replace them with your own design.",
-									"_key": "k1"
-								}
-							],
-							"_key": "k0"
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [
-								{
-									"_type": "span",
-									"text": "What to do next",
-									"_key": "k3"
-								}
-							],
-							"_key": "k2"
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Open the admin panel to add content, or edit the Astro pages in src/pages to change how content is displayed.",
-									"_key": "k5"
-								}
-							],
-							"_key": "k4"
-						}
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Od automatického doplňování k inteligentnímu partnerovi", "_key": "a1" }], "_key": "a0" },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "GitHub Copilot už není jen pokročilý našeptávač. Dnes dokáže navrhovat celé funkce, psát testy a dokonce i vysvětlovat složité kousky kódu.", "_key": "a3" }], "_key": "a2" },
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Zvýšení produktivity", "_key": "a5" }], "_key": "a4" },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Výzkumy ukazují, že programátoři používající AI dokončují úkoly až o 55 % rychleji. To uvolňuje ruce pro kreativnější práci.", "_key": "a7" }], "_key": "a6" }
 					]
 				},
-				"taxonomies": {
-					"category": ["general"],
-					"tag": ["starter", "example"]
-				}
+				"taxonomies": { "category": ["ai-programming"], "tag": ["copilot", "productivity"] }
+			},
+			{
+				"id": "ai-post-2",
+				"slug": "psani-cisteho-kodu-v-ere-ai",
+				"status": "published",
+				"data": {
+					"title": "Psaní čistého kódu v éře AI: Je to ještě potřeba?",
+					"excerpt": "Proč jsou principy Clean Code důležitější než kdy dříve, když kód generují stroje.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=1600&q=80", "alt": "Clean Code" },
+					"content": [
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Kvalita nad kvantitou", "_key": "b1" }], "_key": "b0" },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "AI dokáže vygenerovat tisíce řádků kódu během vteřin. Pokud ale tento kód není čitelný a udržitelný, zaděláváme si na technický dluh.", "_key": "b3" }], "_key": "b2" }
+					]
+				},
+				"taxonomies": { "category": ["ai-programming"], "tag": ["productivity", "ethics"] }
+			},
+			{
+				"id": "ai-post-3",
+				"slug": "debugging-s-chatgpt",
+				"status": "published",
+				"data": {
+					"title": "Pair programming s ChatGPT: Tipy pro efektivnější debugging",
+					"excerpt": "Jak využít konverzační AI k rychlému odhalení chyb a pochopení stack trace.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80", "alt": "Debugging" },
+					"content": [
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Jak se správně ptát", "_key": "c1" }], "_key": "c0" },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Kontext je klíčový. Když ChatGPT pošlete jen chybu, výsledek bude průměrný. Pošlete-li i relevantní kusy kódu, dostanete přesné řešení.", "_key": "c3" }], "_key": "c2" }
+					]
+				},
+				"taxonomies": { "category": ["ai-programming"], "tag": ["productivity", "automation"] }
+			},
+			{
+				"id": "ai-post-4",
+				"slug": "uvod-do-transformatoru",
+				"status": "published",
+				"data": {
+					"title": "Úvod do transformátorů: Architektura, která změnila svět",
+					"excerpt": "Pochopte základy technologie, která stojí za GPT, Claude a dalšími LLM.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1600&q=80", "alt": "Neural Networks" },
+					"content": [
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Attention is all you need", "_key": "d1" }], "_key": "d0" },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Transformátory využívají mechanismus 'attention' (pozornosti), který jim umožňuje zpracovávat informace v kontextu celé věty najednou.", "_key": "d3" }], "_key": "d2" }
+					]
+				},
+				"taxonomies": { "category": ["machine-learning"], "tag": ["neural-networks", "llm"] }
+			},
+			{
+				"id": "ai-post-5",
+				"slug": "proc-se-ucit-ml",
+				"status": "published",
+				"data": {
+					"title": "Proč by se měl každý programátor naučit základy ML",
+					"excerpt": "Strojové učení už není jen pro vědce. Stává se běžnou součástí softwarového inženýrství.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1551288049-bbbda536339a?auto=format&fit=crop&w=1600&q=80", "alt": "Data Science" },
+					"content": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Znalost toho, jak modely fungují, vám pomůže lépe integrovat AI funkce do vašich aplikací a pochopit jejich omezení.", "_key": "e1" }], "_key": "e0" }
+					]
+				},
+				"taxonomies": { "category": ["machine-learning"], "tag": ["automation", "coding"] }
+			},
+			{
+				"id": "ai-post-6",
+				"slug": "role-cloveka-2030",
+				"status": "published",
+				"data": {
+					"title": "Konec programátorů, jak je známe? Role člověka v roce 2030",
+					"excerpt": "Výhled do budoucnosti, kde AI píše většinu kódu a člověk definuje vizi.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1600&q=80", "alt": "Future" },
+					"content": [
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Od psaní kódu k systémovému designu", "_key": "f1" }], "_key": "f0" },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "V budoucnu se budeme méně soustředit na syntaxi a více na architekturu, bezpečnost a uživatelský zážitek.", "_key": "f3" }], "_key": "f2" }
+					]
+				},
+				"taxonomies": { "category": ["future-of-coding"], "tag": ["ethics", "automation"] }
+			},
+			{
+				"id": "ai-post-7",
+				"slug": "prompt-engineering-moda-nebo-skill",
+				"status": "published",
+				"data": {
+					"title": "Prompt Engineering: Nová dovednost nebo jen dočasná móda?",
+					"excerpt": "Analýza toho, jak moc záleží na formulaci dotazů pro velké jazykové modely.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1678911820864-e2c567c655d7?auto=format&fit=crop&w=1600&q=80", "alt": "Prompts" },
+					"content": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "S příchodem schopnějších modelů se potřeba 'hackovat' prompty snižuje, ale schopnost jasně definovat zadání zůstává klíčová.", "_key": "g1" }], "_key": "g0" }
+					]
+				},
+				"taxonomies": { "category": ["future-of-coding"], "tag": ["llm", "productivity"] }
+			},
+			{
+				"id": "ai-post-8",
+				"slug": "claude-vs-gpt4-kod",
+				"status": "published",
+				"data": {
+					"title": "Recenze: Claude 3 vs GPT-4 – Který model lépe rozumí kódu?",
+					"excerpt": "Srovnání dvou nejpopulárnějších modelů v praktických programátorských úlohách.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=1600&q=80", "alt": "Code Comparison" },
+					"content": [
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Logika a kontext", "_key": "h1" }], "_key": "h0" },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Zatímco GPT-4 exceluje v širokém záběru, Claude 3 se zdá být přesnější v dodržování specifických instrukcí a delším kontextu.", "_key": "h3" }], "_key": "h2" }
+					]
+				},
+				"taxonomies": { "category": ["ai-tools"], "tag": ["llm", "productivity"] }
+			},
+			{
+				"id": "ai-post-9",
+				"slug": "lokalni-llm-soukromi",
+				"status": "published",
+				"data": {
+					"title": "Nástroje pro lokální běh LLM: Soukromí nade vše",
+					"excerpt": "Jak rozběhnout modely jako Llama 3 nebo Mistral na vlastním hardwaru pomocí Ollama.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1600&q=80", "alt": "Privacy" },
+					"content": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Pro firmy i jednotlivce, kteří nemohou sdílet svůj kód s cloudy, jsou lokální LLM jedinou cestou k bezpečné AI asistenci.", "_key": "i1" }], "_key": "i0" }
+					]
+				},
+				"taxonomies": { "category": ["ai-tools"], "tag": ["llm", "automation"] }
+			},
+			{
+				"id": "ai-post-10",
+				"slug": "ai-v-ide-za-hranice-doplnovani",
+				"status": "published",
+				"data": {
+					"title": "AI v IDE: Za hranice doplňování textu",
+					"excerpt": "Nové pluginy, které analyzují celou vaši codebase a pomáhají s refaktoringem.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1600&q=80", "alt": "IDE" },
+					"content": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Moderní IDE nástroje dnes dokáží navrhnout refaktoring pro celou aplikaci najednou, čímž šetří hodiny manuální práce.", "_key": "j1" }], "_key": "j0" }
+					]
+				},
+				"taxonomies": { "category": ["ai-tools"], "tag": ["productivity", "automation"] }
+			},
+			{
+				"id": "ai-post-11",
+				"slug": "optimalizace-nn-edge",
+				"status": "published",
+				"data": {
+					"title": "Optimalizace neuronových sítí pro běh na koncových zařízenících",
+					"excerpt": "Jak dostat výkonné modely do mobilů a IoT zařízení pomocí kvantizace.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80", "alt": "Edge AI" },
+					"content": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Techniky jako kvantizace a pruning umožňují zmenšit modely bez výrazné ztráty přesnosti, což je klíčové pro edge computing.", "_key": "l1" }], "_key": "l0" }
+					]
+				},
+				"taxonomies": { "category": ["machine-learning"], "tag": ["neural-networks"] }
+			},
+			{
+				"id": "ai-post-12",
+				"slug": "low-code-no-code-ai",
+				"status": "published",
+				"data": {
+					"title": "Low-code a No-code platformy poháněné AI: Hrozba nebo příležitost?",
+					"excerpt": "Jak se mění trh vývoje aplikací, když si každý může 'napromptovat' vlastní nástroj.",
+					"featured_image": { "src": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=80", "alt": "Teamwork" },
+					"content": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Demokratizace vývoje přináší nové možnosti, ale také výzvy v oblasti bezpečnosti a kvality výsledného softwaru.", "_key": "m1" }], "_key": "m0" }
+					]
+				},
+				"taxonomies": { "category": ["future-of-coding"], "tag": ["automation"] }
 			}
 		]
 	}
