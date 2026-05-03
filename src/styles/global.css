@@ -35,9 +35,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
 }
 
-h1 { font-size: clamp(2.5rem, 8vw, 5rem); }
-h2 { font-size: clamp(2rem, 6vw, 3.5rem); }
-h3 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+h1 { font-size: clamp(2.2rem, 8vw, 5rem); }
+h2 { font-size: clamp(1.8rem, 6vw, 3.5rem); }
+h3 { font-size: clamp(1.4rem, 4vw, 2.5rem); }
 
 a {
   color: inherit;
@@ -74,6 +74,24 @@ nav {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+  position: relative;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-grow: 1;
+}
+
+.menu-toggle {
+  display: none;
+  background: var(--accent-2);
+  padding: 0.5rem;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 3px 3px 0px var(--shadow-color);
+  cursor: pointer;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 nav a {
@@ -100,8 +118,67 @@ ul {
 
 .post-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 0.5rem;
+  }
+
+  header {
+    margin-bottom: 2rem;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    order: 3;
+    background: var(--accent-1);
+    padding: 1rem 0;
+    border-top: var(--border-width) solid var(--border-color);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-links a {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .menu-toggle {
+    display: block;
+    margin-left: auto;
+  }
+
+  .search-container {
+    width: 100%;
+    order: 4;
+  }
+
+  .post-list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  article h1 {
+    font-size: 2rem;
+    padding: 0.75rem;
+  }
+
+  .portable-text {
+    font-size: 1.1rem;
+  }
 }
 
 .post-card {

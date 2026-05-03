@@ -9,3 +9,9 @@ data.db
 .env
 .env.*
 !.env.example
+
+# Tests
+test-results/
+playwright-report/
+blob-report/
+coverage/
