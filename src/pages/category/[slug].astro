@@ -1,8 +1,9 @@
 ---
 import { getTerm, getEmDashCollection, decodeSlug } from "emdash";
-import Image from "../../components/Image.astro";
 import Base from "../../layouts/Base.astro";
+import PostList from "../../components/PostList.astro";
 import Sidebar from "../../components/Sidebar.astro";
+import { plural } from "../../utils/format";
 
 const slug = decodeSlug(Astro.params.slug);
 const term = slug ? await getTerm("category", slug) : null;
@@ -11,52 +12,22 @@ if (!term) {
 	return Astro.redirect("/404");
 }
 
-const { entries: posts } = await getEmDashCollection("posts", {
+const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
 	where: { category: term.slug },
 	orderBy: { published_at: "desc" },
 });
+Astro.cache.set(cacheHint);
 ---
 
-<Base title={`${term.label} posts`} description={`Posts in ${term.label}`}>
+<Base title={`Kategorie: ${term.label}`} description={`Články v kategorii ${term.label}`}>
 	<div class="with-sidebar">
 		<div>
 			<div style="margin-bottom: 4rem;">
-				<h1 style="background: var(--accent-1); display: inline-block; padding: 0.5rem 1.5rem; border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color); margin-bottom: 0.5rem;">CATEGORY: {term.label.toUpperCase()}</h1>
-				<div style="font-family: var(--font-mono); font-weight: 900; text-transform: uppercase;">{posts.length} {posts.length === 1 ? "entry" : "entries"} found</div>
+				<h1 class="page-heading page-heading--yellow" style="margin-bottom: 0.5rem;">KATEGORIE: {term.label.toUpperCase()}</h1>
+				<div class="result-count">{posts.length} {plural(posts.length, "záznam", "záznamy", "záznamů")}</div>
 			</div>
 
-			{
-				posts.length === 0 ? (
-					<div class="block">
-						<p>No posts in this category yet.</p>
-					</div>
-				) : (
-					<ul class="post-list">
-						{posts.map((post) => (
-							<li class="post-card">
-								<a href={`/posts/${post.id}`} style="display: block; height: 100%;">
-										<div class="image-wrapper">
-											<Image image={post.data.featured_image} />
-										</div>
-									<div class="content">
-										{post.data.publishedAt && (
-											<time datetime={post.data.publishedAt.toISOString()}>
-												{post.data.publishedAt.toLocaleDateString("en-US", {
-													year: "numeric",
-													month: "long",
-													day: "numeric",
-												})}
-											</time>
-										)}
-										<h2>{post.data.title}</h2>
-										{post.data.excerpt && <p style="font-weight: 500;">{post.data.excerpt}</p>}
-									</div>
-								</a>
-							</li>
-						))}
-					</ul>
-				)
-			}
+			<PostList posts={posts} emptyText="V této kategorii zatím nejsou žádné články." />
 		</div>
 		<Sidebar />
 	</div>

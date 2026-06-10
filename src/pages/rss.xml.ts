@@ -32,7 +32,7 @@ export const GET: APIRoute = async ({ url }) => {
     <title>${escapeXml(siteTitle)}</title>
     <link>${siteUrl}</link>
     <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml"/>
-    <language>en-us</language>
+    <language>cs</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 ${items}
   </channel>

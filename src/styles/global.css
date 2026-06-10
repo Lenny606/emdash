@@ -221,6 +221,48 @@ ul {
   margin-bottom: 1rem;
 }
 
+/* Utility: brutalist page heading badge */
+.page-heading {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color);
+  background: var(--accent-1);
+}
+
+.page-heading--yellow { background: var(--accent-1); }
+.page-heading--green { background: var(--accent-2); }
+.page-heading--magenta { background: var(--accent-3); color: #fff; }
+
+/* Utility: mono uppercase count/label line */
+.result-count {
+  font-family: var(--font-mono);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+/* Post card extras */
+.read-more {
+  margin-top: 1.5rem;
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+.post-card-tags {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag-chip {
+  background: #000;
+  color: #fff;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
 /* Single Post Area */
 article h1 {
   background: var(--accent-1);

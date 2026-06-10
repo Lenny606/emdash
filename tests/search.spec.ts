@@ -4,26 +4,24 @@ test('search page loads and performs search', async ({ page }) => {
   await page.goto('/search');
   
   // Check that the search page loaded
-  await expect(page.locator('h1')).toHaveText(/SEARCH RESULTS/i);
+  await expect(page.locator('h1')).toHaveText(/VÝSLEDKY HLEDÁNÍ/i);
 
   // Perform a search
-  const searchInput = page.getByPlaceholder('ENTER QUERY...');
+  const searchInput = page.getByPlaceholder('ZADEJTE DOTAZ...');
   await searchInput.fill('welcome');
   await page.keyboard.press('Enter');
 
   // Check that the URL updated
   await expect(page).toHaveURL(/\/search\?q=welcome/);
 
-  // Check that results or "no matches" are displayed
-  const resultsInfo = page.locator('p:has-text("FOUND")');
-  const noMatches = page.locator('text=NO MATCHES FOUND');
-  
-  await expect(resultsInfo.or(noMatches)).toBeVisible();
+  // Check that the result count line is displayed for the query
+  const resultsInfo = page.locator('p.result-count:has-text("NALEZENO")');
+  await expect(resultsInfo).toBeVisible();
 });
 
 test('empty search state', async ({ page }) => {
   await page.goto('/search');
   
   // Check the initial message
-  await expect(page.locator('main .block p:has-text("ENTER A SEARCH TERM ABOVE")')).toBeVisible();
+  await expect(page.locator('main .block p:has-text("Zadejte hledaný výraz")')).toBeVisible();
 });

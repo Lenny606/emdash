@@ -5,8 +5,8 @@ import Base from "../../layouts/Base.astro";
 const tags = await getTaxonomyTerms("tag");
 ---
 
-<Base title="Tags">
-	<h1 style="background: var(--accent-3); color: #fff; display: inline-block; padding: 0.5rem 1.5rem; border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color); margin-bottom: 3rem;">TAG CLOUD</h1>
+<Base title="Štítky">
+	<h1 class="page-heading page-heading--magenta" style="margin-bottom: 3rem;">MRAK ŠTÍTKŮ</h1>
 
 	<div class="block" style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; justify-content: center; padding: 3rem;">
 		{tags.map((tag) => (
@@ -27,7 +27,7 @@ const tags = await getTaxonomyTerms("tag");
 		))}
 
 		{tags.length === 0 && (
-			<p>No tags detected in this sector.</p>
+			<p>Žádné štítky nenalezeny.</p>
 		)}
 	</div>
 </Base>

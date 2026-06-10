@@ -1,0 +1,46 @@
+---
+import Image from "./Image.astro";
+import { formatDate } from "../utils/format";
+
+interface PostCardTag {
+	slug: string;
+	label: string;
+}
+
+interface Props {
+	post: any;
+	tags?: PostCardTag[];
+	showReadMore?: boolean;
+}
+
+const { post, tags = [], showReadMore = false } = Astro.props;
+---
+
+<li class="post-card">
+	<a href={`/posts/${post.id}`} style="display: block; height: 100%;">
+		<div class="image-wrapper">
+			<Image image={post.data.featured_image} />
+		</div>
+		<div class="content">
+			{
+				post.data.publishedAt && (
+					<time datetime={post.data.publishedAt.toISOString()}>
+						{formatDate(post.data.publishedAt)}
+					</time>
+				)
+			}
+			<h2>{post.data.title}</h2>
+			{post.data.excerpt && <p style="font-weight: 500;">{post.data.excerpt}</p>}
+			{
+				tags.length > 0 && (
+					<div class="post-card-tags">
+						{tags.map((t) => (
+							<span class="tag-chip">#{t.label}</span>
+						))}
+					</div>
+				)
+			}
+			{showReadMore && <div class="read-more">ČÍST DÁL &rarr;</div>}
+		</div>
+	</a>
+</li>

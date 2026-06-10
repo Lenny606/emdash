@@ -1,11 +1,10 @@
 ---
 import { search } from "emdash";
-import Image from "../components/Image.astro";
 import Base from "../layouts/Base.astro";
+import { plural } from "../utils/format";
 
 const query = Astro.url.searchParams.get("q") || "";
 let results = [];
-let total = 0;
 
 if (query) {
 	const searchResponse = await search(query, {
@@ -13,31 +12,30 @@ if (query) {
 		status: "published",
 		limit: 20,
 	});
-	results = searchResponse?.results || [];
-	total = searchResponse?.total || 0;
-	console.log('SEARCH RESULTS:', JSON.stringify(results, null, 2));
+	results = searchResponse?.items ?? [];
 }
+const total = results.length;
 ---
 
-<Base title={`Search: ${query || "..."}`}>
+<Base title={`Hledání: ${query || "..."}`}>
 	<div style="margin-bottom: 4rem;">
-		<h1 style="background: var(--accent-1); display: inline-block; padding: 0.5rem 1.5rem; border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color); margin-bottom: 1rem;">SEARCH RESULTS</h1>
+		<h1 class="page-heading page-heading--yellow" style="margin-bottom: 1rem;">VÝSLEDKY HLEDÁNÍ</h1>
 		<form action="/search" method="GET" style="display: flex; gap: 1rem; max-width: 600px;">
-			<input 
-				type="text" 
-				name="q" 
-				value={query} 
-				placeholder="ENTER QUERY..." 
+			<input
+				type="text"
+				name="q"
+				value={query}
+				placeholder="ZADEJTE DOTAZ..."
 				style="flex-grow: 1; background: #fff; font-weight: 900; text-transform: uppercase;"
 			/>
-			<button type="submit">SEARCH</button>
+			<button type="submit">HLEDAT</button>
 		</form>
 	</div>
 
 	{query ? (
 		<div>
-			<p style="font-family: var(--font-mono); font-weight: 900; text-transform: uppercase; margin-bottom: 2rem;">
-				FOUND {total} {total === 1 ? "RESULT" : "RESULTS"} FOR "{query.toUpperCase()}"
+			<p class="result-count" style="margin-bottom: 2rem;">
+				NALEZENO {total} {plural(total, "VÝSLEDEK", "VÝSLEDKY", "VÝSLEDKŮ")} PRO "{query.toUpperCase()}"
 			</p>
 			
 			<div class="post-list">
@@ -50,7 +48,7 @@ if (query) {
 								</span>
 								<h2 style="font-size: 1.5rem;">{result.title}</h2>
 								<div class="snippet" style="font-size: 0.9rem; line-height: 1.4;" set:html={result.snippet} />
-								<div style="margin-top: 1.5rem; font-weight: 900; text-decoration: underline;">VIEW {result.collection?.toUpperCase() || "CONTENT"} &rarr;</div>
+								<div style="margin-top: 1.5rem; font-weight: 900; text-decoration: underline;">ZOBRAZIT &rarr;</div>
 							</div>
 						</a>
 					</div>
@@ -59,13 +57,13 @@ if (query) {
 
 			{results.length === 0 && (
 				<div class="block" style="background: var(--accent-3); color: #fff;">
-					<p style="font-size: 1.5rem; font-weight: 900;">NO MATCHES FOUND. TRY AGAIN WITH DIFFERENT KEYWORDS.</p>
+					<p style="font-size: 1.5rem; font-weight: 900;">NIC NENALEZENO. ZKUSTE JINÁ KLÍČOVÁ SLOVA.</p>
 				</div>
 			)}
 		</div>
 	) : (
 		<div class="block">
-			<p style="font-size: 1.25rem;">ENTER A SEARCH TERM ABOVE TO BEGIN YOUR RAW DATA EXTRACTION.</p>
+			<p style="font-size: 1.25rem;">Zadejte hledaný výraz výše a spusťte vyhledávání.</p>
 		</div>
 	)}
 </Base>

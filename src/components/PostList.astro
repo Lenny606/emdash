@@ -1,0 +1,43 @@
+---
+import PostCard from "./PostCard.astro";
+
+interface PostCardTag {
+	slug: string;
+	label: string;
+}
+
+interface Props {
+	posts: any[];
+	/** Optional tags keyed by entry id (post.data.id), e.g. from getTermsForEntries. */
+	tagsByEntry?: Map<string, PostCardTag[]>;
+	showReadMore?: boolean;
+	emptyText?: string;
+}
+
+const {
+	posts,
+	tagsByEntry,
+	showReadMore = false,
+	emptyText = "Zatím žádné články.",
+} = Astro.props;
+---
+
+{
+	posts.length === 0 ? (
+		<div class="block">
+			<slot name="empty">
+				<p>{emptyText}</p>
+			</slot>
+		</div>
+	) : (
+		<ul class="post-list">
+			{posts.map((post) => (
+				<PostCard
+					post={post}
+					tags={tagsByEntry?.get(post.data.id) ?? []}
+					showReadMore={showReadMore}
+				/>
+			))}
+		</ul>
+	)
+}

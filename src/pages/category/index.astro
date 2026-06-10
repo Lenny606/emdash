@@ -1,25 +1,26 @@
 ---
 import { getTaxonomyTerms } from "emdash";
 import Base from "../../layouts/Base.astro";
+import { plural } from "../../utils/format";
 
 const categories = await getTaxonomyTerms("category");
 ---
 
-<Base title="Categories">
-	<h1 style="background: var(--accent-2); display: inline-block; padding: 0.5rem 1.5rem; border: var(--border-width) solid var(--border-color); box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color); margin-bottom: 3rem;">CATEGORIES</h1>
+<Base title="Kategorie">
+	<h1 class="page-heading page-heading--green" style="margin-bottom: 3rem;">KATEGORIE</h1>
 
 	<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem;">
 		{categories.map((category) => (
 			<a href={`/category/${category.slug}`} class="block" style="display: block; margin-bottom: 0; background: var(--bg-color); transition: background 0.2s;">
 				<h2 style="font-size: 2rem; margin-bottom: 0.5rem;">{category.label}</h2>
-				<p style="font-family: var(--font-mono); font-weight: 900; text-transform: uppercase;">{category.count} {category.count === 1 ? "entry" : "entries"}</p>
+				<p class="result-count">{category.count} {plural(category.count, "záznam", "záznamy", "záznamů")}</p>
 			</a>
 		))}
 	</div>
 
 	{categories.length === 0 && (
 		<div class="block">
-			<p>No categories found in the database.</p>
+			<p>Žádné kategorie nenalezeny.</p>
 		</div>
 	)}
 </Base>

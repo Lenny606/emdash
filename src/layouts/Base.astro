@@ -43,7 +43,7 @@ const pageCtx = createPublicPageContext({
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="cs">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -79,7 +79,7 @@ const pageCtx = createPublicPageContext({
 					}
 				</div>
 				<div class="search-container">
-					<LiveSearch placeholder="SEARCH..." collections={["posts", "pages"]} />
+					<LiveSearch placeholder="HLEDAT..." collections={["posts", "pages"]} />
 				</div>
 			</nav>
 		</header>
@@ -105,7 +105,7 @@ const pageCtx = createPublicPageContext({
 			</div>
 			<div class="footer-bottom">
 				<div class="footer-container">
-					<p>&copy; {new Date().getFullYear()} {siteTitle}. ALL RIGHTS RESERVED.</p>
+					<p>&copy; {new Date().getFullYear()} {siteTitle}. VŠECHNA PRÁVA VYHRAZENA.</p>
 				</div>
 			</div>
 		</footer>
@@ -131,7 +131,7 @@ const pageCtx = createPublicPageContext({
 			if (menuToggle && navLinks) {
 				menuToggle.addEventListener("click", () => {
 					navLinks.classList.toggle("active");
-					menuToggle.textContent = navLinks.classList.contains("active") ? "CLOSE" : "MENU";
+					menuToggle.textContent = navLinks.classList.contains("active") ? "ZAVŘÍT" : "MENU";
 				});
 			}
 		</script>

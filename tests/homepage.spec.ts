@@ -4,17 +4,17 @@ test('homepage loads correctly', async ({ page }) => {
   await page.goto('/');
   
   // Check that the title is correct
-  // Based on index.astro, the title is siteTitle
-  await expect(page).toHaveTitle(/My Site/i);
+  // Based on index.astro, the title is siteTitle (from seed settings)
+  await expect(page).toHaveTitle(/AI Dev Pulse/i);
 
   // Check that the main heading is present
   const heading = page.locator('h1');
   await expect(heading).toBeVisible();
-  await expect(heading).toHaveText(/RECENT POSTS/i);
+  await expect(heading).toHaveText(/NEJNOVĚJŠÍ ČLÁNKY/i);
 
   // Check that the post list is present (if there are posts)
   const postList = page.locator('.post-list');
-  const noPosts = page.locator('text=No posts yet');
+  const noPosts = page.locator('text=Zatím žádné články');
   
   await expect(postList.or(noPosts)).toBeVisible();
 });
