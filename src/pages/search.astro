@@ -17,7 +17,7 @@ if (query) {
 const total = results.length;
 ---
 
-<Base title={`Hledání: ${query || "..."}`}>
+<Base title={`Hledání: ${query || "..."}`} noindex>
 	<div style="margin-bottom: 4rem;">
 		<h1 class="page-heading page-heading--yellow" style="margin-bottom: 1rem;">VÝSLEDKY HLEDÁNÍ</h1>
 		<form action="/search" method="GET" style="display: flex; gap: 1rem; max-width: 600px;">

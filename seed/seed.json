@@ -46,7 +46,7 @@
 			"slug": "pages",
 			"label": "Stránky",
 			"labelSingular": "Stránka",
-			"supports": ["drafts", "revisions", "search"],
+			"supports": ["drafts", "revisions", "search", "seo"],
 			"fields": [
 				{
 					"slug": "title",

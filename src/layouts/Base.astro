@@ -17,14 +17,20 @@ interface Props {
 	description?: string | null;
 	image?: string | null;
 	canonical?: string | null;
+	/** Emit <meta name="robots" content="noindex"> (e.g. search results). */
+	noindex?: boolean;
 	/** Pass content reference for plugin page contributions on content pages */
 	content?: { collection: string; id: string; slug?: string | null };
 }
 
-const { title, pageTitle, description, image, canonical, content } = Astro.props;
+const { title, pageTitle, description, image, canonical, noindex, content } = Astro.props;
 const { siteTitle, siteTagline, siteLogo } = resolveStarterSiteIdentity(await getSiteSettings());
 const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
 const pageDescription = description ?? siteTagline;
+
+// Default every page to a self-referencing canonical (without query string)
+// so listings/archives are covered too. Content pages may override via props.
+const resolvedCanonical = canonical ?? new URL(Astro.url.pathname, Astro.url.origin).href;
 
 const menu = await getMenu("primary");
 
@@ -35,10 +41,11 @@ const pageCtx = createPublicPageContext({
 	title: fullTitle,
 	pageTitle: pageTitle ?? title,
 	description: pageDescription,
-	canonical,
+	canonical: resolvedCanonical,
 	image,
 	content,
 	siteName: siteTitle,
+	seo: noindex ? { robots: "noindex, nofollow" } : undefined,
 });
 ---
 
@@ -51,8 +58,8 @@ const pageCtx = createPublicPageContext({
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
 		<title>{fullTitle}</title>
-		{pageDescription && <meta name="description" content={pageDescription} />}
-		{canonical && <link rel="canonical" href={canonical} />}
+		<link rel="alternate" type="application/rss+xml" title={`${siteTitle} — RSS`} href="/rss.xml" />
+		{/* description + canonical are emitted by <EmDashHead> from the page context */}
 		<EmDashHead page={pageCtx} />
 	</head>
 	<body>
