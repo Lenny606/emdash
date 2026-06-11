@@ -1,0 +1,76 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Clean Remote Dist Folder
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.REMOTE_PASSWORD }}
+          # Only remove the build output. data.db and uploads/ must persist.
+          script: rm -rf ${{ secrets.DEPLOY_PATH }}/dist
+
+      - name: Deploy via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.REMOTE_PASSWORD }}
+          # dist = standalone Node server; package files + packages/ (in-process
+          # email-client plugin) are needed to install runtime deps on the server;
+          # astro.config.mjs + seed/ are used by EmDash at startup.
+          source: "dist/**,package.json,package-lock.json,astro.config.mjs,seed/**,packages/**"
+          target: ${{ secrets.DEPLOY_PATH }}
+          rm: false
+
+      - name: Install Deps & Restart on Remote
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.REMOTE_PASSWORD }}
+          script: |
+            set -e
+            cd ${{ secrets.DEPLOY_PATH }}
+
+            # Install production deps. Rebuilds native better-sqlite3 for the server.
+            npm ci --omit=dev
+
+            # Write runtime env. EMDASH_ENCRYPTION_KEY must stay STABLE across
+            # deploys — changing it breaks data encrypted in data.db.
+            cat > .env <<EOF
+            EMDASH_ENCRYPTION_KEY=${{ secrets.EMDASH_ENCRYPTION_KEY }}
+            HOST=0.0.0.0
+            PORT=4323
+            EOF
+            # Optional SMTP for the email-client plugin (or configure in admin UI):
+            #   SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS / EMAIL_FROM
+
+            # Start (or restart) under pm2. Runs from DEPLOY_PATH so ./data.db
+            # and ./uploads resolve correctly.
+            pm2 restart emdash --update-env \
+              || pm2 start ./dist/server/entry.mjs --name emdash --update-env
+            pm2 save
