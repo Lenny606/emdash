@@ -527,6 +527,14 @@ button:active {
   color: #000;
 }
 
+.promo-status {
+  margin-top: 1rem;
+  font-weight: 900;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--accent-1);
+}
+
 .social-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

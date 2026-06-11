@@ -12,10 +12,11 @@ import { WidgetArea } from "emdash/ui";
     <div class="sidebar-promo">
       <h3 class="promo-title">ZŮSTAŇTE V OBRAZE</h3>
       <p>Přihlaste se k odběru newsletteru pro novinky a postřehy ze světa AI.</p>
-      <div class="promo-form">
-        <input type="email" placeholder="VAS@EMAIL.CZ" aria-label="E-mail" />
-        <button type="button">ODEBÍRAT</button>
-      </div>
+      <form class="promo-form" id="newsletter-form">
+        <input type="email" name="email" placeholder="VAS@EMAIL.CZ" aria-label="E-mail" required />
+        <button type="submit">ODEBÍRAT</button>
+      </form>
+      <p class="promo-status" id="newsletter-status" role="status" aria-live="polite" hidden></p>
     </div>
 
     <div class="sidebar-section social-links">
@@ -23,8 +24,52 @@ import { WidgetArea } from "emdash/ui";
       <div class="social-grid">
         <a href="#">TWITTER</a>
         <a href="#">GITHUB</a>
-        <a href="#">RSS</a>
+        <a href="/rss.xml">RSS</a>
       </div>
     </div>
   </div>
 </aside>
+
+<script is:inline>
+  (() => {
+    const form = document.getElementById("newsletter-form");
+    const status = document.getElementById("newsletter-status");
+    if (!form || !status) return;
+
+    const show = (msg) => {
+      status.textContent = msg;
+      status.hidden = false;
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const input = form.querySelector('input[name="email"]');
+      const email = (input?.value || "").trim();
+      if (!email) return;
+
+      const button = form.querySelector("button");
+      if (button) button.disabled = true;
+      show("Odesílám…");
+
+      try {
+        const res = await fetch("/_emdash/api/plugins/email-client/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+        const body = await res.json().catch(() => ({}));
+        const data = body.data || {};
+        if (res.ok && data.ok) {
+          show(data.alreadySubscribed ? "Tento e-mail už je přihlášen." : "Hotovo! Děkujeme za přihlášení.");
+          form.reset();
+        } else {
+          show(data.error || (body.error && body.error.message) || "Něco se pokazilo, zkuste to prosím znovu.");
+        }
+      } catch {
+        show("Něco se pokazilo, zkuste to prosím znovu.");
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+  })();
+</script>

@@ -1,0 +1,16 @@
+{
+  "name": "@emdash-cms/plugin-email-client",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./sandbox": "./src/sandbox-entry.ts"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.13"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.14",
+    "emdash": "^0.9.0"
+  }
+}
