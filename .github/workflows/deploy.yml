@@ -69,8 +69,14 @@ jobs:
             # Optional SMTP for the email-client plugin (or configure in admin UI):
             #   SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS / EMAIL_FROM
 
+            # Export the variables so they are available in the current shell context for PM2
+            export HOST=0.0.0.0
+            export PORT=4323
+            export EMDASH_ENCRYPTION_KEY="${{ secrets.EMDASH_ENCRYPTION_KEY }}"
+
             # Start (or restart) under pm2. Runs from DEPLOY_PATH so ./data.db
             # and ./uploads resolve correctly.
             pm2 restart emdash --update-env \
               || pm2 start ./dist/server/entry.mjs --name emdash --update-env
             pm2 save
+
