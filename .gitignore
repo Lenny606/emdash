@@ -16,3 +16,7 @@ playwright-report/
 blob-report/
 coverage/
 .idea
+
+# Backups
+data.db.backup
+seed/seed_backup.json
