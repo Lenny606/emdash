@@ -4,10 +4,15 @@ import Base from "../layouts/Base.astro";
 import GalleryList from "../components/GalleryList.astro";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
 
-const { entries: galleries, cacheHint } = await getEmDashCollection("galleries", {
+const { entries: galleries, cacheHint: galleriesCacheHint } = await getEmDashCollection("galleries", {
 	status: "published",
 });
-Astro.cache.set(cacheHint);
+Astro.cache.set(galleriesCacheHint);
+
+const { entries: exhibitions, cacheHint: exhibitionsCacheHint } = await getEmDashCollection("exhibitions", {
+	status: "published",
+});
+Astro.cache.set(exhibitionsCacheHint);
 
 const sortedGalleries = galleries.toSorted((a, b) =>
 	a.data.title.localeCompare(b.data.title, "cs")
@@ -23,21 +28,79 @@ const districtsByEntry = galleryIds.length > 0
 	: new Map();
 
 const { siteTitle, siteTagline } = resolveStarterSiteIdentity(await getSiteSettings());
+
+const galleryByUlid = new Map(galleries.map((g) => [g.data.id, g]));
+
+// Filter and sort/limit exhibitions to active ones
+const now = new Date();
+const currentExhibitions = exhibitions
+	.filter((ex) => {
+		const start = new Date(ex.data.start_date);
+		const end = new Date(ex.data.end_date);
+		return start <= now && end >= now;
+	})
+	.slice(0, 5);
+
+const formatDate = (dateStr: string) => {
+	const d = new Date(dateStr);
+	return d.toLocaleDateString("cs-CZ", {
+		day: "numeric",
+		month: "numeric",
+		year: "numeric",
+	});
+};
 ---
 
 <Base title={siteTitle} description={siteTagline}>
 	<h1 class="page-heading">ARTIS PRAGA</h1>
 
-	<GalleryList
-		galleries={sortedGalleries}
-		categoriesByEntry={categoriesByEntry}
-		districtsByEntry={districtsByEntry}
-	>
-		<Fragment slot="empty">
-			<p>
-				Zatím žádné galerie.{" "}
-				<a href="/_emdash/admin/content/galleries/new">VYTVOŘTE PRVNÍ</a>.
-			</p>
-		</Fragment>
-	</GalleryList>
+	<section class="exhibitions-section" style="margin-bottom: 4rem;">
+		<h2 style="font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; text-transform: uppercase;">Aktuální výstavy</h2>
+		{
+			currentExhibitions.length === 0 ? (
+				<p style="color: var(--muted-color); font-style: italic;">Momentálně neprobíhají žádné výstavy.</p>
+			) : (
+				<ul class="exhibitions-list" style="display: flex; flex-direction: column; gap: 1.5rem; padding: 0; margin-bottom: 3rem; list-style: none;">
+					{currentExhibitions.map((ex) => {
+						const linkedGallery = galleryByUlid.get(ex.data.gallery);
+						return (
+							<li style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+								<div style="flex-grow: 1; min-width: 280px;">
+									<h3 {...ex.edit.title} style="font-family: var(--font-heading); font-size: 1.3rem; margin: 0 0 0.25rem 0; font-weight: normal;">
+										{ex.data.title}
+									</h3>
+									{linkedGallery && (
+										<p style="font-family: var(--font-body); font-size: 0.9rem; color: var(--muted-color); margin: 0;">
+											<a href={`/galerie/${linkedGallery.id}`} style="text-decoration: underline;">
+												{linkedGallery.data.title}
+											</a>
+										</p>
+									)}
+								</div>
+								<div style="font-family: var(--font-mono); font-size: 0.9rem; color: var(--muted-color); white-space: nowrap;">
+									{formatDate(ex.data.start_date)} – {formatDate(ex.data.end_date)}
+								</div>
+							</li>
+						);
+					})}
+				</ul>
+			)
+		}
+	</section>
+
+	<section class="galleries-section">
+		<h2 style="font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; text-transform: uppercase;">Seznam galerií</h2>
+		<GalleryList
+			galleries={sortedGalleries}
+			categoriesByEntry={categoriesByEntry}
+			districtsByEntry={districtsByEntry}
+		>
+			<Fragment slot="empty">
+				<p>
+					Zatím žádné galerie.{" "}
+					<a href="/_emdash/admin/content/galleries/new">VYTVOŘTE PRVNÍ</a>.
+				</p>
+			</Fragment>
+		</GalleryList>
+	</section>
 </Base>

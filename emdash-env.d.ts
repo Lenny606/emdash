@@ -5,6 +5,20 @@
 
 import type { ContentBylineCredit, PortableTextBlock } from "emdash";
 
+export interface Výstava {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  gallery: string;
+  start_date: string;
+  end_date: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+}
+
 export interface Galerie {
   id: string;
   slug: string | null;
@@ -33,6 +47,7 @@ export interface Stránka {
 
 declare module "emdash" {
   interface EmDashCollections {
+    exhibitions: Výstava;
     galleries: Galerie;
     pages: Stránka;
   }

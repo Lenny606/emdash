@@ -28,6 +28,8 @@ Agent skills are in `.agents/skills/`. Load them when working on specific tasks:
 - **building-emdash-site** -- Querying content, rendering Portable Text, schema design, seed files, site features (menus, widgets, search, SEO, comments, bylines). Start here.
 - **creating-plugins** -- Building EmDash plugins with hooks, storage, admin UI, API routes, and Portable Text block types.
 - **emdash-cli** -- CLI commands for content management, seeding, type generation, and visual editing flow.
+- **working-with-api** -- Jak pracovat s API v EmDash a Astro obecně, bezpečné uložení API klíčů v .env, tvorba vlastních endpointů a volání externích API (např. WEDOS).
+- **emdash-rest-api** -- Oficiální REST API reference pro EmDash CMS (autentizace, přehled endpointů, helper klient, a bezpečné proxy).
 
 ## Rules
 

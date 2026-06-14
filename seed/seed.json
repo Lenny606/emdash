@@ -73,6 +73,44 @@
           "searchable": true
         }
       ]
+    },
+    {
+      "slug": "exhibitions",
+      "label": "Výstavy",
+      "labelSingular": "Výstava",
+      "supports": [
+        "drafts",
+        "revisions",
+        "search"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Název výstavy",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "gallery",
+          "label": "Galerie",
+          "type": "reference",
+          "collection": "galleries",
+          "required": true
+        },
+        {
+          "slug": "start_date",
+          "label": "Začátek",
+          "type": "datetime",
+          "required": true
+        },
+        {
+          "slug": "end_date",
+          "label": "Konec",
+          "type": "datetime",
+          "required": true
+        }
+      ]
     }
   ],
   "taxonomies": [
@@ -1044,6 +1082,63 @@
           "district": [
             "praha-1"
           ]
+        }
+      }
+    ],
+    "exhibitions": [
+      {
+        "id": "toyen-snici-rebelka",
+        "slug": "toyen-snici-rebelka",
+        "status": "published",
+        "data": {
+          "title": "Toyen: Snící rebelka",
+          "gallery": "$ref:narodni-galerie-praha-valdstejnska-jizdarna",
+          "start_date": "2026-05-01T10:00:00Z",
+          "end_date": "2026-08-31T18:00:00Z"
+        }
+      },
+      {
+        "id": "koudelka-navraty",
+        "slug": "koudelka-navraty",
+        "status": "published",
+        "data": {
+          "title": "Josef Koudelka: Návraty",
+          "gallery": "$ref:leica-gallery-prague",
+          "start_date": "2026-06-01T10:00:00Z",
+          "end_date": "2026-07-31T18:00:00Z"
+        }
+      },
+      {
+        "id": "kubismus-v-cechach",
+        "slug": "kubismus-v-cechach",
+        "status": "published",
+        "data": {
+          "title": "Kubismus v Čechách a moderní umění",
+          "gallery": "$ref:narodni-galerie-praha-veletrzni-palac",
+          "start_date": "2026-04-15T09:00:00Z",
+          "end_date": "2026-10-15T18:00:00Z"
+        }
+      },
+      {
+        "id": "ruiny-a-touha",
+        "slug": "ruiny-a-touha",
+        "status": "published",
+        "data": {
+          "title": "Ruiny a touha: Nová romantika",
+          "gallery": "$ref:galerie-rudolfinum",
+          "start_date": "2026-05-20T10:00:00Z",
+          "end_date": "2026-08-15T18:00:00Z"
+        }
+      },
+      {
+        "id": "soucasna-malba",
+        "slug": "soucasna-malba",
+        "status": "published",
+        "data": {
+          "title": "Současná česká malba",
+          "gallery": "$ref:dox-centrum-soucasneho-umeni",
+          "start_date": "2026-06-10T10:00:00Z",
+          "end_date": "2026-09-10T18:00:00Z"
         }
       }
     ]
