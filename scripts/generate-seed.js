@@ -76,7 +76,7 @@ function run() {
       author: 'Antigravity developer'
     },
     settings: {
-      title: 'Galerie v Praze',
+      title: 'Artis Praga',
       tagline: 'Přehled pražských galeriích a uměleckých institucí'
     },
     collections: [
@@ -190,7 +190,7 @@ function run() {
           slug: 'about',
           status: 'published',
           data: {
-            title: 'O projektu Galerie v Praze',
+            title: 'O projektu Artis Praga',
             content: [
               {
                 _type: 'block',

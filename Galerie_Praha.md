@@ -1,4 +1,4 @@
-# Galerie v Praze
+# Artis Praga
 
 ## Velké instituce / muzea umění
 

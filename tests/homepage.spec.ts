@@ -4,12 +4,12 @@ test('homepage loads correctly', async ({ page }) => {
   await page.goto('/');
   
   // Check that the title is correct
-  await expect(page).toHaveTitle(/Galerie v Praze/i);
+  await expect(page).toHaveTitle(/Artis Praga/i);
 
   // Check that the main heading is present
   const heading = page.locator('h1');
   await expect(heading).toBeVisible();
-  await expect(heading).toHaveText(/GALERIE V PRAZE/i);
+  await expect(heading).toHaveText(/ARTIS PRAGA/i);
 
   // Check that the gallery list is present
   const galleryList = page.locator('.post-list');

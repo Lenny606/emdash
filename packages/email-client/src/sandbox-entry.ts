@@ -126,7 +126,7 @@ export default definePlugin({
 						to: email,
 						subject: "Potvrzení odběru newsletteru",
 						text:
-							"Děkujeme za přihlášení k odběru newsletteru AI Dev Pulse.\n\n" +
+							"Děkujeme za přihlášení k odběru newsletteru Artis Praga.\n\n" +
 							"Pokud jste se nepřihlásili vy, tento e-mail ignorujte.",
 					});
 				} catch (err) {

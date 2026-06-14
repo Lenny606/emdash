@@ -6,8 +6,8 @@ Schéma i počáteční (demo) obsah jsou definovány v jednom souboru: [`seed/s
 
 ```json
 "settings": {
-  "title": "AI Dev Pulse",
-  "tagline": "Budoucnost programování v éře umělé inteligence"
+  "title": "Artis Praga",
+  "tagline": "Přehled pražských galeriích a uměleckých institucí"
 }
 ```
 

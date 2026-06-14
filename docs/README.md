@@ -1,8 +1,8 @@
-# Dokumentace projektu — AI Dev Pulse
+# Dokumentace projektu — Artis Praga
 
-**AI Dev Pulse** je technologický magazín postavený na CMS [EmDash](https://github.com/emdash-cms/emdash) nad frameworkem [Astro](https://astro.build). Web je plně server-rendered, obsah se spravuje přes vestavěné admin rozhraní a běží na Node.js se SQLite databází a lokálním úložištěm souborů.
+**Artis Praga** je portál a průvodce po pražských galeriích postavený na CMS [EmDash](https://github.com/emdash-cms/emdash) nad frameworkem [Astro](https://astro.build). Web je plně server-rendered, obsah se spravuje přes vestavěné admin rozhraní a běží na Node.js se SQLite databází a lokálním úložištěm souborů.
 
-> Tagline: *„Budoucnost programování v éře umělé inteligence"*
+> Tagline: *„Přehled pražských galeriích a uměleckých institucí“*
 
 ## Obsah dokumentace
 

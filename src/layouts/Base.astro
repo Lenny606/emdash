@@ -17,13 +17,13 @@ interface Props {
 	description?: string | null;
 	image?: string | null;
 	canonical?: string | null;
-	/** Emit <meta name="robots" content="noindex"> (e.g. search results). */
+	/** Emit <meta name="robots" content="noindex, nofollow">. Defaults to true — the whole site is kept out of search indexes. */
 	noindex?: boolean;
 	/** Pass content reference for plugin page contributions on content pages */
 	content?: { collection: string; id: string; slug?: string | null };
 }
 
-const { title, pageTitle, description, image, canonical, noindex, content } = Astro.props;
+const { title, pageTitle, description, image, canonical, noindex = true, content } = Astro.props;
 const { siteTitle, siteTagline, siteLogo } = resolveStarterSiteIdentity(await getSiteSettings());
 const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
 const pageDescription = description ?? siteTagline;
