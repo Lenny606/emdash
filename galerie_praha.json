@@ -1,0 +1,74 @@
+{
+  "title": "Galerie v Praze",
+  "source": "Galerie_Praha.md",
+  "categories": [
+    {
+      "category": "Velké instituce / muzea umění",
+      "galleries": [
+        { "name": "Národní galerie Praha – Veletržní palác", "address": "Dukelských hrdinů 47", "district": "Praha 7", "web": "https://www.ngprague.cz", "note": "Moderní a současné umění 19.–21. století" },
+        { "name": "Národní galerie Praha – Klášter sv. Anežky", "address": "U milosrdných 17", "district": "Praha 1", "web": "https://www.ngprague.cz", "note": "Středověké umění" },
+        { "name": "Národní galerie Praha – Šternberský palác", "address": "Hradčanské náměstí 15", "district": "Praha 1", "web": "https://www.ngprague.cz", "note": "Evropské umění, zahrada otevřena od dubna" },
+        { "name": "Národní galerie Praha – Kinský palác", "address": "Staroměstské náměstí 12", "district": "Praha 1", "web": "https://www.ngprague.cz", "note": "Asijské umění" },
+        { "name": "Národní galerie Praha – Salmovský palác", "address": "Hradčanské náměstí 2", "district": "Praha 1", "web": "https://www.ngprague.cz", "note": "Umění 19. století" },
+        { "name": "Národní galerie Praha – Valdštejnská jízdárna", "address": "Valdštejnská 3", "district": "Praha 1", "web": "https://www.ngprague.cz", "note": "Krátkodobé výstavy" },
+        { "name": "Galerie hlavního města Prahy (GHMP) – Dům U Kamenného zvonu", "address": "Staroměstské náměstí 13", "district": "Praha 1", "web": "https://www.ghmp.cz", "note": "Současné umění" },
+        { "name": "GHMP – Colloredo-Mansfeldský palác", "address": "Karlova 2", "district": "Praha 1", "web": "https://www.ghmp.cz", "note": "Výstavní prostor" },
+        { "name": "GHMP – Bílkova vila", "address": "Mickiewiczova 1", "district": "Praha 6", "web": "https://www.ghmp.cz", "note": "Sochařské muzeum F. Bílka" },
+        { "name": "GHMP – Zámek Troja", "address": "U Trojského zámku 1", "district": "Praha 7", "web": "https://www.ghmp.cz", "note": "Barokní zámek, galerie" },
+        { "name": "Kunsthalle Praha", "address": "Klárov 5", "district": "Praha 1", "web": "https://www.kunsthallepraha.org", "note": "Nové centrum současného umění" },
+        { "name": "Galerie Rudolfinum", "address": "Alšovo nábřeží 12", "district": "Praha 1", "web": "https://www.rudolfinum.org", "note": "Výstavní síň, bez vlastní sbírky" },
+        { "name": "Museum Kampa", "address": "U Sovových mlýnů 2", "district": "Praha 1", "web": "https://www.museumkampa.cz", "note": "Sbírka Kupka, Gutfreund" },
+        { "name": "Uměleckoprůmyslové museum (UPM)", "address": "17. listopadu 2", "district": "Praha 1", "web": "https://www.upm.cz", "note": "Užité umění a design" },
+        { "name": "Dům U Černé Matky Boží", "address": "Celetná 34", "district": "Praha 1", "web": "https://www.upm.cz", "note": "České kubistické umění" },
+        { "name": "Mucha Museum", "address": "Panská 7", "district": "Praha 1", "web": "https://www.mucha.cz", "note": "Alfons Mucha" }
+      ]
+    },
+    {
+      "category": "Centra současného umění",
+      "galleries": [
+        { "name": "DOX – Centrum současného umění", "address": "Poupětova 1", "district": "Praha 7", "web": "https://www.dox.cz", "note": "Umění, architektura, design" },
+        { "name": "FUTURA", "address": "Holečkova 49", "district": "Praha 5", "web": "https://www.futuraprojekt.com", "note": "Nezávislý prostor pro současné umění" },
+        { "name": "Tranzitdisplay", "address": "Dittrichova 9", "district": "Praha 2", "web": "https://www.tranzitdisplay.cz", "note": "Výstavní a vzdělávací prostor" },
+        { "name": "Center for Contemporary Arts Prague (FCCA)", "address": "Staroměstské náměstí 1", "district": "Praha 1", "web": "https://www.fcca.cz", "note": "Nadace pro současné umění" },
+        { "name": "MeetFactory – Galerie Kostka", "address": "Ke Sklárně 15", "district": "Praha 5", "web": "https://www.meetfactory.cz", "note": "Galerie v rámci MeetFactory" },
+        { "name": "Display", "address": "Dittrichova 9", "district": "Praha 2", "web": "https://display.cz", "note": "Prostor pro současné umění" },
+        { "name": "Galerie NoD", "address": "Dlouhá 33", "district": "Praha 1", "web": "https://nod.roxy.cz", "note": "Galerie v Roxy/NoD" }
+      ]
+    },
+    {
+      "category": "Komerční galerie současného umění",
+      "galleries": [
+        { "name": "Hunt Kastner", "address": "Kamenická 22", "district": "Praha 7", "web": "https://www.huntkastner.com", "note": "" },
+        { "name": "Jiří Švestka Gallery", "address": "Biskupský dvůr 2", "district": "Praha 1", "web": "https://www.jirisvestka.com", "note": "" },
+        { "name": "SVIT Prague", "address": "Radlická 187", "district": "Praha 5", "web": "https://www.svitpraha.org", "note": "" },
+        { "name": "Polansky Gallery", "address": "Pernerova 8", "district": "Praha 8", "web": "https://www.polanskygallery.com", "note": "" },
+        { "name": "Trafo Gallery", "address": "Kubelíkova 27", "district": "Praha 3", "web": "https://www.trafogallery.cz", "note": "" },
+        { "name": "Galerie Václava Špály", "address": "Národní 30", "district": "Praha 1", "web": "", "note": "" },
+        { "name": "Galerie Art Praha", "address": "Staré Město", "district": "Praha 1", "web": "https://www.galerie-art-praha.cz", "note": "Sběratelské umění" },
+        { "name": "Galerie Kuzebauch", "address": "Husova 14", "district": "Praha 1", "web": "https://www.kuzebauch.cz", "note": "Sklo a design" }
+      ]
+    },
+    {
+      "category": "Fotografie",
+      "galleries": [
+        { "name": "Leica Gallery Prague", "address": "Školská 28", "district": "Praha 1", "web": "https://www.lgp.cz", "note": "Výstavy fotografie" },
+        { "name": "Galerie Josefa Sudka", "address": "Úvoz 24", "district": "Praha 1", "web": "", "note": "Fotografická galerie" }
+      ]
+    },
+    {
+      "category": "Menší / nezávislé prostory",
+      "galleries": [
+        { "name": "Galerie 9", "address": "Sokolovská 324/14", "district": "Praha 9", "web": "http://www.galerie9.cz", "note": "Nekomerční prostor MČ Praha 9" },
+        { "name": "Studio PRÁM", "address": "Čerpadlová 536/4", "district": "Praha 9", "web": "http://www.pramstudio.cz", "note": "Návštěva po domluvě" },
+        { "name": "Beseder Gallery", "address": "Lihovarská 12", "district": "Praha 9", "web": "https://www.besedergallery.art", "note": "Vstup zdarma" },
+        { "name": "Museum Montanelli", "address": "Nerudova 13", "district": "Praha 1", "web": "https://www.museummontanelli.com", "note": "" },
+        { "name": "Langhans Galerie", "address": "Vodičkova 37", "district": "Praha 1", "web": "http://www.langhansgalerie.cz", "note": "" },
+        { "name": "Signal Space", "address": "Husitská 7", "district": "Praha 3", "web": "", "note": "" },
+        { "name": "Centrální galerie (Staroměstské náměstí)", "address": "Staroměstské náměstí", "district": "Praha 1", "web": "", "note": "Dalí, Warhol – trvalé expozice" },
+        { "name": "Dancing House Gallery (Tančící dům)", "address": "Jiráskovo náměstí 6", "district": "Praha 2", "web": "https://www.tancicidum.cz", "note": "Současné umění" },
+        { "name": "KodlContemporary", "address": "Národní 7", "district": "Praha 1", "web": "https://www.kodl.cz", "note": "" },
+        { "name": "Galerie Vltavín", "address": "Masarykovo nábřeží 36", "district": "Praha 1", "web": "https://www.galerievltavin.cz", "note": "" }
+      ]
+    }
+  ]
+}
