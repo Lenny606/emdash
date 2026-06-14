@@ -1,322 +1,1051 @@
 {
-	"$schema": "https://emdashcms.com/seed.schema.json",
-	"version": "1",
-	"meta": {
-		"name": "AI & Programming Starter",
-		"description": "An EmDash starter populated with AI, Machine Learning and Future of Coding content",
-		"author": "Antigravity Senior Copywriter"
-	},
-	"settings": {
-		"title": "AI Dev Pulse",
-		"tagline": "Budoucnost programování v éře umělé inteligence"
-	},
-	"collections": [
-		{
-			"slug": "posts",
-			"label": "Články",
-			"labelSingular": "Článek",
-			"supports": ["drafts", "revisions", "search", "seo"],
-			"fields": [
-				{
-					"slug": "title",
-					"label": "Titulek",
-					"type": "string",
-					"required": true,
-					"searchable": true
-				},
-				{
-					"slug": "featured_image",
-					"label": "Náhledový obrázek",
-					"type": "image"
-				},
-				{
-					"slug": "content",
-					"label": "Obsah",
-					"type": "portableText",
-					"searchable": true
-				},
-				{
-					"slug": "excerpt",
-					"label": "Perex",
-					"type": "text"
-				}
-			]
-		},
-		{
-			"slug": "pages",
-			"label": "Stránky",
-			"labelSingular": "Stránka",
-			"supports": ["drafts", "revisions", "search", "seo"],
-			"fields": [
-				{
-					"slug": "title",
-					"label": "Titulek",
-					"type": "string",
-					"required": true,
-					"searchable": true
-				},
-				{
-					"slug": "content",
-					"label": "Obsah",
-					"type": "portableText",
-					"searchable": true
-				}
-			]
-		}
-	],
-	"taxonomies": [
-		{
-			"name": "category",
-			"label": "Kategorie",
-			"labelSingular": "Kategorie",
-			"hierarchical": true,
-			"collections": ["posts"],
-			"terms": [
-				{ "slug": "ai-programming", "label": "AI v Programování" },
-				{ "slug": "machine-learning", "label": "Strojové Učení" },
-				{ "slug": "future-of-coding", "label": "Budoucnost Kódování" },
-				{ "slug": "ai-tools", "label": "AI Nástroje" },
-				{ "slug": "general", "label": "Obecné" }
-			]
-		},
-		{
-			"name": "tag",
-			"label": "Tagy",
-			"labelSingular": "Tag",
-			"hierarchical": false,
-			"collections": ["posts"],
-			"terms": [
-				{ "slug": "copilot", "label": "Copilot" },
-				{ "slug": "productivity", "label": "Produktivita" },
-				{ "slug": "neural-networks", "label": "Neurální Sítě" },
-				{ "slug": "llm", "label": "LLM" },
-				{ "slug": "ethics", "label": "Etika" },
-				{ "slug": "automation", "label": "Automatizace" },
-				{ "slug": "coding", "label": "Kódování" }
-			]
-		}
-	],
-	"menus": [
-		{
-			"name": "primary",
-			"label": "Hlavní navigace",
-			"items": [
-				{ "type": "custom", "label": "Domů", "url": "/" },
-				{ "type": "custom", "label": "Články", "url": "/posts" },
-				{ "type": "custom", "label": "Kategorie", "url": "/category" },
-				{ "type": "custom", "label": "Tagy", "url": "/tag" },
-				{ "type": "custom", "label": "O nás", "url": "/about" }
-			]
-		}
-	],
-	"widgetAreas": [
-		{
-			"name": "sidebar",
-			"label": "Sidebar",
-			"description": "Sidebar widget area",
-			"widgets": [
-				{ "type": "component", "componentId": "core:search", "title": "Hledat" },
-				{ "type": "component", "componentId": "core:categories", "title": "Kategorie" },
-				{ "type": "component", "componentId": "core:recent-posts", "title": "Nejnovější články", "settings": { "count": 5 } }
-			]
-		}
-	],
-	"content": {
-		"pages": [
-			{
-				"id": "about",
-				"slug": "about",
-				"status": "published",
-				"data": {
-					"title": "O projektu AI Dev Pulse",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [{ "_type": "span", "text": "Tento projekt vznikl jako ukázka využití EmDash CMS pro tvorbu moderního technologického magazínu.", "_key": "k1" }],
-							"_key": "k0"
-						}
-					]
-				}
-			}
-		],
-		"posts": [
-			{
-				"id": "ai-post-1",
-				"slug": "jak-github-copilot-meni-rutinu",
-				"status": "published",
-				"data": {
-					"title": "Jak GitHub Copilot mění každodenní rutinu vývojáře",
-					"excerpt": "Jak umělá inteligence pomáhá psát kód rychleji a efektivněji v reálném světě.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80", "alt": "AI Visualization" },
-					"content": [
-						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Od automatického doplňování k inteligentnímu partnerovi", "_key": "a1" }], "_key": "a0" },
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "GitHub Copilot už není jen pokročilý našeptávač. Dnes dokáže navrhovat celé funkce, psát testy a dokonce i vysvětlovat složité kousky kódu.", "_key": "a3" }], "_key": "a2" },
-						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Zvýšení produktivity", "_key": "a5" }], "_key": "a4" },
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Výzkumy ukazují, že programátoři používající AI dokončují úkoly až o 55 % rychleji. To uvolňuje ruce pro kreativnější práci.", "_key": "a7" }], "_key": "a6" }
-					]
-				},
-				"taxonomies": { "category": ["ai-programming"], "tag": ["copilot", "productivity"] }
-			},
-			{
-				"id": "ai-post-2",
-				"slug": "psani-cisteho-kodu-v-ere-ai",
-				"status": "published",
-				"data": {
-					"title": "Psaní čistého kódu v éře AI: Je to ještě potřeba?",
-					"excerpt": "Proč jsou principy Clean Code důležitější než kdy dříve, když kód generují stroje.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=1600&q=80", "alt": "Clean Code" },
-					"content": [
-						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Kvalita nad kvantitou", "_key": "b1" }], "_key": "b0" },
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "AI dokáže vygenerovat tisíce řádků kódu během vteřin. Pokud ale tento kód není čitelný a udržitelný, zaděláváme si na technický dluh.", "_key": "b3" }], "_key": "b2" }
-					]
-				},
-				"taxonomies": { "category": ["ai-programming"], "tag": ["productivity", "ethics"] }
-			},
-			{
-				"id": "ai-post-3",
-				"slug": "debugging-s-chatgpt",
-				"status": "published",
-				"data": {
-					"title": "Pair programming s ChatGPT: Tipy pro efektivnější debugging",
-					"excerpt": "Jak využít konverzační AI k rychlému odhalení chyb a pochopení stack trace.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80", "alt": "Debugging" },
-					"content": [
-						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Jak se správně ptát", "_key": "c1" }], "_key": "c0" },
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Kontext je klíčový. Když ChatGPT pošlete jen chybu, výsledek bude průměrný. Pošlete-li i relevantní kusy kódu, dostanete přesné řešení.", "_key": "c3" }], "_key": "c2" }
-					]
-				},
-				"taxonomies": { "category": ["ai-programming"], "tag": ["productivity", "automation"] }
-			},
-			{
-				"id": "ai-post-4",
-				"slug": "uvod-do-transformatoru",
-				"status": "published",
-				"data": {
-					"title": "Úvod do transformátorů: Architektura, která změnila svět",
-					"excerpt": "Pochopte základy technologie, která stojí za GPT, Claude a dalšími LLM.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1600&q=80", "alt": "Neural Networks" },
-					"content": [
-						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Attention is all you need", "_key": "d1" }], "_key": "d0" },
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Transformátory využívají mechanismus 'attention' (pozornosti), který jim umožňuje zpracovávat informace v kontextu celé věty najednou.", "_key": "d3" }], "_key": "d2" }
-					]
-				},
-				"taxonomies": { "category": ["machine-learning"], "tag": ["neural-networks", "llm"] }
-			},
-			{
-				"id": "ai-post-5",
-				"slug": "proc-se-ucit-ml",
-				"status": "published",
-				"data": {
-					"title": "Proč by se měl každý programátor naučit základy ML",
-					"excerpt": "Strojové učení už není jen pro vědce. Stává se běžnou součástí softwarového inženýrství.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80", "alt": "Data Science" },
-					"content": [
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Znalost toho, jak modely fungují, vám pomůže lépe integrovat AI funkce do vašich aplikací a pochopit jejich omezení.", "_key": "e1" }], "_key": "e0" }
-					]
-				},
-				"taxonomies": { "category": ["machine-learning"], "tag": ["automation", "coding"] }
-			},
-			{
-				"id": "ai-post-6",
-				"slug": "role-cloveka-2030",
-				"status": "published",
-				"data": {
-					"title": "Konec programátorů, jak je známe? Role člověka v roce 2030",
-					"excerpt": "Výhled do budoucnosti, kde AI píše většinu kódu a člověk definuje vizi.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1600&q=80", "alt": "Future" },
-					"content": [
-						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Od psaní kódu k systémovému designu", "_key": "f1" }], "_key": "f0" },
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "V budoucnu se budeme méně soustředit na syntaxi a více na architekturu, bezpečnost a uživatelský zážitek.", "_key": "f3" }], "_key": "f2" }
-					]
-				},
-				"taxonomies": { "category": ["future-of-coding"], "tag": ["ethics", "automation"] }
-			},
-			{
-				"id": "ai-post-7",
-				"slug": "prompt-engineering-moda-nebo-skill",
-				"status": "published",
-				"data": {
-					"title": "Prompt Engineering: Nová dovednost nebo jen dočasná móda?",
-					"excerpt": "Analýza toho, jak moc záleží na formulaci dotazů pro velké jazykové modely.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1678911820864-e2c567c655d7?auto=format&fit=crop&w=1600&q=80", "alt": "Prompts" },
-					"content": [
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "S příchodem schopnějších modelů se potřeba 'hackovat' prompty snižuje, ale schopnost jasně definovat zadání zůstává klíčová.", "_key": "g1" }], "_key": "g0" }
-					]
-				},
-				"taxonomies": { "category": ["future-of-coding"], "tag": ["llm", "productivity"] }
-			},
-			{
-				"id": "ai-post-8",
-				"slug": "claude-vs-gpt4-kod",
-				"status": "published",
-				"data": {
-					"title": "Recenze: Claude 3 vs GPT-4 – Který model lépe rozumí kódu?",
-					"excerpt": "Srovnání dvou nejpopulárnějších modelů v praktických programátorských úlohách.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=1600&q=80", "alt": "Code Comparison" },
-					"content": [
-						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Logika a kontext", "_key": "h1" }], "_key": "h0" },
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Zatímco GPT-4 exceluje v širokém záběru, Claude 3 se zdá být přesnější v dodržování specifických instrukcí a delším kontextu.", "_key": "h3" }], "_key": "h2" }
-					]
-				},
-				"taxonomies": { "category": ["ai-tools"], "tag": ["llm", "productivity"] }
-			},
-			{
-				"id": "ai-post-9",
-				"slug": "lokalni-llm-soukromi",
-				"status": "published",
-				"data": {
-					"title": "Nástroje pro lokální běh LLM: Soukromí nade vše",
-					"excerpt": "Jak rozběhnout modely jako Llama 3 nebo Mistral na vlastním hardwaru pomocí Ollama.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1600&q=80", "alt": "Privacy" },
-					"content": [
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Pro firmy i jednotlivce, kteří nemohou sdílet svůj kód s cloudy, jsou lokální LLM jedinou cestou k bezpečné AI asistenci.", "_key": "i1" }], "_key": "i0" }
-					]
-				},
-				"taxonomies": { "category": ["ai-tools"], "tag": ["llm", "automation"] }
-			},
-			{
-				"id": "ai-post-10",
-				"slug": "ai-v-ide-za-hranice-doplnovani",
-				"status": "published",
-				"data": {
-					"title": "AI v IDE: Za hranice doplňování textu",
-					"excerpt": "Nové pluginy, které analyzují celou vaši codebase a pomáhají s refaktoringem.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1600&q=80", "alt": "IDE" },
-					"content": [
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Moderní IDE nástroje dnes dokáží navrhnout refaktoring pro celou aplikaci najednou, čímž šetří hodiny manuální práce.", "_key": "j1" }], "_key": "j0" }
-					]
-				},
-				"taxonomies": { "category": ["ai-tools"], "tag": ["productivity", "automation"] }
-			},
-			{
-				"id": "ai-post-11",
-				"slug": "optimalizace-nn-edge",
-				"status": "published",
-				"data": {
-					"title": "Optimalizace neuronových sítí pro běh na koncových zařízenících",
-					"excerpt": "Jak dostat výkonné modely do mobilů a IoT zařízení pomocí kvantizace.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80", "alt": "Edge AI" },
-					"content": [
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Techniky jako kvantizace a pruning umožňují zmenšit modely bez výrazné ztráty přesnosti, což je klíčové pro edge computing.", "_key": "l1" }], "_key": "l0" }
-					]
-				},
-				"taxonomies": { "category": ["machine-learning"], "tag": ["neural-networks"] }
-			},
-			{
-				"id": "ai-post-12",
-				"slug": "low-code-no-code-ai",
-				"status": "published",
-				"data": {
-					"title": "Low-code a No-code platformy poháněné AI: Hrozba nebo příležitost?",
-					"excerpt": "Jak se mění trh vývoje aplikací, když si každý může 'napromptovat' vlastní nástroj.",
-					"featured_image": { "src": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=80", "alt": "Teamwork" },
-					"content": [
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Demokratizace vývoje přináší nové možnosti, ale také výzvy v oblasti bezpečnosti a kvality výsledného softwaru.", "_key": "m1" }], "_key": "m0" }
-					]
-				},
-				"taxonomies": { "category": ["future-of-coding"], "tag": ["automation"] }
-			}
-		]
-	}
+  "$schema": "https://emdashcms.com/seed.schema.json",
+  "version": "1",
+  "meta": {
+    "name": "Prague Galleries",
+    "description": "Overview of galleries and art museums in Prague",
+    "author": "Antigravity developer"
+  },
+  "settings": {
+    "title": "Galerie v Praze",
+    "tagline": "Přehled pražských galeriích a uměleckých institucí"
+  },
+  "collections": [
+    {
+      "slug": "pages",
+      "label": "Stránky",
+      "labelSingular": "Stránka",
+      "supports": [
+        "drafts",
+        "revisions",
+        "search"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Titulek",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "content",
+          "label": "Obsah",
+          "type": "portableText",
+          "searchable": true
+        }
+      ]
+    },
+    {
+      "slug": "galleries",
+      "label": "Galerie",
+      "labelSingular": "Galerie",
+      "supports": [
+        "drafts",
+        "revisions",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Název",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "address",
+          "label": "Adresa",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "web",
+          "label": "Webové stránky",
+          "type": "string"
+        },
+        {
+          "slug": "note",
+          "label": "Poznámka",
+          "type": "text",
+          "searchable": true
+        }
+      ]
+    }
+  ],
+  "taxonomies": [
+    {
+      "name": "gallery_category",
+      "label": "Kategorie",
+      "labelSingular": "Kategorie",
+      "hierarchical": true,
+      "collections": [
+        "galleries"
+      ],
+      "terms": [
+        {
+          "slug": "velke-instituce-muzea-umeni",
+          "label": "Velké instituce / muzea umění"
+        },
+        {
+          "slug": "centra-soucasneho-umeni",
+          "label": "Centra současného umění"
+        },
+        {
+          "slug": "komercni-galerie-soucasneho-umeni",
+          "label": "Komerční galerie současného umění"
+        },
+        {
+          "slug": "fotografie",
+          "label": "Fotografie"
+        },
+        {
+          "slug": "mensi-nezavisle-prostory",
+          "label": "Menší / nezávislé prostory"
+        }
+      ]
+    },
+    {
+      "name": "tag",
+      "label": "Tagy",
+      "labelSingular": "Tag",
+      "hierarchical": false,
+      "collections": [
+        "galleries"
+      ],
+      "terms": []
+    },
+    {
+      "name": "district",
+      "label": "Městské části",
+      "labelSingular": "Městská část",
+      "hierarchical": false,
+      "collections": [
+        "galleries"
+      ],
+      "terms": [
+        {
+          "slug": "praha-1",
+          "label": "Praha 1"
+        },
+        {
+          "slug": "praha-2",
+          "label": "Praha 2"
+        },
+        {
+          "slug": "praha-3",
+          "label": "Praha 3"
+        },
+        {
+          "slug": "praha-5",
+          "label": "Praha 5"
+        },
+        {
+          "slug": "praha-6",
+          "label": "Praha 6"
+        },
+        {
+          "slug": "praha-7",
+          "label": "Praha 7"
+        },
+        {
+          "slug": "praha-8",
+          "label": "Praha 8"
+        },
+        {
+          "slug": "praha-9",
+          "label": "Praha 9"
+        }
+      ]
+    }
+  ],
+  "menus": [
+    {
+      "name": "primary",
+      "label": "Hlavní navigace",
+      "items": [
+        {
+          "type": "custom",
+          "label": "Domů",
+          "url": "/"
+        },
+        {
+          "type": "custom",
+          "label": "Kategorie",
+          "url": "/kategorie"
+        },
+        {
+          "type": "custom",
+          "label": "Městské části",
+          "url": "/obvod"
+        },
+        {
+          "type": "custom",
+          "label": "O projektu",
+          "url": "/about"
+        }
+      ]
+    }
+  ],
+  "widgetAreas": [
+    {
+      "name": "sidebar",
+      "label": "Sidebar",
+      "description": "Sidebar widget area",
+      "widgets": [
+        {
+          "type": "component",
+          "componentId": "core:search",
+          "title": "Hledat"
+        }
+      ]
+    }
+  ],
+  "content": {
+    "pages": [
+      {
+        "id": "about",
+        "slug": "about",
+        "status": "published",
+        "data": {
+          "title": "O projektu Galerie v Praze",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Tento web slouží jako přehledný průvodce po pražských galeriích, muzeích umění a nezávislých uměleckých prostorech.",
+                  "_key": "about-intro"
+                }
+              ],
+              "_key": "about-block-1"
+            }
+          ]
+        }
+      }
+    ],
+    "galleries": [
+      {
+        "id": "narodni-galerie-praha-veletrzni-palac",
+        "slug": "narodni-galerie-praha-veletrzni-palac",
+        "status": "published",
+        "data": {
+          "title": "Národní galerie Praha – Veletržní palác",
+          "address": "Dukelských hrdinů 47",
+          "web": "https://www.ngprague.cz",
+          "note": "Moderní a současné umění 19.–21. století"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-7"
+          ]
+        }
+      },
+      {
+        "id": "narodni-galerie-praha-klaster-sv-anezky",
+        "slug": "narodni-galerie-praha-klaster-sv-anezky",
+        "status": "published",
+        "data": {
+          "title": "Národní galerie Praha – Klášter sv. Anežky",
+          "address": "U milosrdných 17",
+          "web": "https://www.ngprague.cz",
+          "note": "Středověké umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "narodni-galerie-praha-sternbersky-palac",
+        "slug": "narodni-galerie-praha-sternbersky-palac",
+        "status": "published",
+        "data": {
+          "title": "Národní galerie Praha – Šternberský palác",
+          "address": "Hradčanské náměstí 15",
+          "web": "https://www.ngprague.cz",
+          "note": "Evropské umění, zahrada otevřena od dubna"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "narodni-galerie-praha-kinsky-palac",
+        "slug": "narodni-galerie-praha-kinsky-palac",
+        "status": "published",
+        "data": {
+          "title": "Národní galerie Praha – Kinský palác",
+          "address": "Staroměstské náměstí 12",
+          "web": "https://www.ngprague.cz",
+          "note": "Asijské umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "narodni-galerie-praha-salmovsky-palac",
+        "slug": "narodni-galerie-praha-salmovsky-palac",
+        "status": "published",
+        "data": {
+          "title": "Národní galerie Praha – Salmovský palác",
+          "address": "Hradčanské náměstí 2",
+          "web": "https://www.ngprague.cz",
+          "note": "Umění 19. století"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "narodni-galerie-praha-valdstejnska-jizdarna",
+        "slug": "narodni-galerie-praha-valdstejnska-jizdarna",
+        "status": "published",
+        "data": {
+          "title": "Národní galerie Praha – Valdštejnská jízdárna",
+          "address": "Valdštejnská 3",
+          "web": "https://www.ngprague.cz",
+          "note": "Krátkodobé výstavy"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "galerie-hlavniho-mesta-prahy-ghmp-dum-u-kamenneho-zvonu",
+        "slug": "galerie-hlavniho-mesta-prahy-ghmp-dum-u-kamenneho-zvonu",
+        "status": "published",
+        "data": {
+          "title": "Galerie hlavního města Prahy (GHMP) – Dům U Kamenného zvonu",
+          "address": "Staroměstské náměstí 13",
+          "web": "https://www.ghmp.cz",
+          "note": "Současné umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "ghmp-colloredo-mansfeldsky-palac",
+        "slug": "ghmp-colloredo-mansfeldsky-palac",
+        "status": "published",
+        "data": {
+          "title": "GHMP – Colloredo-Mansfeldský palác",
+          "address": "Karlova 2",
+          "web": "https://www.ghmp.cz",
+          "note": "Výstavní prostor"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "ghmp-bilkova-vila",
+        "slug": "ghmp-bilkova-vila",
+        "status": "published",
+        "data": {
+          "title": "GHMP – Bílkova vila",
+          "address": "Mickiewiczova 1",
+          "web": "https://www.ghmp.cz",
+          "note": "Sochařské muzeum F. Bílka"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-6"
+          ]
+        }
+      },
+      {
+        "id": "ghmp-zamek-troja",
+        "slug": "ghmp-zamek-troja",
+        "status": "published",
+        "data": {
+          "title": "GHMP – Zámek Troja",
+          "address": "U Trojského zámku 1",
+          "web": "https://www.ghmp.cz",
+          "note": "Barokní zámek, galerie"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-7"
+          ]
+        }
+      },
+      {
+        "id": "kunsthalle-praha",
+        "slug": "kunsthalle-praha",
+        "status": "published",
+        "data": {
+          "title": "Kunsthalle Praha",
+          "address": "Klárov 5",
+          "web": "https://www.kunsthallepraha.org",
+          "note": "Nové centrum současného umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "galerie-rudolfinum",
+        "slug": "galerie-rudolfinum",
+        "status": "published",
+        "data": {
+          "title": "Galerie Rudolfinum",
+          "address": "Alšovo nábřeží 12",
+          "web": "https://www.rudolfinum.org",
+          "note": "Výstavní síň, bez vlastní sbírky"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "museum-kampa",
+        "slug": "museum-kampa",
+        "status": "published",
+        "data": {
+          "title": "Museum Kampa",
+          "address": "U Sovových mlýnů 2",
+          "web": "https://www.museumkampa.cz",
+          "note": "Sbírka Kupka, Gutfreund"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "umeleckoprumyslove-museum-upm",
+        "slug": "umeleckoprumyslove-museum-upm",
+        "status": "published",
+        "data": {
+          "title": "Uměleckoprůmyslové museum (UPM)",
+          "address": "17. listopadu 2",
+          "web": "https://www.upm.cz",
+          "note": "Užité umění a design"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "dum-u-cerne-matky-bozi",
+        "slug": "dum-u-cerne-matky-bozi",
+        "status": "published",
+        "data": {
+          "title": "Dům U Černé Matky Boží",
+          "address": "Celetná 34",
+          "web": "https://www.upm.cz",
+          "note": "České kubistické umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "mucha-museum",
+        "slug": "mucha-museum",
+        "status": "published",
+        "data": {
+          "title": "Mucha Museum",
+          "address": "Panská 7",
+          "web": "https://www.mucha.cz",
+          "note": "Alfons Mucha"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "velke-instituce-muzea-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "dox-centrum-soucasneho-umeni",
+        "slug": "dox-centrum-soucasneho-umeni",
+        "status": "published",
+        "data": {
+          "title": "DOX – Centrum současného umění",
+          "address": "Poupětova 1",
+          "web": "https://www.dox.cz",
+          "note": "Umění, architektura, design"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "centra-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-7"
+          ]
+        }
+      },
+      {
+        "id": "futura",
+        "slug": "futura",
+        "status": "published",
+        "data": {
+          "title": "FUTURA",
+          "address": "Holečkova 49",
+          "web": "https://www.futuraprojekt.com",
+          "note": "Nezávislý prostor pro současné umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "centra-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-5"
+          ]
+        }
+      },
+      {
+        "id": "tranzitdisplay",
+        "slug": "tranzitdisplay",
+        "status": "published",
+        "data": {
+          "title": "Tranzitdisplay",
+          "address": "Dittrichova 9",
+          "web": "https://www.tranzitdisplay.cz",
+          "note": "Výstavní a vzdělávací prostor"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "centra-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-2"
+          ]
+        }
+      },
+      {
+        "id": "center-for-contemporary-arts-prague-fcca",
+        "slug": "center-for-contemporary-arts-prague-fcca",
+        "status": "published",
+        "data": {
+          "title": "Center for Contemporary Arts Prague (FCCA)",
+          "address": "Staroměstské náměstí 1",
+          "web": "https://www.fcca.cz",
+          "note": "Nadace pro současné umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "centra-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "meetfactory-galerie-kostka",
+        "slug": "meetfactory-galerie-kostka",
+        "status": "published",
+        "data": {
+          "title": "MeetFactory – Galerie Kostka",
+          "address": "Ke Sklárně 15",
+          "web": "https://www.meetfactory.cz",
+          "note": "Galerie v rámci MeetFactory"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "centra-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-5"
+          ]
+        }
+      },
+      {
+        "id": "display",
+        "slug": "display",
+        "status": "published",
+        "data": {
+          "title": "Display",
+          "address": "Dittrichova 9",
+          "web": "https://display.cz",
+          "note": "Prostor pro současné umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "centra-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-2"
+          ]
+        }
+      },
+      {
+        "id": "galerie-nod",
+        "slug": "galerie-nod",
+        "status": "published",
+        "data": {
+          "title": "Galerie NoD",
+          "address": "Dlouhá 33",
+          "web": "https://nod.roxy.cz",
+          "note": "Galerie v Roxy/NoD"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "centra-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "hunt-kastner",
+        "slug": "hunt-kastner",
+        "status": "published",
+        "data": {
+          "title": "Hunt Kastner",
+          "address": "Kamenická 22",
+          "web": "https://www.huntkastner.com",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "komercni-galerie-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-7"
+          ]
+        }
+      },
+      {
+        "id": "jiri-svestka-gallery",
+        "slug": "jiri-svestka-gallery",
+        "status": "published",
+        "data": {
+          "title": "Jiří Švestka Gallery",
+          "address": "Biskupský dvůr 2",
+          "web": "https://www.jirisvestka.com",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "komercni-galerie-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "svit-prague",
+        "slug": "svit-prague",
+        "status": "published",
+        "data": {
+          "title": "SVIT Prague",
+          "address": "Radlická 187",
+          "web": "https://www.svitpraha.org",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "komercni-galerie-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-5"
+          ]
+        }
+      },
+      {
+        "id": "polansky-gallery",
+        "slug": "polansky-gallery",
+        "status": "published",
+        "data": {
+          "title": "Polansky Gallery",
+          "address": "Pernerova 8",
+          "web": "https://www.polanskygallery.com",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "komercni-galerie-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-8"
+          ]
+        }
+      },
+      {
+        "id": "trafo-gallery",
+        "slug": "trafo-gallery",
+        "status": "published",
+        "data": {
+          "title": "Trafo Gallery",
+          "address": "Kubelíkova 27",
+          "web": "https://www.trafogallery.cz",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "komercni-galerie-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-3"
+          ]
+        }
+      },
+      {
+        "id": "galerie-vaclava-spaly",
+        "slug": "galerie-vaclava-spaly",
+        "status": "published",
+        "data": {
+          "title": "Galerie Václava Špály",
+          "address": "Národní 30",
+          "web": "",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "komercni-galerie-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "galerie-art-praha",
+        "slug": "galerie-art-praha",
+        "status": "published",
+        "data": {
+          "title": "Galerie Art Praha",
+          "address": "Staré Město",
+          "web": "https://www.galerie-art-praha.cz",
+          "note": "Sběratelské umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "komercni-galerie-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "galerie-kuzebauch",
+        "slug": "galerie-kuzebauch",
+        "status": "published",
+        "data": {
+          "title": "Galerie Kuzebauch",
+          "address": "Husova 14",
+          "web": "https://www.kuzebauch.cz",
+          "note": "Sklo a design"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "komercni-galerie-soucasneho-umeni"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "leica-gallery-prague",
+        "slug": "leica-gallery-prague",
+        "status": "published",
+        "data": {
+          "title": "Leica Gallery Prague",
+          "address": "Školská 28",
+          "web": "https://www.lgp.cz",
+          "note": "Výstavy fotografie"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "fotografie"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "galerie-josefa-sudka",
+        "slug": "galerie-josefa-sudka",
+        "status": "published",
+        "data": {
+          "title": "Galerie Josefa Sudka",
+          "address": "Úvoz 24",
+          "web": "",
+          "note": "Fotografická galerie"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "fotografie"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "galerie-9",
+        "slug": "galerie-9",
+        "status": "published",
+        "data": {
+          "title": "Galerie 9",
+          "address": "Sokolovská 324/14",
+          "web": "http://www.galerie9.cz",
+          "note": "Nekomerční prostor MČ Praha 9"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-9"
+          ]
+        }
+      },
+      {
+        "id": "studio-pram",
+        "slug": "studio-pram",
+        "status": "published",
+        "data": {
+          "title": "Studio PRÁM",
+          "address": "Čerpadlová 536/4",
+          "web": "http://www.pramstudio.cz",
+          "note": "Návštěva po domluvě"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-9"
+          ]
+        }
+      },
+      {
+        "id": "beseder-gallery",
+        "slug": "beseder-gallery",
+        "status": "published",
+        "data": {
+          "title": "Beseder Gallery",
+          "address": "Lihovarská 12",
+          "web": "https://www.besedergallery.art",
+          "note": "Vstup zdarma"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-9"
+          ]
+        }
+      },
+      {
+        "id": "museum-montanelli",
+        "slug": "museum-montanelli",
+        "status": "published",
+        "data": {
+          "title": "Museum Montanelli",
+          "address": "Nerudova 13",
+          "web": "https://www.museummontanelli.com",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "langhans-galerie",
+        "slug": "langhans-galerie",
+        "status": "published",
+        "data": {
+          "title": "Langhans Galerie",
+          "address": "Vodičkova 37",
+          "web": "http://www.langhansgalerie.cz",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "signal-space",
+        "slug": "signal-space",
+        "status": "published",
+        "data": {
+          "title": "Signal Space",
+          "address": "Husitská 7",
+          "web": "",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-3"
+          ]
+        }
+      },
+      {
+        "id": "centralni-galerie-staromestske-namesti",
+        "slug": "centralni-galerie-staromestske-namesti",
+        "status": "published",
+        "data": {
+          "title": "Centrální galerie (Staroměstské náměstí)",
+          "address": "Staroměstské náměstí",
+          "web": "",
+          "note": "Dalí, Warhol – trvalé expozice"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "dancing-house-gallery-tancici-dum",
+        "slug": "dancing-house-gallery-tancici-dum",
+        "status": "published",
+        "data": {
+          "title": "Dancing House Gallery (Tančící dům)",
+          "address": "Jiráskovo náměstí 6",
+          "web": "https://www.tancicidum.cz",
+          "note": "Současné umění"
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-2"
+          ]
+        }
+      },
+      {
+        "id": "kodlcontemporary",
+        "slug": "kodlcontemporary",
+        "status": "published",
+        "data": {
+          "title": "KodlContemporary",
+          "address": "Národní 7",
+          "web": "https://www.kodl.cz",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      },
+      {
+        "id": "galerie-vltavin",
+        "slug": "galerie-vltavin",
+        "status": "published",
+        "data": {
+          "title": "Galerie Vltavín",
+          "address": "Masarykovo nábřeží 36",
+          "web": "https://www.galerievltavin.cz",
+          "note": ""
+        },
+        "taxonomies": {
+          "gallery_category": [
+            "mensi-nezavisle-prostory"
+          ],
+          "district": [
+            "praha-1"
+          ]
+        }
+      }
+    ]
+  }
 }

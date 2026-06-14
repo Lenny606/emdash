@@ -37,23 +37,28 @@ test.describe('Broken Image Link Tests', () => {
 		await checkImagesOnPage(page);
 	});
 
-	test('posts archive has no broken images', async ({ page }) => {
-		await page.goto('/posts');
+	test('categories list has no broken images', async ({ page }) => {
+		await page.goto('/kategorie');
 		await checkImagesOnPage(page);
 	});
 
-	test('individual post detail has no broken images', async ({ page }) => {
-		// Go to home and find first post
+	test('districts list has no broken images', async ({ page }) => {
+		await page.goto('/obvod');
+		await checkImagesOnPage(page);
+	});
+
+	test('individual gallery detail has no broken images', async ({ page }) => {
+		// Go to home and find first gallery
 		await page.goto('/');
-		const firstPostLink = page.locator('.post-card a').first();
-		if (await firstPostLink.count() > 0) {
-			await firstPostLink.click();
+		const firstGalleryLink = page.locator('.gallery-card a').first();
+		if (await firstGalleryLink.count() > 0) {
+			await firstGalleryLink.click();
 			await checkImagesOnPage(page);
 		}
 	});
 
 	test('search results have no broken images', async ({ page }) => {
-		await page.goto('/search?q=AI');
+		await page.goto('/search?q=Praha');
 		await checkImagesOnPage(page);
 	});
 

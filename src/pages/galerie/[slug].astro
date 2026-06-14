@@ -1,0 +1,102 @@
+---
+import { getEmDashEntry, getEntryTerms, getSeoMeta, decodeSlug, getSiteSettings } from "emdash";
+import Base from "../../layouts/Base.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+
+const slug = decodeSlug(Astro.params.slug);
+
+if (!slug) {
+	return Astro.redirect("/404");
+}
+
+const { entry: gallery, cacheHint } = await getEmDashEntry("galleries", slug);
+
+if (!gallery) {
+	return Astro.redirect("/404");
+}
+
+Astro.cache.set(cacheHint);
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+
+const seo = getSeoMeta(gallery, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: `/galerie/${slug}`,
+});
+
+const categories = await getEntryTerms("galleries", gallery.data.id, "gallery_category");
+const districts = await getEntryTerms("galleries", gallery.data.id, "district");
+---
+
+<Base
+	title={seo.title}
+	pageTitle={seo.ogTitle}
+	description={seo.description}
+	canonical={seo.canonical}
+	image={seo.ogImage}
+	content={{ collection: "galleries", id: gallery.data.id, slug }}
+>
+	<div class="with-sidebar">
+		<article class="block" style="padding: 0; overflow: hidden;">
+			<div style="padding: 2.5rem;">
+				<div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem; flex-wrap: wrap;">
+					{
+						districts.map((d) => (
+							<a href={`/obvod/${d.slug}`} style="background: var(--accent-3); color: white; padding: 0.25rem 0.75rem; border: 2px solid var(--border-color); font-size: 0.8rem; text-transform: uppercase;">
+								{d.label}
+							</a>
+						))
+					}
+					{
+						categories.map((c) => (
+							<a href={`/kategorie/${c.slug}`} style="background: var(--accent-1); padding: 0.25rem 0.75rem; border: 2px solid var(--border-color); font-size: 0.8rem; text-transform: uppercase;">
+								{c.label}
+							</a>
+						))
+					}
+				</div>
+
+				<h1 {...gallery.edit.title} style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 2rem; line-height: 1.1; display: block; background: none; border: none; box-shadow: none; padding: 0;">
+					{gallery.data.title}
+				</h1>
+
+				<div style="border-top: var(--border-width) solid var(--border-color); border-bottom: var(--border-width) solid var(--border-color); padding: 1.5rem 0; margin-bottom: 2rem;">
+					<div style="margin-bottom: 1.5rem;">
+						<strong style="text-transform: uppercase; font-family: var(--font-mono); font-size: 0.85rem; display: block; color: #555; margin-bottom: 0.25rem;">Adresa</strong>
+						<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 1rem;">
+							<span {...gallery.edit.address} style="font-size: 1.2rem; font-weight: bold;">{gallery.data.address}</span>
+							<a href={`https://mapy.cz/zakladni?q=${encodeURIComponent(gallery.data.address + ', Praha')}`} target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem; text-decoration: underline; color: var(--accent-3);">
+								Ukázat na mapě &rarr;
+							</a>
+						</div>
+					</div>
+
+					{
+						gallery.data.web && (
+							<div>
+								<strong style="text-transform: uppercase; font-family: var(--font-mono); font-size: 0.85rem; display: block; color: #555; margin-bottom: 0.25rem;">Webové stránky</strong>
+								<a {...gallery.edit.web} href={gallery.data.web} target="_blank" rel="noopener noreferrer" style="font-size: 1.2rem; font-weight: bold; text-decoration: underline; color: var(--accent-3); word-break: break-all;">
+									{gallery.data.web}
+								</a>
+							</div>
+						)
+					}
+				</div>
+
+				{
+					gallery.data.note && (
+						<div style="margin-top: 2rem;">
+							<strong style="text-transform: uppercase; font-family: var(--font-mono); font-size: 0.85rem; display: block; color: #555; margin-bottom: 0.5rem;">Poznámka / Popis</strong>
+							<p {...gallery.edit.note} style="font-size: 1.1rem; line-height: 1.6; white-space: pre-line; color: #222;">
+								{gallery.data.note}
+							</p>
+						</div>
+					)
+				}
+			</div>
+		</article>
+
+		<Sidebar />
+	</div>
+</Base>

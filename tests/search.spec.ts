@@ -8,11 +8,11 @@ test('search page loads and performs search', async ({ page }) => {
 
   // Perform a search
   const searchInput = page.getByPlaceholder('ZADEJTE DOTAZ...');
-  await searchInput.fill('welcome');
+  await searchInput.fill('Praha');
   await page.keyboard.press('Enter');
 
   // Check that the URL updated
-  await expect(page).toHaveURL(/\/search\?q=welcome/);
+  await expect(page).toHaveURL(/\/search\?q=Praha/);
 
   // Check that the result count line is displayed for the query
   const resultsInfo = page.locator('p.result-count:has-text("NALEZENO")');

@@ -1,0 +1,56 @@
+---
+interface Term {
+	slug: string;
+	label: string;
+}
+
+interface Props {
+	gallery: any;
+	categories?: Term[];
+	districts?: Term[];
+}
+
+const { gallery, categories = [], districts = [] } = Astro.props;
+---
+
+<li class="post-card">
+	<a href={`/galerie/${gallery.id}`} style="display: block; height: 100%; display: flex; flex-direction: column;">
+		<div class="content" style="flex-grow: 1; display: flex; flex-direction: column;">
+			<div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+				{
+					districts.map((d) => (
+						<span class="tag-chip" style="background: var(--accent-3); color: white; font-weight: bold; border: 1px solid var(--border-color);">
+							{d.label}
+						</span>
+					))
+				}
+				{
+					categories.map((c) => (
+						<span class="tag-chip" style="background: var(--accent-2); color: black; font-weight: bold; border: 1px solid var(--border-color);">
+							{c.label}
+						</span>
+					))
+				}
+			</div>
+
+			<h2 style="font-size: 1.5rem; margin-bottom: 0.75rem; line-height: 1.2;">{gallery.data.title}</h2>
+			
+			<p style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; color: #555;">
+				📍 {gallery.data.address}
+			</p>
+
+			{
+				gallery.data.note && (
+					<p style="font-size: 0.9rem; line-height: 1.4; color: #333; flex-grow: 1;">
+						{gallery.data.note.length > 150 ? gallery.data.note.substring(0, 147) + '...' : gallery.data.note}
+					</p>
+				)
+			}
+			
+			<div style="margin-top: 1.5rem; font-weight: 900; text-transform: uppercase; font-size: 0.85rem; border-top: 2px dashed var(--border-color); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+				<span>DETAIL GALERIE</span>
+				<span>&rarr;</span>
+			</div>
+		</div>
+	</a>
+</li>

@@ -5,6 +5,20 @@
 
 import type { ContentBylineCredit, PortableTextBlock } from "emdash";
 
+export interface Galerie {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  address: string;
+  web?: string;
+  note?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+}
+
 export interface Stránka {
   id: string;
   slug: string | null;
@@ -17,23 +31,9 @@ export interface Stránka {
   bylines?: ContentBylineCredit[];
 }
 
-export interface Článek {
-  id: string;
-  slug: string | null;
-  status: string;
-  title: string;
-  featured_image?: { id: string; src?: string; alt?: string; width?: number; height?: number };
-  content?: PortableTextBlock[];
-  excerpt?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  publishedAt: Date | null;
-  bylines?: ContentBylineCredit[];
-}
-
 declare module "emdash" {
   interface EmDashCollections {
+    galleries: Galerie;
     pages: Stránka;
-    posts: Článek;
   }
 }

@@ -6,21 +6,21 @@ export const GET: APIRoute = async ({ url }) => {
 	const siteTitle = settings.title || "My Site";
 	const siteUrl = url.origin;
 	
-	const { entries: posts } = await getEmDashCollection("posts", {
+	const { entries: galleries } = await getEmDashCollection("galleries", {
 		orderBy: { published_at: "desc" },
 		limit: 20,
 	});
 
-	const items = posts
+	const items = galleries
 		.filter((p) => p.data.publishedAt)
-		.map((post) => {
-			const postUrl = `${siteUrl}/posts/${post.id}`;
+		.map((gallery) => {
+			const galleryUrl = `${siteUrl}/galerie/${gallery.slug || gallery.id}`;
 			return `    <item>
-      <title>${escapeXml(post.data.title)}</title>
-      <link>${postUrl}</link>
-      <guid isPermaLink="true">${postUrl}</guid>
-      <pubDate>${post.data.publishedAt!.toUTCString()}</pubDate>
-      <description>${escapeXml(post.data.excerpt || "")}</description>
+      <title>${escapeXml(gallery.data.title)}</title>
+      <link>${galleryUrl}</link>
+      <guid isPermaLink="true">${galleryUrl}</guid>
+      <pubDate>${gallery.data.publishedAt!.toUTCString()}</pubDate>
+      <description>${escapeXml(gallery.data.note || gallery.data.address || "")}</description>
     </item>`;
 		})
 		.join("\n");

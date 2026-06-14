@@ -1,0 +1,47 @@
+---
+import { getTaxonomyTerms, getSiteSettings } from "emdash";
+import Base from "../../layouts/Base.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+
+const categories = await getTaxonomyTerms("gallery_category");
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+---
+
+<Base title={`Kategorie | ${siteTitle}`} description="Přehled kategorií pražských galerií.">
+	<div class="with-sidebar">
+		<div>
+			<h1 class="page-heading page-heading--magenta" style="margin-bottom: 2.5rem;">Kategorie galerií</h1>
+			
+			<div class="block" style="padding: 2.5rem;">
+				{categories.length === 0 ? (
+					<p>Nebyly nalezeny žádné kategorie.</p>
+				) : (
+					<ul style="display: flex; flex-direction: column; gap: 1.5rem;">
+						{categories.map((cat) => (
+							<li style="border-bottom: 2px dashed var(--border-color); padding-bottom: 1.5rem; last-child: { border: none; }">
+								<a href={`/kategorie/${cat.slug}`} style="font-size: 1.5rem; text-transform: uppercase; color: #000; hover: { color: var(--accent-3); }">
+									{cat.label} <span style="font-family: var(--font-mono); font-size: 1rem; color: #666; margin-left: 0.5rem;">({cat.count})</span>
+								</a>
+								
+								{cat.children && cat.children.length > 0 && (
+									<ul style="margin-top: 1rem; margin-left: 2rem; display: flex; flex-direction: column; gap: 0.75rem; border-left: 4px solid var(--accent-2); padding-left: 1rem;">
+										{cat.children.map((subcat) => (
+											<li>
+												<a href={`/kategorie/${subcat.slug}`} style="font-size: 1.1rem; text-transform: uppercase; font-weight: 700;">
+													{subcat.label} <span style="font-family: var(--font-mono); font-size: 0.85rem; color: #666; margin-left: 0.25rem;">({subcat.count})</span>
+												</a>
+											</li>
+										))}
+									</ul>
+								)}
+							</li>
+						))}
+					</ul>
+				)}
+			</div>
+		</div>
+
+		<Sidebar />
+	</div>
+</Base>

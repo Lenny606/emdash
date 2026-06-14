@@ -4,32 +4,31 @@ test('homepage loads correctly', async ({ page }) => {
   await page.goto('/');
   
   // Check that the title is correct
-  // Based on index.astro, the title is siteTitle (from seed settings)
-  await expect(page).toHaveTitle(/AI Dev Pulse/i);
+  await expect(page).toHaveTitle(/Galerie v Praze/i);
 
   // Check that the main heading is present
   const heading = page.locator('h1');
   await expect(heading).toBeVisible();
-  await expect(heading).toHaveText(/NEJNOVĚJŠÍ ČLÁNKY/i);
+  await expect(heading).toHaveText(/GALERIE V PRAZE/i);
 
-  // Check that the post list is present (if there are posts)
-  const postList = page.locator('.post-list');
-  const noPosts = page.locator('text=Zatím žádné články');
+  // Check that the gallery list is present
+  const galleryList = page.locator('.post-list');
+  const noGalleries = page.locator('text=Zatím žádné galerie');
   
-  await expect(postList.or(noPosts)).toBeVisible();
+  await expect(galleryList.or(noGalleries)).toBeVisible();
 });
 
 test('navigation works', async ({ page }) => {
   await page.goto('/');
   
-  // Find the first post link if it exists
-  const firstPost = page.locator('.post-card a').first();
-  if (await firstPost.count() > 0) {
-    const postTitle = await firstPost.locator('h2').textContent();
-    await firstPost.click();
+  // Find the first gallery link if it exists
+  const firstGallery = page.locator('.gallery-card a').first();
+  if (await firstGallery.count() > 0) {
+    const galleryTitle = await firstGallery.locator('h2').textContent();
+    await firstGallery.click();
     
-    // Should navigate to a post page
-    await expect(page.url()).toContain('/posts/');
-    await expect(page.locator('h1')).toHaveText(postTitle || '');
+    // Should navigate to a gallery page
+    await expect(page.url()).toContain('/galerie/');
+    await expect(page.locator('h1')).toHaveText(galleryTitle || '');
   }
 });

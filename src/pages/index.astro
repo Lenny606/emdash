@@ -1,25 +1,43 @@
 ---
-import { getEmDashCollection, getSiteSettings } from "emdash";
+import { getEmDashCollection, getTermsForEntries, getSiteSettings } from "emdash";
 import Base from "../layouts/Base.astro";
-import PostList from "../components/PostList.astro";
+import GalleryList from "../components/GalleryList.astro";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
 
-const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
-	orderBy: { published_at: "desc" },
+const { entries: galleries, cacheHint } = await getEmDashCollection("galleries", {
+	status: "published",
 });
-const { siteTitle, siteTagline } = resolveStarterSiteIdentity(await getSiteSettings());
 Astro.cache.set(cacheHint);
+
+const sortedGalleries = galleries.toSorted((a, b) =>
+	a.data.title.localeCompare(b.data.title, "cs")
+);
+
+// Batch query terms for all galleries
+const galleryIds = sortedGalleries.map((g) => g.data.id);
+const categoriesByEntry = galleryIds.length > 0
+	? await getTermsForEntries("galleries", galleryIds, "gallery_category")
+	: new Map();
+const districtsByEntry = galleryIds.length > 0
+	? await getTermsForEntries("galleries", galleryIds, "district")
+	: new Map();
+
+const { siteTitle, siteTagline } = resolveStarterSiteIdentity(await getSiteSettings());
 ---
 
 <Base title={siteTitle} description={siteTagline}>
-	<h1 class="page-heading page-heading--magenta" style="margin-bottom: 3rem;">NEJNOVĚJŠÍ ČLÁNKY</h1>
+	<h1 class="page-heading page-heading--magenta" style="margin-bottom: 3rem;">GALERIE V PRAZE</h1>
 
-	<PostList posts={posts} showReadMore>
+	<GalleryList
+		galleries={sortedGalleries}
+		categoriesByEntry={categoriesByEntry}
+		districtsByEntry={districtsByEntry}
+	>
 		<Fragment slot="empty">
 			<p>
-				Zatím žádné články.{" "}
-				<a href="/_emdash/admin/content/posts/new">VYTVOŘTE PRVNÍ</a>.
+				Zatím žádné galerie.{" "}
+				<a href="/_emdash/admin/content/galleries/new">VYTVOŘTE PRVNÍ</a>.
 			</p>
 		</Fragment>
-	</PostList>
+	</GalleryList>
 </Base>

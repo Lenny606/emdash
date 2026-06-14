@@ -1,0 +1,54 @@
+---
+import { getTaxonomyTerms, getSiteSettings } from "emdash";
+import Base from "../../layouts/Base.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+
+const districts = await getTaxonomyTerms("district");
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+
+// Sort districts numerically, e.g. Praha 1, Praha 2, ..., Praha 10
+const sortedDistricts = districts.toSorted((a, b) => {
+	const numA = parseInt(a.label.replace(/\D/g, ""), 10);
+	const numB = parseInt(b.label.replace(/\D/g, ""), 10);
+	if (!isNaN(numA) && !isNaN(numB)) {
+		return numA - numB;
+	}
+	return a.label.localeCompare(b.label, "cs");
+});
+
+function getDistrictCountLabel(count: number) {
+	if (count === 1) return "galerie";
+	if (count >= 2 && count <= 4) return "galerie";
+	return "galerií";
+}
+---
+
+<Base title={`Městské obvody | ${siteTitle}`} description="Přehled pražských obvodů s galeriemi.">
+	<div class="with-sidebar">
+		<div>
+			<h1 class="page-heading page-heading--magenta" style="margin-bottom: 2.5rem;">Městské obvody</h1>
+			
+			<div class="block" style="padding: 2.5rem;">
+				{sortedDistricts.length === 0 ? (
+					<p>Nebyly nalezeny žádné městské obvody.</p>
+				) : (
+					<ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem;">
+						{sortedDistricts.map((d) => (
+							<li style="border: var(--border-width) solid var(--border-color); box-shadow: 4px 4px 0px var(--shadow-color); background: var(--accent-1); text-align: center; transition: transform 0.1s ease; hover: { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--shadow-color); }">
+								<a href={`/obvod/${d.slug}`} style="display: block; padding: 1rem; text-transform: uppercase;">
+									<div style="font-size: 1.25rem; font-weight: 900;">{d.label}</div>
+									<div style="font-family: var(--font-mono); font-size: 0.85rem; color: #333; margin-top: 0.5rem;">
+										{d.count} {getDistrictCountLabel(d.count)}
+									</div>
+								</a>
+							</li>
+						))}
+					</ul>
+				)}
+			</div>
+		</div>
+
+		<Sidebar />
+	</div>
+</Base>

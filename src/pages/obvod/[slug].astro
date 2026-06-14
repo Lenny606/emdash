@@ -1,0 +1,55 @@
+---
+import { getTerm, getEmDashCollection, getTermsForEntries, getSiteSettings } from "emdash";
+import Base from "../../layouts/Base.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import GalleryList from "../../components/GalleryList.astro";
+import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+
+const { slug } = Astro.params;
+const term = slug ? await getTerm("district", slug) : null;
+
+if (!term) {
+	return Astro.redirect("/404");
+}
+
+const { entries: galleries, cacheHint } = await getEmDashCollection("galleries", {
+	where: { district: term.slug },
+	status: "published",
+});
+
+Astro.cache.set(cacheHint);
+
+const sortedGalleries = galleries.toSorted((a, b) =>
+	a.data.title.localeCompare(b.data.title, "cs")
+);
+
+const galleryIds = sortedGalleries.map((g) => g.data.id);
+const categoriesByEntry = galleryIds.length > 0
+	? await getTermsForEntries("galleries", galleryIds, "gallery_category")
+	: new Map();
+const districtsByEntry = galleryIds.length > 0
+	? await getTermsForEntries("galleries", galleryIds, "district")
+	: new Map();
+
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+---
+
+<Base title={`${term.label} | ${siteTitle}`} description={`Galerie v městské části ${term.label}.`}>
+	<div class="with-sidebar">
+		<div>
+			<div style="margin-bottom: 2.5rem;">
+				<span class="result-count" style="display: block; margin-bottom: 0.5rem; color: #666;">Obvod</span>
+				<h1 class="page-heading page-heading--magenta">{term.label}</h1>
+			</div>
+
+			<GalleryList
+				galleries={sortedGalleries}
+				categoriesByEntry={categoriesByEntry}
+				districtsByEntry={districtsByEntry}
+				emptyText="V tomto obvodu zatím nejsou žádné galerie."
+			/>
+		</div>
+
+		<Sidebar />
+	</div>
+</Base>

@@ -1,0 +1,42 @@
+---
+import GalleryCard from "./GalleryCard.astro";
+
+interface Term {
+	slug: string;
+	label: string;
+}
+
+interface Props {
+	galleries: any[];
+	categoriesByEntry?: Map<string, Term[]>;
+	districtsByEntry?: Map<string, Term[]>;
+	emptyText?: string;
+}
+
+const {
+	galleries,
+	categoriesByEntry,
+	districtsByEntry,
+	emptyText = "Nebyly nalezeny žádné galerie.",
+} = Astro.props;
+---
+
+{
+	galleries.length === 0 ? (
+		<div class="block">
+			<slot name="empty">
+				<p>{emptyText}</p>
+			</slot>
+		</div>
+	) : (
+		<ul class="post-list">
+			{galleries.map((gallery) => (
+				<GalleryCard
+					gallery={gallery}
+					categories={categoriesByEntry?.get(gallery.data.id) ?? []}
+					districts={districtsByEntry?.get(gallery.data.id) ?? []}
+				/>
+			))}
+		</ul>
+	)
+}

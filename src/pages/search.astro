@@ -8,7 +8,7 @@ let results = [];
 
 if (query) {
 	const searchResponse = await search(query, {
-		collections: ["posts", "pages"],
+		collections: ["galleries", "pages"],
 		status: "published",
 		limit: 20,
 	});
@@ -41,10 +41,10 @@ const total = results.length;
 			<div class="post-list">
 				{results.map((result) => result && (
 					<div class="post-card">
-						<a href={result.collection === "posts" ? `/posts/${result.slug || result.id}` : `/${result.slug || result.id}`} style="display: block; height: 100%;">
+						<a href={result.collection === "galleries" ? `/galerie/${result.slug || result.id}` : `/${result.slug || result.id}`} style="display: block; height: 100%;">
 							<div class="content">
 								<span style="background: #000; color: #fff; padding: 0.1rem 0.5rem; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 1rem; display: inline-block;">
-									{result.collection}
+									{result.collection === "galleries" ? "Galerie" : "Stránka"}
 								</span>
 								<h2 style="font-size: 1.5rem;">{result.title}</h2>
 								<div class="snippet" style="font-size: 0.9rem; line-height: 1.4;" set:html={result.snippet} />
