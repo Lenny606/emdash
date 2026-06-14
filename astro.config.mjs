@@ -25,8 +25,11 @@ export default defineConfig({
 			}),
 			// Trusted (in-process) plugins — runs in Node, uses nodemailer.
 			plugins: [emailClientPlugin()],
-			authProviders: [google()]
+			authProviders: [google()],
+			siteUrl: process.env.EMDASH_SITE_URL || process.env.SITE_URL || undefined,
+			allowedOrigins: process.env.EMDASH_ALLOWED_ORIGINS ? [process.env.EMDASH_ALLOWED_ORIGINS] : undefined,
 		}),
 	],
 	devToolbar: { enabled: false },
+	site: "https://www.previweb.site"
 });
