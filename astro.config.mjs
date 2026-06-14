@@ -4,6 +4,7 @@ import { defineConfig } from "astro/config";
 import emdash, { local } from "emdash/astro";
 import { sqlite } from "emdash/db";
 import { emailClientPlugin } from "@emdash-cms/plugin-email-client";
+import { google } from "emdash/auth/providers/google";
 
 export default defineConfig({
 	output: "server",
@@ -24,6 +25,7 @@ export default defineConfig({
 			}),
 			// Trusted (in-process) plugins — runs in Node, uses nodemailer.
 			plugins: [emailClientPlugin()],
+			authProviders: [google()]
 		}),
 	],
 	devToolbar: { enabled: false },
