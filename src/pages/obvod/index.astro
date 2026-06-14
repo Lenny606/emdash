@@ -27,18 +27,18 @@ function getDistrictCountLabel(count: number) {
 <Base title={`Městské obvody | ${siteTitle}`} description="Přehled pražských obvodů s galeriemi.">
 	<div class="with-sidebar">
 		<div>
-			<h1 class="page-heading page-heading--magenta" style="margin-bottom: 2.5rem;">Městské obvody</h1>
+			<h1 class="page-heading">Městské obvody</h1>
 			
-			<div class="block" style="padding: 2.5rem;">
+			<div class="block">
 				{sortedDistricts.length === 0 ? (
 					<p>Nebyly nalezeny žádné městské obvody.</p>
 				) : (
-					<ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem;">
+					<ul class="district-grid">
 						{sortedDistricts.map((d) => (
-							<li style="border: var(--border-width) solid var(--border-color); box-shadow: 4px 4px 0px var(--shadow-color); background: var(--accent-1); text-align: center; transition: transform 0.1s ease; hover: { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--shadow-color); }">
-								<a href={`/obvod/${d.slug}`} style="display: block; padding: 1rem; text-transform: uppercase;">
-									<div style="font-size: 1.25rem; font-weight: 900;">{d.label}</div>
-									<div style="font-family: var(--font-mono); font-size: 0.85rem; color: #333; margin-top: 0.5rem;">
+							<li class="district-item">
+								<a href={`/obvod/${d.slug}`} class="district-link">
+									<div class="district-name">{d.label}</div>
+									<div class="district-count">
 										{d.count} {getDistrictCountLabel(d.count)}
 									</div>
 								</a>
@@ -52,3 +52,57 @@ function getDistrictCountLabel(count: number) {
 		<Sidebar />
 	</div>
 </Base>
+
+<style>
+	.district-grid {
+		list-style: none;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+		gap: 1.5rem;
+		padding: 0;
+		margin: 0;
+	}
+
+	.district-item {
+		border: 1px solid var(--border-color);
+		background-color: var(--bg-color);
+		text-align: center;
+		transition: background-color 0.2s ease, border-color 0.2s ease;
+	}
+
+	.district-item:hover {
+		background-color: var(--border-primary);
+		border-color: var(--border-primary);
+	}
+
+	.district-link {
+		display: block;
+		padding: 2rem 1rem;
+		text-transform: uppercase;
+		height: 100%;
+	}
+
+	.district-item:hover .district-link {
+		color: var(--bg-color);
+	}
+
+	.district-name {
+		font-family: var(--font-heading);
+		font-size: 1.4rem;
+		font-weight: 500;
+		margin-bottom: 0.5rem;
+	}
+
+	.district-count {
+		font-family: var(--font-body);
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		color: var(--muted-color);
+	}
+
+	.district-item:hover .district-count {
+		color: var(--bg-color);
+		opacity: 0.8;
+	}
+</style>

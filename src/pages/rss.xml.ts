@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ url }) => {
 	const items = galleries
 		.filter((p) => p.data.publishedAt)
 		.map((gallery) => {
-			const galleryUrl = `${siteUrl}/galerie/${gallery.slug || gallery.id}`;
+			const galleryUrl = `${siteUrl}/galerie/${gallery.id}`;
 			return `    <item>
       <title>${escapeXml(gallery.data.title)}</title>
       <link>${galleryUrl}</link>

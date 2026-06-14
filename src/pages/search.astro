@@ -19,14 +19,13 @@ const total = results.length;
 
 <Base title={`Hledání: ${query || "..."}`} noindex>
 	<div style="margin-bottom: 4rem;">
-		<h1 class="page-heading page-heading--yellow" style="margin-bottom: 1rem;">VÝSLEDKY HLEDÁNÍ</h1>
-		<form action="/search" method="GET" style="display: flex; gap: 1rem; max-width: 600px;">
+		<h1 class="page-heading">Výsledky hledání</h1>
+		<form action="/search" method="GET" class="search-form">
 			<input
 				type="text"
 				name="q"
 				value={query}
 				placeholder="ZADEJTE DOTAZ..."
-				style="flex-grow: 1; background: #fff; font-weight: 900; text-transform: uppercase;"
 			/>
 			<button type="submit">HLEDAT</button>
 		</form>
@@ -43,12 +42,16 @@ const total = results.length;
 					<div class="post-card">
 						<a href={result.collection === "galleries" ? `/galerie/${result.slug || result.id}` : `/${result.slug || result.id}`} style="display: block; height: 100%;">
 							<div class="content">
-								<span style="background: #000; color: #fff; padding: 0.1rem 0.5rem; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 1rem; display: inline-block;">
-									{result.collection === "galleries" ? "Galerie" : "Stránka"}
-								</span>
-								<h2 style="font-size: 1.5rem;">{result.title}</h2>
-								<div class="snippet" style="font-size: 0.9rem; line-height: 1.4;" set:html={result.snippet} />
-								<div style="margin-top: 1.5rem; font-weight: 900; text-decoration: underline;">ZOBRAZIT &rarr;</div>
+								<div class="post-card-tags">
+									<span class="tag-chip">
+										{result.collection === "galleries" ? "Galerie" : "Stránka"}
+									</span>
+								</div>
+								<h2>{result.title}</h2>
+								<div class="snippet" set:html={result.snippet} />
+								<div class="action-link">
+									Zobrazit &rarr;
+								</div>
 							</div>
 						</a>
 					</div>
@@ -56,23 +59,55 @@ const total = results.length;
 			</div>
 
 			{results.length === 0 && (
-				<div class="block" style="background: var(--accent-3); color: #fff;">
-					<p style="font-size: 1.5rem; font-weight: 900;">NIC NENALEZENO. ZKUSTE JINÁ KLÍČOVÁ SLOVA.</p>
+				<div class="block">
+					<p style="font-family: var(--font-body); font-size: 1.1rem; color: var(--muted-color);">Nebyl nalezen žádný výsledek pro váš dotaz. Zkuste prosím jiná klíčová slova.</p>
 				</div>
 			)}
 		</div>
 	) : (
 		<div class="block">
-			<p style="font-size: 1.25rem;">Zadejte hledaný výraz výše a spusťte vyhledávání.</p>
+			<p style="font-family: var(--font-body); font-size: 1.1rem; color: var(--muted-color);">Zadejte hledaný výraz výše a spusťte vyhledávání.</p>
 		</div>
 	)}
 </Base>
 
+<style>
+	.search-form {
+		display: flex;
+		gap: 1rem;
+		max-width: 600px;
+	}
+
+	.search-form input {
+		flex-grow: 1;
+	}
+
+	.snippet {
+		font-family: var(--font-body);
+		font-size: 0.95rem;
+		line-height: 1.6;
+		color: var(--muted-color);
+		margin-top: 0.5rem;
+	}
+
+	.action-link {
+		margin-top: auto;
+		padding-top: 1.5rem;
+		font-family: var(--font-body);
+		font-size: 0.8rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		text-decoration: underline;
+	}
+</style>
+
 <style is:global>
 	.snippet mark {
-		background: var(--accent-1);
-		color: #000;
-		font-weight: 900;
-		padding: 0 0.2rem;
+		background: var(--bg-secondary);
+		border-bottom: 2px solid var(--border-primary);
+		color: var(--text-color);
+		font-weight: 700;
+		padding: 0 0.1rem;
 	}
 </style>

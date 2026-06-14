@@ -11,25 +11,25 @@ const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
 <Base title={`Kategorie | ${siteTitle}`} description="Přehled kategorií pražských galerií.">
 	<div class="with-sidebar">
 		<div>
-			<h1 class="page-heading page-heading--magenta" style="margin-bottom: 2.5rem;">Kategorie galerií</h1>
+			<h1 class="page-heading">Kategorie galerií</h1>
 			
-			<div class="block" style="padding: 2.5rem;">
+			<div class="block">
 				{categories.length === 0 ? (
 					<p>Nebyly nalezeny žádné kategorie.</p>
 				) : (
-					<ul style="display: flex; flex-direction: column; gap: 1.5rem;">
+					<ul class="category-list">
 						{categories.map((cat) => (
-							<li style="border-bottom: 2px dashed var(--border-color); padding-bottom: 1.5rem; last-child: { border: none; }">
-								<a href={`/kategorie/${cat.slug}`} style="font-size: 1.5rem; text-transform: uppercase; color: #000; hover: { color: var(--accent-3); }">
-									{cat.label} <span style="font-family: var(--font-mono); font-size: 1rem; color: #666; margin-left: 0.5rem;">({cat.count})</span>
+							<li class="category-item">
+								<a href={`/kategorie/${cat.slug}`} class="category-link">
+									{cat.label} <span class="category-count">({cat.count})</span>
 								</a>
 								
 								{cat.children && cat.children.length > 0 && (
-									<ul style="margin-top: 1rem; margin-left: 2rem; display: flex; flex-direction: column; gap: 0.75rem; border-left: 4px solid var(--accent-2); padding-left: 1rem;">
+									<ul class="subcategory-list">
 										{cat.children.map((subcat) => (
-											<li>
-												<a href={`/kategorie/${subcat.slug}`} style="font-size: 1.1rem; text-transform: uppercase; font-weight: 700;">
-													{subcat.label} <span style="font-family: var(--font-mono); font-size: 0.85rem; color: #666; margin-left: 0.25rem;">({subcat.count})</span>
+											<li class="subcategory-item">
+												<a href={`/kategorie/${subcat.slug}`} class="subcategory-link">
+													{subcat.label} <span class="category-count">({subcat.count})</span>
 												</a>
 											</li>
 										))}
@@ -45,3 +45,72 @@ const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
 		<Sidebar />
 	</div>
 </Base>
+
+<style>
+	.category-list {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		padding: 0;
+		margin: 0;
+	}
+
+	.category-item {
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 2rem;
+	}
+
+	.category-item:last-child {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+
+	.category-link {
+		font-family: var(--font-heading);
+		font-size: 1.75rem;
+		text-transform: uppercase;
+		color: var(--text-color);
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.5rem;
+	}
+
+	.category-link:hover {
+		opacity: 0.7;
+	}
+
+	.category-count {
+		font-family: var(--font-body);
+		font-size: 0.9rem;
+		color: var(--muted-color);
+		font-weight: 400;
+	}
+
+	.subcategory-list {
+		margin-top: 1.5rem;
+		margin-left: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		border-left: 1px solid var(--border-color);
+		padding-left: 1.5rem;
+		list-style: none;
+	}
+
+	.subcategory-link {
+		font-family: var(--font-body);
+		font-size: 1rem;
+		text-transform: uppercase;
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		color: var(--text-color);
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.25rem;
+	}
+
+	.subcategory-link:hover {
+		opacity: 0.7;
+	}
+</style>

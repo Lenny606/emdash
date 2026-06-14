@@ -25,8 +25,8 @@ const seo = getSeoMeta(gallery, {
 	path: `/galerie/${slug}`,
 });
 
-const categories = await getEntryTerms("galleries", gallery.data.id, "gallery_category");
-const districts = await getEntryTerms("galleries", gallery.data.id, "district");
+const categories = await getEntryTerms("galleries", gallery.data.id as string, "gallery_category");
+const districts = await getEntryTerms("galleries", gallery.data.id as string, "district");
 ---
 
 <Base
@@ -35,38 +35,38 @@ const districts = await getEntryTerms("galleries", gallery.data.id, "district");
 	description={seo.description}
 	canonical={seo.canonical}
 	image={seo.ogImage}
-	content={{ collection: "galleries", id: gallery.data.id, slug }}
+	content={{ collection: "galleries", id: gallery.data.id as string, slug }}
 >
 	<div class="with-sidebar">
 		<article class="block" style="padding: 0; overflow: hidden;">
 			<div style="padding: 2.5rem;">
-				<div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem; flex-wrap: wrap;">
+				<div class="post-card-tags" style="margin-bottom: 2rem;">
 					{
 						districts.map((d) => (
-							<a href={`/obvod/${d.slug}`} style="background: var(--accent-3); color: white; padding: 0.25rem 0.75rem; border: 2px solid var(--border-color); font-size: 0.8rem; text-transform: uppercase;">
+							<a href={`/obvod/${d.slug}`} class="tag-chip">
 								{d.label}
 							</a>
 						))
 					}
 					{
 						categories.map((c) => (
-							<a href={`/kategorie/${c.slug}`} style="background: var(--accent-1); padding: 0.25rem 0.75rem; border: 2px solid var(--border-color); font-size: 0.8rem; text-transform: uppercase;">
+							<a href={`/kategorie/${c.slug}`} class="tag-chip">
 								{c.label}
 							</a>
 						))
 					}
 				</div>
 
-				<h1 {...gallery.edit.title} style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 2rem; line-height: 1.1; display: block; background: none; border: none; box-shadow: none; padding: 0;">
+				<h1 {...gallery.edit.title} style="margin-bottom: 2rem;">
 					{gallery.data.title}
 				</h1>
 
-				<div style="border-top: var(--border-width) solid var(--border-color); border-bottom: var(--border-width) solid var(--border-color); padding: 1.5rem 0; margin-bottom: 2rem;">
+				<div style="border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 2rem 0; margin-bottom: 2rem;">
 					<div style="margin-bottom: 1.5rem;">
-						<strong style="text-transform: uppercase; font-family: var(--font-mono); font-size: 0.85rem; display: block; color: #555; margin-bottom: 0.25rem;">Adresa</strong>
+						<strong style="text-transform: uppercase; font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.08em; display: block; color: var(--muted-color); margin-bottom: 0.5rem; font-weight: 700;">Adresa</strong>
 						<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 1rem;">
-							<span {...gallery.edit.address} style="font-size: 1.2rem; font-weight: bold;">{gallery.data.address}</span>
-							<a href={`https://mapy.cz/zakladni?q=${encodeURIComponent(gallery.data.address + ', Praha')}`} target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem; text-decoration: underline; color: var(--accent-3);">
+							<span {...gallery.edit.address} style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--text-color);">{gallery.data.address}</span>
+							<a href={`https://mapy.cz/zakladni?q=${encodeURIComponent(gallery.data.address + ', Praha')}`} target="_blank" rel="noopener noreferrer" style="font-family: var(--font-body); font-size: 0.85rem; text-decoration: underline; color: var(--text-color); font-weight: 500;">
 								Ukázat na mapě &rarr;
 							</a>
 						</div>
@@ -75,8 +75,8 @@ const districts = await getEntryTerms("galleries", gallery.data.id, "district");
 					{
 						gallery.data.web && (
 							<div>
-								<strong style="text-transform: uppercase; font-family: var(--font-mono); font-size: 0.85rem; display: block; color: #555; margin-bottom: 0.25rem;">Webové stránky</strong>
-								<a {...gallery.edit.web} href={gallery.data.web} target="_blank" rel="noopener noreferrer" style="font-size: 1.2rem; font-weight: bold; text-decoration: underline; color: var(--accent-3); word-break: break-all;">
+								<strong style="text-transform: uppercase; font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.08em; display: block; color: var(--muted-color); margin-bottom: 0.5rem; font-weight: 700;">Webové stránky</strong>
+								<a {...gallery.edit.web} href={gallery.data.web as string} target="_blank" rel="noopener noreferrer" style="font-family: var(--font-heading); font-size: 1.5rem; text-decoration: underline; color: var(--text-color); word-break: break-all;">
 									{gallery.data.web}
 								</a>
 							</div>
@@ -87,8 +87,8 @@ const districts = await getEntryTerms("galleries", gallery.data.id, "district");
 				{
 					gallery.data.note && (
 						<div style="margin-top: 2rem;">
-							<strong style="text-transform: uppercase; font-family: var(--font-mono); font-size: 0.85rem; display: block; color: #555; margin-bottom: 0.5rem;">Poznámka / Popis</strong>
-							<p {...gallery.edit.note} style="font-size: 1.1rem; line-height: 1.6; white-space: pre-line; color: #222;">
+							<strong style="text-transform: uppercase; font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.08em; display: block; color: var(--muted-color); margin-bottom: 0.5rem; font-weight: 700;">Poznámka / Popis</strong>
+							<p {...gallery.edit.note} style="font-size: 1.1rem; line-height: 1.7; white-space: pre-line; color: var(--text-color);">
 								{gallery.data.note}
 							</p>
 						</div>
