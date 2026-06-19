@@ -76,7 +76,7 @@ const formatDate = (dateStr: string) => {
 						const linkedGallery = galleryByUlid.get(ex.data.gallery);
 						return (
 							<li style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-								<div style="flex-grow: 1; min-width: 280px;">
+								<div style="flex-grow: 1; min-width: min(280px, 100%);">
 									<h3 {...ex.edit.title} style="font-family: var(--font-heading), serif; font-size: 1.3rem; margin: 0 0 0.25rem 0; font-weight: normal;">
 										{ex.data.title}
 									</h3>
