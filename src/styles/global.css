@@ -182,7 +182,7 @@ ul {
   height: 100%;
 }
 
-.post-card h2 {
+.post-card h3 {
   font-family: var(--font-heading), serif;
   font-size: 1.8rem;
   font-weight: 500;
