@@ -1,7 +1,6 @@
 ---
 import { getMenu, getSiteSettings } from "emdash";
 import {
-	WidgetArea,
 	EmDashHead,
 	EmDashBodyStart,
 	EmDashBodyEnd,
@@ -109,9 +108,6 @@ const pageCtx = createPublicPageContext({
 						}
 					</a>
 					{siteTagline && <p class="footer-tagline">{siteTagline}</p>}
-				</div>
-				<div class="footer-widgets">
-					<WidgetArea name="sidebar" />
 				</div>
 			</div>
 			<div class="footer-bottom">
