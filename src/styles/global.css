@@ -485,30 +485,6 @@ button:hover, [type="submit"]:hover, .btn:hover {
   color: var(--muted-color);
 }
 
-.social-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.social-links a {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-align: center;
-  padding: 0.75rem 0.5rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  transition: all 0.2s ease;
-}
-
-.social-links a:hover {
-  border-color: var(--border-primary);
-  background: var(--bg-color);
-  opacity: 1;
-}
-
 /* LiveSearch Override for minimalism */
 .search-container input {
   font-family: var(--font-body) !important;
