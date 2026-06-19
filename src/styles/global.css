@@ -23,14 +23,14 @@
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 16px;
   line-height: 1.6;
   padding: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
+  font-family: var(--font-heading), serif;
   font-weight: 500;
   line-height: 1.2;
   margin-bottom: 1rem;
@@ -52,7 +52,7 @@ a:hover {
 
 /* Elegant Page Heading */
 .page-heading {
-  font-family: var(--font-heading);
+  font-family: var(--font-heading), serif;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 400;
   text-transform: uppercase;
@@ -88,7 +88,7 @@ nav {
 }
 
 nav a.logo-link {
-  font-family: var(--font-heading);
+  font-family: var(--font-heading), serif;
   font-size: 1.8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -105,7 +105,7 @@ nav a.logo-link {
 }
 
 .nav-links a {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -125,7 +125,7 @@ nav a.logo-link {
   padding: 0.5rem 1rem;
   border: 1px solid var(--border-primary);
   cursor: pointer;
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-weight: 700;
   font-size: 0.85rem;
   letter-spacing: 0.1em;
@@ -177,7 +177,7 @@ ul {
 }
 
 .post-card h2 {
-  font-family: var(--font-heading);
+  font-family: var(--font-heading), serif;
   font-size: 1.8rem;
   font-weight: 500;
   line-height: 1.25;
@@ -193,7 +193,7 @@ ul {
 }
 
 .tag-chip {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -212,7 +212,7 @@ ul {
 
 /* Utility: mono uppercase count/label line */
 .result-count {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -249,7 +249,7 @@ article h1 {
 
 /* Forms & Inputs */
 input, textarea, select {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 0.95rem;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-color);
@@ -265,7 +265,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 button, [type="submit"], .btn {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -316,7 +316,7 @@ button:hover, [type="submit"]:hover, .btn:hover {
 }
 
 .footer-logo {
-  font-family: var(--font-heading);
+  font-family: var(--font-heading), serif;
   font-size: 2.2rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -331,7 +331,7 @@ button:hover, [type="submit"]:hover, .btn:hover {
 }
 
 .footer-tagline {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--muted-color);
@@ -345,7 +345,7 @@ button:hover, [type="submit"]:hover, .btn:hover {
 }
 
 .footer-bottom p {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -380,7 +380,7 @@ button:hover, [type="submit"]:hover, .btn:hover {
 }
 
 .sidebar-title {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -399,14 +399,14 @@ button:hover, [type="submit"]:hover, .btn:hover {
 }
 
 .promo-title {
-  font-family: var(--font-heading);
+  font-family: var(--font-heading), serif;
   font-size: 1.8rem;
   font-weight: normal;
   margin-bottom: 1rem;
 }
 
 .sidebar-promo p {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   color: var(--muted-color);
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
@@ -431,7 +431,7 @@ button:hover, [type="submit"]:hover, .btn:hover {
 
 .promo-status {
   margin-top: 1rem;
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-weight: 700;
   font-size: 0.8rem;
   text-transform: uppercase;
@@ -440,7 +440,7 @@ button:hover, [type="submit"]:hover, .btn:hover {
 
 /* LiveSearch Override for minimalism */
 .search-container input {
-  font-family: var(--font-body) !important;
+  font-family: var(--font-body), sans-serif !important;
   font-size: 0.85rem !important;
   font-weight: 600 !important;
   letter-spacing: 0.08em !important;
@@ -465,7 +465,7 @@ button:hover, [type="submit"]:hover, .btn:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
