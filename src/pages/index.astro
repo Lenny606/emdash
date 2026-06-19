@@ -27,6 +27,17 @@ const districtsByEntry = galleryIds.length > 0
 	? await getTermsForEntries("galleries", galleryIds, "district")
 	: new Map();
 
+// Unique districts present among the listed galleries (for the filter bar)
+const districtMap = new Map<string, string>();
+for (const terms of districtsByEntry.values()) {
+	for (const term of terms) {
+		districtMap.set(term.slug, term.label);
+	}
+}
+const availableDistricts = Array.from(districtMap, ([slug, label]) => ({ slug, label })).sort(
+	(a, b) => a.label.localeCompare(b.label, "cs")
+);
+
 const { siteTitle, siteTagline } = resolveStarterSiteIdentity(await getSiteSettings());
 
 const galleryByUlid = new Map(galleries.map((g) => [g.data.id, g]));
@@ -90,6 +101,26 @@ const formatDate = (dateStr: string) => {
 
 	<section class="galleries-section">
 		<h2 style="font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; text-transform: uppercase;">Seznam galerií</h2>
+
+		{
+			availableDistricts.length > 0 && (
+				<div class="district-filter" id="district-filter" role="group" aria-label="Filtrovat podle lokality">
+					<button type="button" class="district-filter-chip is-active" data-district="all" aria-pressed="true">
+						Vše
+					</button>
+					{availableDistricts.map((d) => (
+						<button type="button" class="district-filter-chip" data-district={d.slug} aria-pressed="false">
+							{d.label}
+						</button>
+					))}
+				</div>
+			)
+		}
+
+		<p class="district-filter-empty" id="district-filter-empty" hidden>
+			V této lokalitě zatím nejsou žádné galerie.
+		</p>
+
 		<GalleryList
 			galleries={sortedGalleries}
 			categoriesByEntry={categoriesByEntry}
@@ -104,3 +135,78 @@ const formatDate = (dateStr: string) => {
 		</GalleryList>
 	</section>
 </Base>
+
+<style>
+	.district-filter {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+	}
+
+	.district-filter-chip {
+		font-family: var(--font-body);
+		font-size: 0.8rem;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		padding: 0.5rem 0.9rem;
+		background: var(--bg-secondary);
+		border: 1px solid var(--border-color);
+		color: var(--text-color);
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.district-filter-chip:hover {
+		border-color: var(--border-primary);
+		background: var(--bg-color);
+	}
+
+	.district-filter-chip.is-active {
+		background: var(--text-color);
+		color: var(--bg-color);
+		border-color: var(--text-color);
+	}
+
+	.district-filter-empty {
+		color: var(--muted-color);
+		font-style: italic;
+	}
+
+	:global(.post-list .post-card[hidden]) {
+		display: none;
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		const filter = document.getElementById("district-filter");
+		if (!filter) return;
+		const chips = filter.querySelectorAll(".district-filter-chip");
+		const cards = document.querySelectorAll(".post-list .post-card");
+		const empty = document.getElementById("district-filter-empty");
+
+		filter.addEventListener("click", (e) => {
+			const chip = e.target.closest(".district-filter-chip");
+			if (!chip) return;
+
+			const district = chip.dataset.district;
+			chips.forEach((c) => {
+				const active = c === chip;
+				c.classList.toggle("is-active", active);
+				c.setAttribute("aria-pressed", String(active));
+			});
+
+			let visible = 0;
+			cards.forEach((card) => {
+				const districts = (card.dataset.districts || "").split(" ").filter(Boolean);
+				const show = district === "all" || districts.includes(district);
+				card.hidden = !show;
+				if (show) visible++;
+			});
+
+			if (empty) empty.hidden = visible !== 0;
+		});
+	})();
+</script>
