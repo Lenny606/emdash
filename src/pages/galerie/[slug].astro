@@ -38,9 +38,9 @@ const districts = await getEntryTerms("galleries", gallery.data.id as string, "d
 	content={{ collection: "galleries", id: gallery.data.id as string, slug }}
 >
 	<div class="with-sidebar">
-		<article class="block" style="padding: 0; overflow: hidden;">
-			<div style="padding: 2.5rem;">
-				<div class="post-card-tags" style="margin-bottom: 2rem;">
+		<article class="block gallery-article">
+			<div class="gallery-content">
+				<div class="post-card-tags">
 					{
 						districts.map((d) => (
 							<a href={`/obvod/${d.slug}`} class="tag-chip">
@@ -57,16 +57,16 @@ const districts = await getEntryTerms("galleries", gallery.data.id as string, "d
 					}
 				</div>
 
-				<h1 {...gallery.edit.title} style="margin-bottom: 2rem;">
+				<h1 {...gallery.edit.title}>
 					{gallery.data.title}
 				</h1>
 
-				<div style="border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 2rem 0; margin-bottom: 2rem;">
-					<div style="margin-bottom: 1.5rem;">
-						<strong style="text-transform: uppercase; font-family: var(--font-body), sans-serif; font-size: 0.75rem; letter-spacing: 0.08em; display: block; color: var(--muted-color); margin-bottom: 0.5rem; font-weight: 700;">Adresa</strong>
-						<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 1rem;">
-							<span {...gallery.edit.address} style="font-family: var(--font-heading), serif; font-size: 1.5rem; color: var(--text-color);">{gallery.data.address}</span>
-							<a href={`https://mapy.cz/zakladni?q=${encodeURIComponent(gallery.data.address + ', Praha')}`} target="_blank" rel="noopener noreferrer" style="font-family: var(--font-body), sans-serif; font-size: 0.85rem; text-decoration: underline; color: var(--text-color); font-weight: 500;">
+				<div class="gallery-details">
+					<div class="detail-item">
+						<strong class="detail-label">Adresa</strong>
+						<div class="address-row">
+							<span {...gallery.edit.address} class="address-value">{gallery.data.address}</span>
+							<a href={`https://mapy.cz/zakladni?q=${encodeURIComponent(gallery.data.address + ', Praha')}`} target="_blank" rel="noopener noreferrer" class="map-link">
 								Ukázat na mapě &rarr;
 							</a>
 						</div>
@@ -74,9 +74,9 @@ const districts = await getEntryTerms("galleries", gallery.data.id as string, "d
 
 					{
 						gallery.data.web && (
-							<div>
-								<strong style="text-transform: uppercase; font-family: var(--font-body), sans-serif; font-size: 0.75rem; letter-spacing: 0.08em; display: block; color: var(--muted-color); margin-bottom: 0.5rem; font-weight: 700;">Webové stránky</strong>
-								<a {...gallery.edit.web} href={gallery.data.web as string} target="_blank" rel="noopener noreferrer" style="font-family: var(--font-heading), serif; font-size: 1.5rem; text-decoration: underline; color: var(--text-color); word-break: break-all;">
+							<div class="detail-item">
+								<strong class="detail-label">Webové stránky</strong>
+								<a {...gallery.edit.web} href={gallery.data.web as string} target="_blank" rel="noopener noreferrer" class="web-link">
 									{gallery.data.web}
 								</a>
 							</div>
@@ -86,9 +86,9 @@ const districts = await getEntryTerms("galleries", gallery.data.id as string, "d
 
 				{
 					gallery.data.note && (
-						<div style="margin-top: 2rem;">
-							<strong style="text-transform: uppercase; font-family: var(--font-body), sans-serif; font-size: 0.75rem; letter-spacing: 0.08em; display: block; color: var(--muted-color); margin-bottom: 0.5rem; font-weight: 700;">Poznámka / Popis</strong>
-							<p {...gallery.edit.note} style="font-size: 1.1rem; line-height: 1.7; white-space: pre-line; color: var(--text-color);">
+						<div class="gallery-note">
+							<strong class="detail-label">Poznámka / Popis</strong>
+							<p {...gallery.edit.note} class="note-text">
 								{gallery.data.note}
 							</p>
 						</div>
@@ -100,3 +100,88 @@ const districts = await getEntryTerms("galleries", gallery.data.id as string, "d
 		<Sidebar />
 	</div>
 </Base>
+
+<style>
+	.gallery-article {
+		padding: 0;
+		overflow: hidden;
+	}
+
+	.gallery-content {
+		padding: 2.5rem;
+	}
+
+	.gallery-content .post-card-tags {
+		margin-bottom: 2rem;
+	}
+
+	.gallery-content h1 {
+		margin-bottom: 2rem;
+	}
+
+	.gallery-details {
+		border-top: 1px solid var(--border-color);
+		border-bottom: 1px solid var(--border-color);
+		padding: 2rem 0;
+		margin-bottom: 2rem;
+	}
+
+	.detail-item {
+		margin-bottom: 1.5rem;
+	}
+
+	.detail-item:last-child {
+		margin-bottom: 0;
+	}
+
+	.detail-label {
+		text-transform: uppercase;
+		font-family: var(--font-body), sans-serif;
+		font-size: 0.75rem;
+		letter-spacing: 0.08em;
+		display: block;
+		color: var(--muted-color);
+		margin-bottom: 0.5rem;
+		font-weight: 700;
+	}
+
+	.address-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 1rem;
+	}
+
+	.address-value {
+		font-family: var(--font-heading), serif;
+		font-size: 1.5rem;
+		color: var(--text-color);
+	}
+
+	.map-link {
+		font-family: var(--font-body), sans-serif;
+		font-size: 0.85rem;
+		text-decoration: underline;
+		color: var(--text-color);
+		font-weight: 500;
+	}
+
+	.web-link {
+		font-family: var(--font-heading), serif;
+		font-size: 1.5rem;
+		text-decoration: underline;
+		color: var(--text-color);
+		word-break: break-all;
+	}
+
+	.gallery-note {
+		margin-top: 2rem;
+	}
+
+	.note-text {
+		font-size: 1.1rem;
+		line-height: 1.7;
+		white-space: pre-line;
+		color: var(--text-color);
+	}
+</style>

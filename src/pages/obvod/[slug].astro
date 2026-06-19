@@ -37,8 +37,8 @@ const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
 <Base title={`${term.label} | ${siteTitle}`} description={`Galerie v městské části ${term.label}.`}>
 	<div class="with-sidebar">
 		<div>
-			<div style="margin-bottom: 2.5rem;">
-				<span class="result-count" style="display: block; margin-bottom: 0.5rem;">Obvod</span>
+			<div class="district-header">
+				<span class="result-count district-label">Obvod</span>
 				<h1 class="page-heading">{term.label}</h1>
 			</div>
 
@@ -53,3 +53,14 @@ const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
 		<Sidebar />
 	</div>
 </Base>
+
+<style>
+	.district-header {
+		margin-bottom: 2.5rem;
+	}
+
+	.district-label {
+		display: block;
+		margin-bottom: 0.5rem;
+	}
+</style>

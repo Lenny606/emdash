@@ -40,8 +40,8 @@ const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
 <Base title={`${term.label} | ${siteTitle}`} description={`Galerie v kategorii ${term.label}.`}>
 	<div class="with-sidebar">
 		<div>
-			<div style="margin-bottom: 2.5rem;">
-				<span class="result-count" style="display: block; margin-bottom: 0.5rem;">Kategorie</span>
+			<div class="category-header">
+				<span class="result-count category-label">Kategorie</span>
 				<h1 class="page-heading">{term.label}</h1>
 			</div>
 
@@ -56,3 +56,14 @@ const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
 		<Sidebar />
 	</div>
 </Base>
+
+<style>
+	.category-header {
+		margin-bottom: 2.5rem;
+	}
+
+	.category-label {
+		display: block;
+		margin-bottom: 0.5rem;
+	}
+</style>

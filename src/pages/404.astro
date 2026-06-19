@@ -3,10 +3,43 @@ import Base from "../layouts/Base.astro";
 ---
 
 <Base title="404 / NENALEZENO">
-	<div class="error-container" style="text-align: center; padding: 6rem 2rem;">
-		<h1 style="font-family: var(--font-heading), serif; font-size: clamp(6rem, 15vw, 10rem); font-weight: 400; margin: 0 0 1rem 0; color: var(--text-color); line-height: 1;">404</h1>
-		<h2 style="font-family: var(--font-body), sans-serif; font-size: 0.9rem; letter-spacing: 0.15em; font-weight: 700; color: var(--muted-color); text-transform: uppercase; margin-bottom: 2rem;">STRÁNKA NEEXISTUJE</h2>
-		<p style="font-family: var(--font-body), sans-serif; font-size: 1.1rem; color: var(--text-color); margin-bottom: 3rem;">Hledaný obsah nebyl nalezen.</p>
+	<div class="error-container">
+		<h1>404</h1>
+		<h2>STRÁNKA NEEXISTUJE</h2>
+		<p>Hledaný obsah nebyl nalezen.</p>
 		<a href="/" class="btn">ZPĚT NA HLAVNÍ STRÁNKU</a>
 	</div>
 </Base>
+
+<style>
+	.error-container {
+		text-align: center;
+		padding: 6rem 2rem;
+	}
+
+	.error-container h1 {
+		font-family: var(--font-heading), serif;
+		font-size: clamp(6rem, 15vw, 10rem);
+		font-weight: 400;
+		margin: 0 0 1rem 0;
+		color: var(--text-color);
+		line-height: 1;
+	}
+
+	.error-container h2 {
+		font-family: var(--font-body), sans-serif;
+		font-size: 0.9rem;
+		letter-spacing: 0.15em;
+		font-weight: 700;
+		color: var(--muted-color);
+		text-transform: uppercase;
+		margin-bottom: 2rem;
+	}
+
+	.error-container p {
+		font-family: var(--font-body), sans-serif;
+		font-size: 1.1rem;
+		color: var(--text-color);
+		margin-bottom: 3rem;
+	}
+</style>

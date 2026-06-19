@@ -33,7 +33,7 @@ const seo = getSeoMeta(page, {
 	canonical={seo.canonical}
 	content={{ collection: "pages", id: page.data.id, slug }}
 >
-	<article class="block" style="max-width: 800px; margin: 0 auto;">
+	<article class="block article-page">
 		<h1 {...page.edit.title}>{page.data.title}</h1>
 
 		<div class="portable-text">
@@ -41,3 +41,10 @@ const seo = getSeoMeta(page, {
 		</div>
 	</article>
 </Base>
+
+<style>
+	.article-page {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+</style>

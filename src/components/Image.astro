@@ -1,6 +1,4 @@
 ---
-import { Image as EmdashImage } from "emdash/ui";
-
 interface Props {
 	image?: any;
 	class?: string;
@@ -8,20 +6,29 @@ interface Props {
 }
 
 const { image, class: className, ...rest } = Astro.props;
-
-const fallbackImage = {
-	id: "fallback",
-	src: "/placeholder.png",
-	alt: "Image not found",
-};
-
-const finalImage = image?.src ? image : fallbackImage;
 ---
 
 <div 
 	class={`image-placeholder ${className || ""}`} 
-	style="width: 100%; aspect-ratio: 16/9; background: #f0f0f0; border: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: center; color: #888; font-family: var(--font-body), sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; min-height: 150px;"
 	{...rest}
 >
 	<span>{image?.alt || "ARTIS PRAGA PLACEHOLDER"}</span>
 </div>
+
+<style>
+	.image-placeholder {
+		width: 100%;
+		aspect-ratio: 16/9;
+		background: #f0f0f0;
+		border: 1px solid #e0e0e0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #888;
+		font-family: var(--font-body), sans-serif;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		min-height: 150px;
+	}
+</style>

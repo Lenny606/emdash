@@ -65,30 +65,30 @@ const formatDate = (dateStr: string) => {
 <Base title={siteTitle} description={siteTagline}>
 	<h1 class="page-heading">ARTIS PRAGA</h1>
 
-	<section class="exhibitions-section" style="margin-bottom: 4rem;">
-		<h2 style="font-family: var(--font-heading), serif; font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; text-transform: uppercase;">Aktuální výstavy</h2>
+	<section class="exhibitions-section">
+		<h2 class="section-title">Aktuální výstavy</h2>
 		{
 			currentExhibitions.length === 0 ? (
-				<p style="color: var(--muted-color); font-style: italic;">Momentálně neprobíhají žádné výstavy.</p>
+				<p class="no-exhibitions">Momentálně neprobíhají žádné výstavy.</p>
 			) : (
-				<ul class="exhibitions-list" style="display: flex; flex-direction: column; gap: 1.5rem; padding: 0; margin-bottom: 3rem; list-style: none;">
+				<ul class="exhibitions-list">
 					{currentExhibitions.map((ex) => {
 						const linkedGallery = galleryByUlid.get(ex.data.gallery);
 						return (
-							<li style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-								<div style="flex-grow: 1; min-width: min(280px, 100%);">
-									<h3 {...ex.edit.title} style="font-family: var(--font-heading), serif; font-size: 1.3rem; margin: 0 0 0.25rem 0; font-weight: normal;">
+							<li>
+								<div class="exhibition-info">
+									<h3 {...ex.edit.title}>
 										{ex.data.title}
 									</h3>
 									{linkedGallery && (
-										<p style="font-family: var(--font-body), sans-serif; font-size: 0.9rem; color: var(--muted-color); margin: 0;">
-											<a href={`/galerie/${linkedGallery.id}`} style="text-decoration: underline;">
+										<p class="gallery-link-container">
+											<a href={`/galerie/${linkedGallery.id}`}>
 												{linkedGallery.data.title}
 											</a>
 										</p>
 									)}
 								</div>
-								<div style="font-family: var(--font-mono), monospace; font-size: 0.9rem; color: var(--muted-color); white-space: nowrap;">
+								<div class="exhibition-date">
 									{formatDate(ex.data.start_date)} – {formatDate(ex.data.end_date)}
 								</div>
 							</li>
@@ -100,7 +100,7 @@ const formatDate = (dateStr: string) => {
 	</section>
 
 	<section class="galleries-section">
-		<h2 style="font-family: var(--font-heading), serif; font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; text-transform: uppercase;">Seznam galerií</h2>
+		<h2 class="section-title">Seznam galerií</h2>
 
 		{
 			availableDistricts.length > 0 && (
@@ -137,6 +137,73 @@ const formatDate = (dateStr: string) => {
 </Base>
 
 <style>
+	.exhibitions-section {
+		margin-bottom: 4rem;
+	}
+
+	.section-title {
+		font-family: var(--font-heading), serif;
+		font-size: clamp(1.8rem, 4vw, 2.5rem);
+		margin-bottom: 2rem;
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 0.5rem;
+		text-transform: uppercase;
+	}
+
+	.no-exhibitions {
+		color: var(--muted-color);
+		font-style: italic;
+	}
+
+	.exhibitions-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		padding: 0;
+		margin-bottom: 3rem;
+		list-style: none;
+	}
+
+	.exhibitions-list li {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 1rem;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.exhibition-info {
+		flex-grow: 1;
+		min-width: min(280px, 100%);
+	}
+
+	.exhibitions-list h3 {
+		font-family: var(--font-heading), serif;
+		font-size: 1.3rem;
+		margin: 0 0 0.25rem 0;
+		font-weight: normal;
+	}
+
+	.gallery-link-container {
+		font-family: var(--font-body), sans-serif;
+		font-size: 0.9rem;
+		color: var(--muted-color);
+		margin: 0;
+	}
+
+	.gallery-link-container a {
+		text-decoration: underline;
+	}
+
+	.exhibition-date {
+		font-family: var(--font-mono), monospace;
+		font-size: 0.9rem;
+		color: var(--muted-color);
+		white-space: nowrap;
+	}
+
 	.district-filter {
 		display: flex;
 		flex-wrap: wrap;

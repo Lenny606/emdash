@@ -18,7 +18,7 @@ const total = results.length;
 ---
 
 <Base title={`Hledání: ${query || "..."}`} noindex>
-	<div style="margin-bottom: 4rem;">
+	<div class="search-header-container">
 		<h1 class="page-heading">Výsledky hledání</h1>
 		<form action="/search" method="GET" class="search-form">
 			<input
@@ -33,14 +33,14 @@ const total = results.length;
 
 	{query ? (
 		<div>
-			<p class="result-count" style="margin-bottom: 2rem;">
+			<p class="result-count">
 				NALEZENO {total} {plural(total, "VÝSLEDEK", "VÝSLEDKY", "VÝSLEDKŮ")} PRO "{query.toUpperCase()}"
 			</p>
 			
 			<div class="post-list">
 				{results.map((result) => result && (
 					<div class="post-card">
-						<a href={result.collection === "galleries" ? `/galerie/${result.slug || result.id}` : `/${result.slug || result.id}`} style="display: block; height: 100%;">
+						<a href={result.collection === "galleries" ? `/galerie/${result.slug || result.id}` : `/${result.slug || result.id}`}>
 							<div class="content">
 								<div class="post-card-tags">
 									<span class="tag-chip">
@@ -60,18 +60,22 @@ const total = results.length;
 
 			{results.length === 0 && (
 				<div class="block">
-					<p style="font-family: var(--font-body), sans-serif; font-size: 1.1rem; color: var(--muted-color);">Nebyl nalezen žádný výsledek pro váš dotaz. Zkuste prosím jiná klíčová slova.</p>
+					<p class="search-message">Nebyl nalezen žádný výsledek pro váš dotaz. Zkuste prosím jiná klíčová slova.</p>
 				</div>
 			)}
 		</div>
 	) : (
 		<div class="block">
-			<p style="font-family: var(--font-body), sans-serif; font-size: 1.1rem; color: var(--muted-color);">Zadejte hledaný výraz výše a spusťte vyhledávání.</p>
+			<p class="search-message">Zadejte hledaný výraz výše a spusťte vyhledávání.</p>
 		</div>
 	)}
 </Base>
 
 <style>
+	.search-header-container {
+		margin-bottom: 4rem;
+	}
+
 	.search-form {
 		display: flex;
 		gap: 1rem;
@@ -80,6 +84,21 @@ const total = results.length;
 
 	.search-form input {
 		flex-grow: 1;
+	}
+
+	.result-count {
+		margin-bottom: 2rem;
+	}
+
+	.post-card > a {
+		display: block;
+		height: 100%;
+	}
+
+	.search-message {
+		font-family: var(--font-body), sans-serif;
+		font-size: 1.1rem;
+		color: var(--muted-color);
 	}
 
 	.snippet {
