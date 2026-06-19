@@ -1,2 +1,5 @@
 User-agent: *
 Disallow: /
+
+Sitemap: https://previweb.site/sitemap.xml
+Sitemap: https://previweb.site/sitemap/taxonomies.xml

@@ -63,6 +63,33 @@ const metaDescription =
 			? note.slice(0, 152).trimEnd() + "…"
 			: note
 		: `${gallery.data.title} — galerie na adrese ${gallery.data.address}${districtLabel ? `, ${districtLabel}` : ""}, Praha.`;
+
+// Structured data: ArtGallery + current/upcoming exhibitions as ExhibitionEvent
+const postalAddress = {
+	"@type": "PostalAddress",
+	streetAddress: gallery.data.address,
+	addressLocality: "Praha",
+	addressCountry: "CZ",
+};
+const galleryJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "ArtGallery",
+	name: gallery.data.title,
+	...(seo.canonical ? { url: seo.canonical } : {}),
+	...(gallery.data.web ? { sameAs: [gallery.data.web] } : {}),
+	address: postalAddress,
+	...(currentAndUpcoming.length > 0
+		? {
+				event: currentAndUpcoming.map((ex) => ({
+					"@type": "ExhibitionEvent",
+					name: ex.data.title,
+					startDate: ex.data.start_date,
+					endDate: ex.data.end_date,
+					location: { "@type": "Place", name: gallery.data.title, address: postalAddress },
+				})),
+			}
+		: {}),
+};
 ---
 
 <Base
@@ -73,6 +100,10 @@ const metaDescription =
 	image={seo.ogImage}
 	content={{ collection: "galleries", id: gallery.data.id as string, slug }}
 >
+	<Fragment slot="head">
+		<script type="application/ld+json" set:html={JSON.stringify(galleryJsonLd)} />
+	</Fragment>
+
 	<div class="with-sidebar">
 		<article class="block gallery-article">
 			<div class="gallery-content">

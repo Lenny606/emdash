@@ -18,8 +18,10 @@
       "supports": [
         "drafts",
         "revisions",
-        "search"
+        "search",
+        "seo"
       ],
+      "urlPattern": "/{slug}",
       "fields": [
         {
           "slug": "title",
@@ -46,6 +48,7 @@
         "search",
         "seo"
       ],
+      "urlPattern": "/galerie/{slug}",
       "fields": [
         {
           "slug": "title",
