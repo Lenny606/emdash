@@ -206,11 +206,6 @@
       "items": [
         {
           "type": "custom",
-          "label": "Domů",
-          "url": "/"
-        },
-        {
-          "type": "custom",
           "label": "Kategorie",
           "url": "/kategorie"
         },
