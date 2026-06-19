@@ -1,18 +1,37 @@
 ---
-import { search } from "emdash";
+import { search, getEmDashCollection } from "emdash";
 import Base from "../layouts/Base.astro";
 import { plural } from "../utils/format";
 
 const query = Astro.url.searchParams.get("q") || "";
 let results = [];
+let galleryByUlid = new Map();
+let exhibitionByUlid = new Map();
+
+const formatDate = (dateStr: string) => {
+	const d = new Date(dateStr);
+	return d.toLocaleDateString("cs-CZ", {
+		day: "numeric",
+		month: "numeric",
+		year: "numeric",
+	});
+};
 
 if (query) {
 	const searchResponse = await search(query, {
-		collections: ["galleries", "pages"],
+		collections: ["galleries", "pages", "exhibitions"],
 		status: "published",
 		limit: 20,
 	});
 	results = searchResponse?.items ?? [];
+
+	if (results.some((r) => r.collection === "exhibitions" || r.collection === "galleries")) {
+		const { entries: allGalleries } = await getEmDashCollection("galleries", { status: "published" });
+		const { entries: allExhibitions } = await getEmDashCollection("exhibitions", { status: "published" });
+
+		galleryByUlid = new Map(allGalleries.map((g) => [g.data.id, g]));
+		exhibitionByUlid = new Map(allExhibitions.map((e) => [e.data.id, e]));
+	}
 }
 const total = results.length;
 ---
@@ -38,24 +57,55 @@ const total = results.length;
 			</p>
 			
 			<div class="post-list">
-				{results.map((result) => result && (
-					<div class="post-card">
-						<a href={result.collection === "galleries" ? `/galerie/${result.slug || result.id}` : `/${result.slug || result.id}`}>
-							<div class="content">
-								<div class="post-card-tags">
-									<span class="tag-chip">
-										{result.collection === "galleries" ? "Galerie" : "Stránka"}
-									</span>
+				{results.map((result) => {
+					if (!result) return null;
+
+					let href = "";
+					let typeLabel = "";
+
+					if (result.collection === "galleries") {
+						href = `/galerie/${result.slug || result.id}`;
+						typeLabel = "Galerie";
+					} else if (result.collection === "exhibitions") {
+						const ex = exhibitionByUlid.get(result.id);
+						const gallery = ex ? galleryByUlid.get(ex.data.gallery) : null;
+						href = gallery ? `/galerie/${gallery.id}` : "#";
+						typeLabel = "Výstava";
+					} else {
+						href = `/${result.slug || result.id}`;
+						typeLabel = "Stránka";
+					}
+
+					return (
+						<div class="post-card">
+							<a href={href}>
+								<div class="content">
+									<div class="post-card-tags">
+										<span class="tag-chip">
+											{typeLabel}
+										</span>
+									</div>
+									<h2>{result.title}</h2>
+									{result.collection === "exhibitions" && (() => {
+										const ex = exhibitionByUlid.get(result.id);
+										if (!ex) return null;
+										const gallery = galleryByUlid.get(ex.data.gallery);
+										return (
+											<div class="exhibition-meta">
+												{gallery && <p class="exhibition-gallery">Galerie: {gallery.data.title}</p>}
+												<p class="exhibition-dates">{formatDate(ex.data.start_date)} – {formatDate(ex.data.end_date)}</p>
+											</div>
+										);
+									})()}
+									<div class="snippet" set:html={result.snippet} />
+									<div class="action-link">
+										Zobrazit &rarr;
+									</div>
 								</div>
-								<h2>{result.title}</h2>
-								<div class="snippet" set:html={result.snippet} />
-								<div class="action-link">
-									Zobrazit &rarr;
-								</div>
-							</div>
-						</a>
-					</div>
-				))}
+							</a>
+						</div>
+					);
+				})}
 			</div>
 
 			{results.length === 0 && (
@@ -118,6 +168,23 @@ const total = results.length;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		text-decoration: underline;
+	}
+
+	.exhibition-meta {
+		margin-top: 0.5rem;
+		font-family: var(--font-body), sans-serif;
+		font-size: 0.9rem;
+		color: var(--muted-color);
+	}
+
+	.exhibition-gallery {
+		margin: 0 0 0.25rem 0;
+	}
+
+	.exhibition-dates {
+		font-family: var(--font-mono), monospace;
+		font-size: 0.8rem;
+		margin: 0;
 	}
 </style>
 

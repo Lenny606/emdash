@@ -1,5 +1,5 @@
 ---
-import { getEmDashEntry, getEntryTerms, getSeoMeta, decodeSlug, getSiteSettings } from "emdash";
+import { getEmDashEntry, getEntryTerms, getSeoMeta, decodeSlug, getSiteSettings, getEmDashCollection } from "emdash";
 import Base from "../../layouts/Base.astro";
 import Sidebar from "../../components/Sidebar.astro";
 import { resolveStarterSiteIdentity } from "../../utils/site-identity";
@@ -27,12 +27,48 @@ const seo = getSeoMeta(gallery, {
 
 const categories = await getEntryTerms("galleries", gallery.data.id as string, "gallery_category");
 const districts = await getEntryTerms("galleries", gallery.data.id as string, "district");
+
+// Fetch exhibitions and filter/sort them for this gallery
+const { entries: allExhibitions, cacheHint: exhibitionsCacheHint } = await getEmDashCollection("exhibitions", {
+	status: "published",
+});
+Astro.cache.set(exhibitionsCacheHint);
+
+const galleryExhibitions = allExhibitions.filter((ex) => ex.data.gallery === gallery.data.id);
+
+const now = new Date();
+const currentAndUpcoming = galleryExhibitions
+	.filter((ex) => new Date(ex.data.end_date) >= now)
+	.sort((a, b) => new Date(a.data.start_date).getTime() - new Date(b.data.start_date).getTime());
+
+const past = galleryExhibitions
+	.filter((ex) => new Date(ex.data.end_date) < now)
+	.sort((a, b) => new Date(b.data.end_date).getTime() - new Date(a.data.end_date).getTime());
+
+const formatDate = (dateStr: string) => {
+	const d = new Date(dateStr);
+	return d.toLocaleDateString("cs-CZ", {
+		day: "numeric",
+		month: "numeric",
+		year: "numeric",
+	});
+};
+
+// Build a unique meta description per gallery (note excerpt, or address/district fallback)
+const note = (gallery.data.note as string | undefined)?.replace(/\s+/g, " ").trim();
+const districtLabel = districts[0]?.label;
+const metaDescription =
+	note && note.length > 0
+		? note.length > 155
+			? note.slice(0, 152).trimEnd() + "…"
+			: note
+		: `${gallery.data.title} — galerie na adrese ${gallery.data.address}${districtLabel ? `, ${districtLabel}` : ""}, Praha.`;
 ---
 
 <Base
 	title={seo.title}
 	pageTitle={seo.ogTitle}
-	description={seo.description}
+	description={seo.description ?? metaDescription}
 	canonical={seo.canonical}
 	image={seo.ogImage}
 	content={{ collection: "galleries", id: gallery.data.id as string, slug }}
@@ -91,6 +127,48 @@ const districts = await getEntryTerms("galleries", gallery.data.id as string, "d
 							<p {...gallery.edit.note} class="note-text">
 								{gallery.data.note}
 							</p>
+						</div>
+					)
+				}
+
+				{
+					(currentAndUpcoming.length > 0 || past.length > 0) && (
+						<div class="gallery-exhibitions-container">
+							{currentAndUpcoming.length > 0 && (
+								<div class="exhibitions-group">
+									<h2 class="exhibitions-group-title">Aktuální a plánované výstavy</h2>
+									<ul class="exhibitions-list">
+										{currentAndUpcoming.map((ex) => (
+											<li>
+												<div class="exhibition-item-header">
+													<h3 {...ex.edit.title} class="exhibition-item-title">{ex.data.title}</h3>
+													<span class="exhibition-item-date">
+														{formatDate(ex.data.start_date)} – {formatDate(ex.data.end_date)}
+													</span>
+												</div>
+											</li>
+										))}
+									</ul>
+								</div>
+							)}
+
+							{past.length > 0 && (
+								<div class="exhibitions-group">
+									<h2 class="exhibitions-group-title">Proběhlé výstavy</h2>
+									<ul class="exhibitions-list past-exhibitions">
+										{past.map((ex) => (
+											<li>
+												<div class="exhibition-item-header">
+													<h3 {...ex.edit.title} class="exhibition-item-title">{ex.data.title}</h3>
+													<span class="exhibition-item-date">
+														{formatDate(ex.data.start_date)} – {formatDate(ex.data.end_date)}
+													</span>
+												</div>
+											</li>
+										))}
+									</ul>
+								</div>
+							)}
 						</div>
 					)
 				}
@@ -183,5 +261,74 @@ const districts = await getEntryTerms("galleries", gallery.data.id as string, "d
 		line-height: 1.7;
 		white-space: pre-line;
 		color: var(--text-color);
+	}
+
+	.gallery-exhibitions-container {
+		margin-top: 3rem;
+		border-top: 1px solid var(--border-color);
+		padding-top: 2rem;
+	}
+
+	.exhibitions-group {
+		margin-bottom: 2.5rem;
+	}
+
+	.exhibitions-group:last-child {
+		margin-bottom: 0;
+	}
+
+	.exhibitions-group-title {
+		font-family: var(--font-heading), serif;
+		font-size: 1.4rem;
+		text-transform: uppercase;
+		margin-bottom: 1.5rem;
+		font-weight: normal;
+		color: var(--text-color);
+	}
+
+	.exhibitions-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.exhibitions-list li {
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 1rem;
+	}
+
+	.exhibitions-list li:last-child {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+
+	.exhibition-item-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.exhibition-item-title {
+		font-family: var(--font-heading), serif;
+		font-size: 1.2rem;
+		margin: 0;
+		font-weight: normal;
+		color: var(--text-color);
+	}
+
+	.exhibition-item-date {
+		font-family: var(--font-mono), monospace;
+		font-size: 0.85rem;
+		color: var(--muted-color);
+		white-space: nowrap;
+	}
+
+	.past-exhibitions .exhibition-item-title {
+		color: var(--muted-color);
 	}
 </style>
