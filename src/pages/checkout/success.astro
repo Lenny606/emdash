@@ -1,0 +1,23 @@
+---
+import { getSiteSettings } from "emdash";
+import Base from "../../layouts/Base.astro";
+import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+const sessionId = Astro.url.searchParams.get("session_id");
+const isTest = Astro.url.searchParams.get("test") === "1";
+---
+
+<Base title={`Děkujeme — ${siteTitle}`} pageTitle="Objednávka přijata" description="Platba proběhla úspěšně.">
+	<section style="max-width: 40rem; margin: 0 auto; padding: 3rem 1rem; text-align: center;">
+		<h1>Děkujeme za objednávku!</h1>
+		{isTest && (
+			<p style="display:inline-block; background:#fff3cd; color:#856404; padding:0.4rem 0.8rem; border-radius:0.375rem; font-size:0.85rem;">
+				⚠️ TESTOVACÍ REŽIM — platba přes Stripe byla přeskočena (CART_TEST_MODE).
+			</p>
+		)}
+		<p>Vaše platba byla úspěšně přijata.</p>
+		{sessionId && <p style="color:#888; font-size:0.85rem;">Stripe session: <code>{sessionId}</code></p>}
+		<p><a href="/obchod">← Zpět do obchodu</a></p>
+	</section>
+</Base>

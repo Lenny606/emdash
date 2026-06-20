@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/plugins/*"
   ],
   "emdash": {
     "label": "Starter",
@@ -23,6 +24,7 @@
   "dependencies": {
     "@astrojs/node": "^10.0.0",
     "@astrojs/react": "^5.0.0",
+    "@local/plugin-stripe-cart": "*",
     "astro": "^6.0.1",
     "better-sqlite3": "^12.8.0",
     "emdash": "^0.9.0",

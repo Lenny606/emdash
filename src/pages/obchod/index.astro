@@ -1,0 +1,150 @@
+---
+import { getEmDashCollection, getSiteSettings } from "emdash";
+import Base from "../../layouts/Base.astro";
+import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+
+// Server-rendered storefront. Prices and product identity come from the CMS;
+// the client only ever sends { productId, quantity } to the checkout route, so
+// prices can never be tampered with from the browser.
+const { entries: products, cacheHint } = await getEmDashCollection("products", {
+	status: "published",
+});
+Astro.cache.set(cacheHint);
+
+const sorted = products.toSorted((a, b) =>
+	String(a.data.title).localeCompare(String(b.data.title), "cs")
+);
+
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+
+const formatPrice = (value: number) =>
+	new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK" }).format(value);
+---
+
+<Base title={`Obchod — ${siteTitle}`} pageTitle="Obchod" description="Testovací obchod pro pokladnu Stripe.">
+	<section class="shop">
+		<h1>Obchod</h1>
+		<p class="shop__intro">Testovací produkty pro ověření pokladny Stripe.</p>
+
+		{products.length === 0 && (
+			<p>Žádné produkty. Spusťte <code>npx emdash dev</code> pro seed.</p>
+		)}
+
+		<ul class="shop__grid">
+			{sorted.map((product) => (
+				<li class="product">
+					<h2 class="product__title">{product.data.title}</h2>
+					{product.data.description && (
+						<p class="product__desc">{product.data.description}</p>
+					)}
+					<div class="product__row">
+						<span class="product__price">{formatPrice(Number(product.data.price))}</span>
+						<button
+							type="button"
+							class="product__add"
+							data-add-to-cart
+							data-product-id={product.data.id}
+							data-title={product.data.title}
+							data-price={product.data.price}
+						>
+							Přidat do košíku
+						</button>
+					</div>
+				</li>
+			))}
+		</ul>
+
+		<aside class="cart" data-cart hidden>
+			<h2>Košík</h2>
+			<ul class="cart__items" data-cart-items></ul>
+			<div class="cart__footer">
+				<strong>Celkem: <span data-cart-total>0 Kč</span></strong>
+				<a class="cart__checkout" href="/checkout" data-checkout>Přejít k pokladně</a>
+			</div>
+		</aside>
+	</section>
+</Base>
+
+<script>
+	// Minimal client-side cart. Keyed by product ULID; only ids + quantities are
+	// ever sent to the server. Prices shown here are display-only.
+	type Line = { productId: string; title: string; price: number; quantity: number };
+
+	const CART_KEY = "emdash-cart";
+	const fmt = new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK" });
+	const $ = <T extends Element>(sel: string) => document.querySelector<T>(sel);
+
+	function loadCart(): Map<string, Line> {
+		try {
+			const raw = localStorage.getItem(CART_KEY);
+			if (!raw) return new Map();
+			const lines = JSON.parse(raw) as Line[];
+			return new Map(lines.map((l) => [l.productId, l]));
+		} catch {
+			return new Map();
+		}
+	}
+	function saveCart(cart: Map<string, Line>) {
+		localStorage.setItem(CART_KEY, JSON.stringify(Array.from(cart.values())));
+	}
+
+	const cart = loadCart();
+
+	const cartEl = $<HTMLElement>("[data-cart]");
+	const itemsEl = $<HTMLUListElement>("[data-cart-items]");
+	const totalEl = $<HTMLElement>("[data-cart-total]");
+	const checkoutBtn = $<HTMLAnchorElement>("[data-checkout]");
+
+	function render() {
+		if (!itemsEl || !totalEl || !cartEl) return;
+		itemsEl.innerHTML = "";
+		let total = 0;
+		for (const line of cart.values()) {
+			total += line.price * line.quantity;
+			const li = document.createElement("li");
+			li.textContent = `${line.title} × ${line.quantity} — ${fmt.format(line.price * line.quantity)}`;
+			itemsEl.appendChild(li);
+		}
+		totalEl.textContent = fmt.format(total);
+		cartEl.hidden = cart.size === 0;
+	}
+
+	document.querySelectorAll<HTMLButtonElement>("[data-add-to-cart]").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			const productId = btn.dataset.productId!;
+			const existing = cart.get(productId);
+			if (existing) {
+				existing.quantity += 1;
+			} else {
+				cart.set(productId, {
+					productId,
+					title: btn.dataset.title ?? "Produkt",
+					price: Number(btn.dataset.price ?? 0),
+					quantity: 1,
+				});
+			}
+			saveCart(cart);
+			render();
+		});
+	});
+
+	render();
+</script>
+
+<style>
+	.shop { max-width: 60rem; margin: 0 auto; padding: 2rem 1rem; }
+	.shop__intro { color: #666; margin-bottom: 2rem; }
+	.shop__grid { list-style: none; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+	.product { border: 1px solid #e3e3e3; border-radius: 0.5rem; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+	.product__title { font-size: 1.1rem; margin: 0; }
+	.product__desc { color: #666; font-size: 0.9rem; margin: 0; flex: 1; }
+	.product__row { display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; }
+	.product__price { font-weight: 700; }
+	.product__add, .cart__checkout { cursor: pointer; border: 0; border-radius: 0.375rem; padding: 0.5rem 0.9rem; background: #111; color: #fff; font-size: 0.85rem; }
+	.product__add:hover, .cart__checkout:hover { background: #333; }
+	.cart { position: sticky; bottom: 1rem; margin-top: 2rem; border: 1px solid #d0d0d0; border-radius: 0.5rem; padding: 1.25rem; background: #fafafa; }
+	.cart__items { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 0.25rem; }
+	.cart__footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+	.cart__checkout { background: #635bff; text-decoration: none; display: inline-block; }
+	.cart__checkout:hover { background: #5247e0; }
+</style>

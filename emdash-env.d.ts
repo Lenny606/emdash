@@ -45,10 +45,26 @@ export interface Stránka {
   bylines?: ContentBylineCredit[];
 }
 
+export interface Produkt {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  price: number;
+  description?: string;
+  image?: { id: string; src?: string; alt?: string; width?: number; height?: number };
+  stripe_price_id?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+}
+
 declare module "emdash" {
   interface EmDashCollections {
     exhibitions: Výstava;
     galleries: Galerie;
     pages: Stránka;
+    products: Produkt;
   }
 }

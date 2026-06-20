@@ -1,0 +1,144 @@
+---
+import { getSiteSettings } from "emdash";
+import Base from "../../layouts/Base.astro";
+import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+
+// Checkout review step. The cart lives in localStorage (set on /obchod); this
+// page renders a summary, collects an email, and only then calls the checkout
+// route and redirects to Stripe (or the success page in test mode).
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+---
+
+<Base title={`Pokladna — ${siteTitle}`} pageTitle="Pokladna" description="Shrnutí objednávky před platbou.">
+	<section class="checkout">
+		<h1>Pokladna</h1>
+
+		<div data-empty hidden>
+			<p>Váš košík je prázdný.</p>
+			<p><a href="/obchod">← Zpět do obchodu</a></p>
+		</div>
+
+		<div data-checkout-body hidden>
+			<h2>Shrnutí objednávky</h2>
+			<table class="summary">
+				<tbody data-summary-rows></tbody>
+				<tfoot>
+					<tr>
+						<th scope="row">Celkem</th>
+						<td class="summary__total" data-summary-total>0 Kč</td>
+					</tr>
+				</tfoot>
+			</table>
+
+			<form data-checkout-form class="form">
+				<label class="form__label">
+					E-mail (pro potvrzení objednávky)
+					<input type="email" name="email" required placeholder="vas@email.cz" />
+				</label>
+				<button type="submit" class="form__submit" data-submit>Zaplatit</button>
+				<p class="form__error" data-error hidden></p>
+			</form>
+
+			<p class="checkout__back"><a href="/obchod">← Pokračovat v nákupu</a></p>
+		</div>
+	</section>
+</Base>
+
+<script>
+	type Line = { productId: string; title: string; price: number; quantity: number };
+
+	const CART_KEY = "emdash-cart";
+	const fmt = new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK" });
+	const $ = <T extends Element>(sel: string) => document.querySelector<T>(sel);
+
+	function loadCart(): Line[] {
+		try {
+			const raw = localStorage.getItem(CART_KEY);
+			return raw ? (JSON.parse(raw) as Line[]) : [];
+		} catch {
+			return [];
+		}
+	}
+
+	const cart = loadCart();
+	const emptyEl = $<HTMLElement>("[data-empty]");
+	const bodyEl = $<HTMLElement>("[data-checkout-body]");
+	const rowsEl = $<HTMLElement>("[data-summary-rows]");
+	const totalEl = $<HTMLElement>("[data-summary-total]");
+	const formEl = $<HTMLFormElement>("[data-checkout-form]");
+	const submitEl = $<HTMLButtonElement>("[data-submit]");
+	const errorEl = $<HTMLElement>("[data-error]");
+
+	if (cart.length === 0) {
+		if (emptyEl) emptyEl.hidden = false;
+	} else {
+		if (bodyEl) bodyEl.hidden = false;
+		let total = 0;
+		for (const line of cart) {
+			const lineTotal = line.price * line.quantity;
+			total += lineTotal;
+			const tr = document.createElement("tr");
+			tr.innerHTML =
+				`<td>${line.title}</td>` +
+				`<td>× ${line.quantity}</td>` +
+				`<td class="summary__amount">${fmt.format(lineTotal)}</td>`;
+			rowsEl?.appendChild(tr);
+		}
+		if (totalEl) totalEl.textContent = fmt.format(total);
+	}
+
+	formEl?.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		if (!submitEl) return;
+		if (errorEl) errorEl.hidden = true;
+		submitEl.disabled = true;
+		submitEl.textContent = "Přesměrování…";
+
+		try {
+			const email = new FormData(formEl).get("email")?.toString() || undefined;
+			const items = cart.map((l) => ({ productId: l.productId, quantity: l.quantity }));
+			const res = await fetch("/_emdash/api/plugins/stripe-cart/checkout", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ items, email }),
+			});
+			// EmDash plugin routes wrap the return value as { data: ... };
+			// our handler returns { url } on success or { error } on failure.
+			const json = await res.json();
+			const result = json?.data ?? {};
+			if (!res.ok || result.error || !result.url) {
+				const message =
+					result.error ||
+					json?.error?.message ||
+					"Pokladnu se nepodařilo spustit. Zkontrolujte konfiguraci Stripe.";
+				throw new Error(typeof message === "string" ? message : "Checkout failed");
+			}
+			// Clear the cart before leaving for the payment page.
+			localStorage.removeItem(CART_KEY);
+			window.location.href = result.url;
+		} catch (err) {
+			if (errorEl) {
+				errorEl.textContent = err instanceof Error ? err.message : String(err);
+				errorEl.hidden = false;
+			}
+			submitEl.disabled = false;
+			submitEl.textContent = "Zaplatit";
+		}
+	});
+</script>
+
+<style>
+	.checkout { max-width: 40rem; margin: 0 auto; padding: 2rem 1rem; }
+	.summary { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; }
+	.summary td, .summary th { padding: 0.5rem 0; border-bottom: 1px solid #eee; text-align: left; }
+	.summary__amount, .summary__total { text-align: right; font-variant-numeric: tabular-nums; }
+	.summary tfoot th, .summary tfoot td { font-weight: 700; border-bottom: 0; padding-top: 0.75rem; }
+	.form { display: flex; flex-direction: column; gap: 1rem; }
+	.form__label { display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.9rem; }
+	.form__label input { padding: 0.6rem 0.75rem; border: 1px solid #ccc; border-radius: 0.375rem; font-size: 1rem; }
+	.form__submit { cursor: pointer; border: 0; border-radius: 0.375rem; padding: 0.7rem 1rem; background: #635bff; color: #fff; font-size: 0.95rem; }
+	.form__submit:hover { background: #5247e0; }
+	.form__submit:disabled { opacity: 0.6; cursor: default; }
+	.form__error { color: #c0392b; margin: 0; }
+	.checkout__back { margin-top: 1.5rem; }
+</style>

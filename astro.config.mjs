@@ -4,6 +4,7 @@ import { defineConfig } from "astro/config";
 import emdash, { local } from "emdash/astro";
 import { sqlite } from "emdash/db";
 import { emailClientPlugin } from "@emdash-cms/plugin-email-client";
+import { stripeCartPlugin } from "@local/plugin-stripe-cart";
 import { google } from "emdash/auth/providers/google";
 
 export default defineConfig({
@@ -24,7 +25,7 @@ export default defineConfig({
 				baseUrl: "/_emdash/api/media/file",
 			}),
 			// Trusted (in-process) plugins — runs in Node, uses nodemailer.
-			plugins: [emailClientPlugin()],
+			plugins: [emailClientPlugin(), stripeCartPlugin()],
 			siteUrl: process.env.EMDASH_SITE_URL || process.env.SITE_URL || undefined,
 			allowedOrigins: process.env.EMDASH_ALLOWED_ORIGINS ? [process.env.EMDASH_ALLOWED_ORIGINS] : undefined,
 		}),

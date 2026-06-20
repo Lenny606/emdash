@@ -1,0 +1,15 @@
+---
+import { getSiteSettings } from "emdash";
+import Base from "../../layouts/Base.astro";
+import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+---
+
+<Base title={`Platba zrušena — ${siteTitle}`} pageTitle="Platba zrušena" description="Platba byla zrušena.">
+	<section style="max-width: 40rem; margin: 0 auto; padding: 3rem 1rem; text-align: center;">
+		<h1>Platba zrušena</h1>
+		<p>Vaše objednávka nebyla dokončena. Položky zůstávají v košíku.</p>
+		<p><a href="/obchod">← Zpět do obchodu</a></p>
+	</section>
+</Base>

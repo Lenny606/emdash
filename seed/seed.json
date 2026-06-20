@@ -114,6 +114,47 @@
           "required": true
         }
       ]
+    },
+    {
+      "slug": "products",
+      "label": "Produkty",
+      "labelSingular": "Produkt",
+      "urlPattern": "/obchod/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "search"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Název produktu",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "price",
+          "label": "Cena",
+          "type": "number",
+          "required": true
+        },
+        {
+          "slug": "description",
+          "label": "Popis",
+          "type": "text"
+        },
+        {
+          "slug": "image",
+          "label": "Obrázek",
+          "type": "image"
+        },
+        {
+          "slug": "stripe_price_id",
+          "label": "Stripe Price ID (volitelné)",
+          "type": "string"
+        }
+      ]
     }
   ],
   "taxonomies": [
@@ -240,6 +281,38 @@
     }
   ],
   "content": {
+    "products": [
+      {
+        "id": "plakat-praha",
+        "slug": "plakat-praha",
+        "status": "published",
+        "data": {
+          "title": "Plakát — Praha",
+          "price": 350,
+          "description": "Umělecký plakát s motivem Prahy, formát A2."
+        }
+      },
+      {
+        "id": "katalog-vystavy",
+        "slug": "katalog-vystavy",
+        "status": "published",
+        "data": {
+          "title": "Katalog výstavy",
+          "price": 590,
+          "description": "Tištěný katalog s reprodukcemi a texty kurátorů."
+        }
+      },
+      {
+        "id": "platena-taska",
+        "slug": "platena-taska",
+        "status": "published",
+        "data": {
+          "title": "Plátěná taška",
+          "price": 240,
+          "description": "Bavlněná taška s potiskem loga Artis Praga."
+        }
+      }
+    ],
     "pages": [
       {
         "id": "about",
