@@ -125,6 +125,20 @@ const michalek = {
 	image: `${CDN}/200000195-2527725279/image-crop-200000182-0.png?ph=cbcde18247`,
 };
 
+// Salon environment gallery (last section) — 9 real interior photos pulled
+// from the source site's lightbox gallery (700px webp variants).
+const interior = [
+	`${CDN}/200000434-a5d7aa5d7c/700/Jindra_Salo-0515-7.webp?ph=cbcde18247`,
+	`${CDN}/200000438-9849b9849d/700/DSCF011315salon-8.webp?ph=cbcde18247`,
+	`${CDN}/200000433-906299062a/700/Jindra_Salo-0548-9.webp?ph=cbcde18247`,
+	`${CDN}/200000425-eafc3eafc5/700/Jindra_Salo-0508-01.webp?ph=cbcde18247`,
+	`${CDN}/200000439-9d0a89d0ab/700/DSCF011516salon-7.webp?ph=cbcde18247`,
+	`${CDN}/200000432-64f3a64f3c/700/Jindra_Salo-0554-6.webp?ph=cbcde18247`,
+	`${CDN}/200000426-f1589f158b/700/Jindra_Salo-0509.webp?ph=cbcde18247`,
+	`${CDN}/200000431-5aa825aa83/700/Jindra_Salo-0537.webp?ph=cbcde18247`,
+	`${CDN}/200000440-e118fe1192/700/DSCF012017salon-6.webp?ph=cbcde18247`,
+].map((src, i) => ({ src, alt: `Interiér salonu Prestige ${i + 1}` }));
+
 const contact = {
 	name: "Prestige Beauty Salon",
 	address: "Husitská 106/1, 130 00 Praha 3-Žižkov",
@@ -319,6 +333,23 @@ const legal = [
 				<h2 class="collab__name">{michalek.name}</h2>
 				<p class="collab__role">{michalek.role}</p>
 				<p class="collab__desc">{michalek.desc}</p>
+			</div>
+		</section>
+
+		<!-- ===== SALON ENVIRONMENT GALLERY ===== -->
+		<section class="interior">
+			<header class="interior__head">
+				<p class="interior__eyebrow">Galerie</p>
+				<h2>Prostředí, ve kterém se na Vás těšíme</h2>
+			</header>
+			<div class="interior__grid">
+				{
+					interior.map((p) => (
+						<figure class="interior__item">
+							<img src={p.src} alt={p.alt} loading="lazy" />
+						</figure>
+					))
+				}
 			</div>
 		</section>
 
@@ -798,6 +829,47 @@ const legal = [
 				line-height: 1.65;
 			}
 
+			/* ---------- SALON ENVIRONMENT GALLERY ---------- */
+			.interior {
+				padding: clamp(3rem, 7vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+			}
+			.interior__head {
+				text-align: center;
+				margin-bottom: 2.6rem;
+			}
+			.interior__eyebrow {
+				text-transform: uppercase;
+				letter-spacing: 0.28em;
+				font-size: 0.7rem;
+				font-weight: 600;
+				color: var(--gold);
+				margin-bottom: 0.9rem;
+			}
+			.interior__head h2 {
+				font-family: var(--serif);
+				font-weight: 500;
+				font-size: clamp(2rem, 5vw, 3.4rem);
+			}
+			.interior__grid {
+				columns: 3;
+				column-gap: clamp(0.6rem, 1.5vw, 1rem);
+			}
+			.interior__item {
+				margin: 0 0 clamp(0.6rem, 1.5vw, 1rem);
+				break-inside: avoid;
+				overflow: hidden;
+				background: #eee;
+			}
+			.interior__item img {
+				width: 100%;
+				height: auto;
+				display: block;
+				transition: transform 0.7s ease;
+			}
+			.interior__item:hover img {
+				transform: scale(1.05);
+			}
+
 			/* ---------- FOOTER ---------- */
 			.site-footer {
 				border-top: 1px solid var(--ink);
@@ -897,6 +969,9 @@ const legal = [
 				.collab__media {
 					aspect-ratio: 16 / 10;
 					max-height: 360px;
+				}
+				.interior__grid {
+					columns: 2;
 				}
 			}
 			@media (max-width: 760px) {
