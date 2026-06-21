@@ -9,8 +9,8 @@
 const CDN = "https://cbcde18247.clvaw-cdnwnd.com/7dc52aed9bef38085303530badf91f8e";
 
 const brand = {
-	name: "Prestige",
-	sub: "Beauty Salon",
+	name: "Prestige Beauty Salon",
+	logo: "/prestige-logo.png",
 	tagline: "Prémiový salón krásy v srdci Prahy",
 	slogan: "Dokonalost v každém detailu",
 	hero: `${CDN}/200000455-902c3902c4/pano_zoom.jpeg?ph=cbcde18247`,
@@ -112,8 +112,9 @@ const legal = [
 
 			<div class="hero-brand">
 				<p class="hero-brand__slogan">{brand.slogan}</p>
-				<h1>{brand.name}</h1>
-				<p class="hero-brand__sub">{brand.sub}</p>
+				<h1 class="hero-brand__logo">
+					<img src={brand.logo} alt={brand.name} width="1081" height="302" />
+				</h1>
 				<p class="hero-brand__tag">{brand.tagline}</p>
 				<a href="#sluzby" class="hero-brand__cta">Rezervovat si svou službu</a>
 			</div>
@@ -208,7 +209,7 @@ const legal = [
 		<footer class="site-footer">
 			<div class="site-footer__top">
 				<div class="site-footer__col">
-					<span class="site-footer__name">{contact.name}</span>
+					<img class="site-footer__logo" src={brand.logo} alt={contact.name} width="1081" height="302" />
 					<span class="site-footer__hours">{contact.hours}</span>
 				</div>
 				<address class="site-footer__col">
@@ -298,19 +299,19 @@ const legal = [
 				font-weight: 600;
 				margin-bottom: 1.4rem;
 			}
-			.hero-brand h1 {
-				font-family: var(--serif);
-				font-weight: 500;
-				font-size: clamp(3rem, 9vw, 7rem);
-				line-height: 0.9;
-				letter-spacing: -0.01em;
+			.hero-brand__logo {
+				margin: 0;
+				line-height: 0;
 			}
-			.hero-brand__sub {
-				font-family: var(--serif);
-				font-size: clamp(1rem, 2.4vw, 1.7rem);
-				letter-spacing: 0.5em;
-				text-transform: uppercase;
-				margin-top: 0.6rem;
+			.hero-brand__logo img {
+				width: auto;
+				height: auto;
+				max-width: min(100%, 460px);
+				max-height: clamp(90px, 18vw, 170px);
+				object-fit: contain;
+				/* Recolor whole mark (incl. gold emblem) to solid black for
+				   full contrast on the gold hero block. */
+				filter: brightness(0);
 			}
 			.hero-brand__tag {
 				font-family: var(--serif);
@@ -578,7 +579,14 @@ const legal = [
 				padding: 2.4rem clamp(1.5rem, 5vw, 4rem);
 			}
 			.site-footer__col { display: flex; flex-direction: column; gap: 0.35rem; font-style: normal; }
-			.site-footer__name { font-weight: 600; }
+			.site-footer__logo {
+				width: auto;
+				height: auto;
+				max-width: 220px;
+				max-height: 56px;
+				object-fit: contain;
+				margin-bottom: 0.4rem;
+			}
 			.site-footer__hours, .site-footer__col > span { color: var(--muted); }
 			.site-footer__col a { color: var(--ink); text-decoration: none; }
 			.site-footer__col a:hover { color: var(--gold); }
