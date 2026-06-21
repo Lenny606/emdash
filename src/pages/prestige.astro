@@ -6,7 +6,8 @@
 // Images are hot-linked from the live site's CDN — for production, download
 // them and upload to EmDash media instead of referencing externally.
 
-const CDN = "https://cbcde18247.clvaw-cdnwnd.com/7dc52aed9bef38085303530badf91f8e";
+const CDN =
+	"https://cbcde18247.clvaw-cdnwnd.com/7dc52aed9bef38085303530badf91f8e";
 
 const brand = {
 	name: "Prestige Beauty Salon",
@@ -16,28 +17,89 @@ const brand = {
 	hero: `${CDN}/200000455-902c3902c4/pano_zoom.jpeg?ph=cbcde18247`,
 };
 
-const sideNav = ["Úvod", "Ošetření", "Renasculpt", "Biohack", "Brow & Lash", "Kontakt"];
+const sideNav = [
+	"Úvod",
+	"Ošetření",
+	"Renasculpt",
+	"Biohack",
+	"Brow & Lash",
+	"Kontakt",
+];
 
 // Featured strip — 4 editorial service shots
 const strip = [
-	{ src: `${CDN}/200000022-3334f33352/Osetrenie_PEELING.jpeg?ph=cbcde18247`, alt: "Ošetření pleti Institut Esthederm", tall: false },
-	{ src: `${CDN}/200000066-d0fbbd0fbd/idenel05-1024x1007.jpeg?ph=cbcde18247`, alt: "Ošetření Idenel s mikrojehličkami", tall: true },
-	{ src: `${CDN}/200000020-8928789288/no1.jpeg?ph=cbcde18247`, alt: "Ošetření Di Angelo", tall: false },
-	{ src: `${CDN}/200000040-0b1bb0b1bd/rifetechplasma-745x1024.jpeg?ph=cbcde18247`, alt: "Biohack systém", tall: true },
+	{
+		src: `${CDN}/200000022-3334f33352/Osetrenie_PEELING.jpeg?ph=cbcde18247`,
+		alt: "Ošetření pleti Institut Esthederm",
+		tall: false,
+	},
+	{
+		src: `${CDN}/200000066-d0fbbd0fbd/idenel05-1024x1007.jpeg?ph=cbcde18247`,
+		alt: "Ošetření Idenel s mikrojehličkami",
+		tall: true,
+	},
+	{
+		src: `${CDN}/200000020-8928789288/no1.jpeg?ph=cbcde18247`,
+		alt: "Ošetření Di Angelo",
+		tall: false,
+	},
+	{
+		src: `${CDN}/200000040-0b1bb0b1bd/rifetechplasma-745x1024.jpeg?ph=cbcde18247`,
+		alt: "Biohack systém",
+		tall: true,
+	},
 ];
 
-const categories = ["Ošetření pleti", "Renasculpt", "Maderoterapie", "Biohack", "Brow & Lash"];
+const categories = [
+	"Ošetření pleti",
+	"Renasculpt",
+	"Maderoterapie",
+	"Biohack",
+	"Brow & Lash",
+];
 
 // Full service grid (PEPTAXEL is featured separately below)
 const services = [
-	{ title: "Ošetření pleti Institut Esthederm", desc: "Tréninkem, který učí pleť fungovat vlastními silami.", src: `${CDN}/200000022-3334f33352/Osetrenie_PEELING.jpeg?ph=cbcde18247` },
-	{ title: "Idenel s mikrojehličkami", desc: "Korejská metoda microneedlingu pro obnovu a pevnost pleti.", src: `${CDN}/200000066-d0fbbd0fbd/idenel05-1024x1007.jpeg?ph=cbcde18247` },
-	{ title: "Autobiography Photon Pro", desc: "Multifunkční věž: mikrodermabraze, mezoterapie a LED fototerapie.", src: `${CDN}/200000075-b5713b5714/Sn%C3%ADmek%20obrazovky%202026-01-13%20v%C2%A012.02.20.png?ph=cbcde18247` },
-	{ title: "Ošetření Di Angelo", desc: "Česká luxusní kosmetika pro náročnou pleť.", src: `${CDN}/200000020-8928789288/no1.jpeg?ph=cbcde18247` },
-	{ title: "Přístrojová maderoterapie", desc: "Přístrojové ošetření celulitidy a formování postavy.", src: `${CDN}/200000026-d1bd9d1bdb/1176.jpeg?ph=cbcde18247` },
-	{ title: "Renasculpt procedury", desc: "Tvarování postavy technologií EMS.", src: `${CDN}/200000028-e4c2fe4c31/d112a7_08f5ae69062c4ea385cf741ff5dffd9c~mv2.png?ph=cbcde18247` },
-	{ title: "Biohack systém", desc: "Plazmová a frekvenční terapie pro regeneraci.", src: `${CDN}/200000040-0b1bb0b1bd/rifetechplasma-745x1024.jpeg?ph=cbcde18247` },
-	{ title: "Brow & Lash Bar", desc: "Profesionální péče o obočí a řasy.", src: `${CDN}/200000046-00ba800baa/eyebrows-and-lashes-185.png?ph=cbcde18247` },
+	{
+		title: "Ošetření pleti Institut Esthederm",
+		desc: "Tréninkem, který učí pleť fungovat vlastními silami.",
+		src: `${CDN}/200000022-3334f33352/Osetrenie_PEELING.jpeg?ph=cbcde18247`,
+	},
+	{
+		title: "Idenel s mikrojehličkami",
+		desc: "Korejská metoda microneedlingu pro obnovu a pevnost pleti.",
+		src: `${CDN}/200000066-d0fbbd0fbd/idenel05-1024x1007.jpeg?ph=cbcde18247`,
+	},
+	{
+		title: "Autobiography Photon Pro",
+		desc: "Multifunkční věž: mikrodermabraze, mezoterapie a LED fototerapie.",
+		src: `${CDN}/200000075-b5713b5714/Sn%C3%ADmek%20obrazovky%202026-01-13%20v%C2%A012.02.20.png?ph=cbcde18247`,
+	},
+	{
+		title: "Ošetření Di Angelo",
+		desc: "Česká luxusní kosmetika pro náročnou pleť.",
+		src: `${CDN}/200000020-8928789288/no1.jpeg?ph=cbcde18247`,
+	},
+	{
+		title: "Přístrojová maderoterapie",
+		desc: "Přístrojové ošetření celulitidy a formování postavy.",
+		src: `${CDN}/200000026-d1bd9d1bdb/1176.jpeg?ph=cbcde18247`,
+	},
+	{
+		title: "Renasculpt procedury",
+		desc: "Tvarování postavy technologií EMS.",
+		src: `${CDN}/200000028-e4c2fe4c31/d112a7_08f5ae69062c4ea385cf741ff5dffd9c~mv2.png?ph=cbcde18247`,
+	},
+	{
+		title: "Biohack systém",
+		desc: "Plazmová a frekvenční terapie pro regeneraci.",
+		src: `${CDN}/200000040-0b1bb0b1bd/rifetechplasma-745x1024.jpeg?ph=cbcde18247`,
+	},
+	{
+		title: "Brow & Lash Bar",
+		desc: "Profesionální péče o obočí a řasy.",
+		src: `${CDN}/200000046-00ba800baa/eyebrows-and-lashes-185.png?ph=cbcde18247`,
+	},
 ];
 
 const peptaxel = {
@@ -73,8 +135,14 @@ const contact = {
 };
 
 const social = [
-	{ label: "Facebook", url: "https://www.facebook.com/prestigebeautysalon.cz" },
-	{ label: "Instagram", url: "https://www.instagram.com/salonprestigebeautycz" },
+	{
+		label: "Facebook",
+		url: "https://www.facebook.com/prestigebeautysalon.cz",
+	},
+	{
+		label: "Instagram",
+		url: "https://www.instagram.com/salonprestigebeautycz",
+	},
 ];
 
 const legal = [
@@ -89,7 +157,9 @@ const legal = [
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="robots" content="noindex, nofollow" />
-		<title>Prestige Beauty Salon — Prémiový salón krásy v srdci Prahy</title>
+		<title>
+			Prestige Beauty Salon — Prémiový salón krásy v srdci Prahy
+		</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -102,21 +172,38 @@ const legal = [
 		<header class="hero">
 			<nav class="side-nav" aria-label="Hlavní navigace">
 				<ul>
-					{sideNav.map((item) => <li><a href="#">{item}</a></li>)}
+					{
+						sideNav.map((item) => (
+							<li>
+								<a href="#">{item}</a>
+							</li>
+						))
+					}
 				</ul>
 			</nav>
 
 			<figure class="hero-portrait">
-				<img src={brand.hero} alt="Interiér salonu Prestige Beauty" loading="eager" />
+				<img
+					src={brand.hero}
+					alt="Interiér salonu Prestige Beauty"
+					loading="eager"
+				/>
 			</figure>
 
 			<div class="hero-brand">
 				<p class="hero-brand__slogan">{brand.slogan}</p>
 				<h1 class="hero-brand__logo">
-					<img src={brand.logo} alt={brand.name} width="1081" height="302" />
+					<img
+						src={brand.logo}
+						alt={brand.name}
+						width="1081"
+						height="302"
+					/>
 				</h1>
 				<p class="hero-brand__tag">{brand.tagline}</p>
-				<a href="#sluzby" class="hero-brand__cta">Rezervovat si svou službu</a>
+				<a href="#sluzby" class="hero-brand__cta"
+					>Rezervovat si svou službu</a
+				>
 			</div>
 		</header>
 
@@ -124,7 +211,13 @@ const legal = [
 		<section class="strip" aria-label="Galerie ošetření">
 			{
 				strip.map((g) => (
-					<figure class={g.tall ? "strip__item strip__item--tall" : "strip__item"}>
+					<figure
+						class={
+							g.tall
+								? "strip__item strip__item--tall"
+								: "strip__item"
+						}
+					>
 						<img src={g.src} alt={g.alt} loading="lazy" />
 						<figcaption>{g.alt}</figcaption>
 					</figure>
@@ -133,7 +226,13 @@ const legal = [
 		</section>
 
 		<nav class="categories" aria-label="Kategorie">
-			{categories.map((c) => <a href="#sluzby" class="categories__item">{c}</a>)}
+			{
+				categories.map((c) => (
+					<a href="#sluzby" class="categories__item">
+						{c}
+					</a>
+				))
+			}
 		</nav>
 
 		<!-- ===== VALUES ===== -->
@@ -141,7 +240,9 @@ const legal = [
 			{
 				values.map((v, i) => (
 					<div class="values__item">
-						<span class="values__num">{String(i + 1).padStart(2, "0")}</span>
+						<span class="values__num">
+							{String(i + 1).padStart(2, "0")}
+						</span>
 						<p class="values__text">{v}</p>
 					</div>
 				))
@@ -152,7 +253,9 @@ const legal = [
 		<section class="services" id="sluzby">
 			<header class="services__head">
 				<h2>Naše ošetření</h2>
-				<p>Individuální přístup, profesionální péče a přirozená krása.</p>
+				<p>
+					Individuální přístup, profesionální péče a přirozená krása.
+				</p>
 			</header>
 			<div class="services__grid">
 				{
@@ -172,23 +275,37 @@ const legal = [
 		<!-- ===== NEON FEATURE: PEPTAXEL ===== -->
 		<section class="feature">
 			<div class="feature__inner">
-				<p class="feature__eyebrow">Akční nabídka — 3 ošetření za cenu 2</p>
+				<p class="feature__eyebrow">
+					Akční nabídka — 3 ošetření za cenu 2
+				</p>
 				<h2 class="feature__title">
 					Peptaxel: <span>přírodní</span> mikrojehličkování s peptidy
 				</h2>
 				<p class="feature__lead">
-					Mikrojehličkování s mořskou houbou a peptidy pro viditelně mladší,
-					pevnější a rozjasněnou pleť.
+					Mikrojehličkování s mořskou houbou a peptidy pro viditelně
+					mladší, pevnější a rozjasněnou pleť.
 				</p>
 				<dl class="feature__price">
-					<div><dt>Běžná cena</dt><dd class="is-strike">{peptaxel.priceRegular}</dd></div>
-					<div><dt>Balíček 3 ošetření</dt><dd class="is-accent">{peptaxel.pricePackage}</dd></div>
+					<div>
+						<dt>Běžná cena</dt><dd class="is-strike">
+							{peptaxel.priceRegular}
+						</dd>
+					</div>
+					<div>
+						<dt>Balíček 3 ošetření</dt><dd class="is-accent">
+							{peptaxel.pricePackage}
+						</dd>
+					</div>
 					<div><dt>Ušetříte</dt><dd>{peptaxel.saving}</dd></div>
 				</dl>
 				<a href="#" class="feature__cta">Chci využít akční nabídku</a>
 			</div>
 			<figure class="feature__media">
-				<img src={peptaxel.image} alt="PEPTAXEL ošetření" loading="lazy" />
+				<img
+					src={peptaxel.image}
+					alt="PEPTAXEL ošetření"
+					loading="lazy"
+				/>
 			</figure>
 		</section>
 
@@ -209,7 +326,13 @@ const legal = [
 		<footer class="site-footer">
 			<div class="site-footer__top">
 				<div class="site-footer__col">
-					<img class="site-footer__logo" src={brand.logo} alt={contact.name} width="1081" height="302" />
+					<img
+						class="site-footer__logo"
+						src={brand.logo}
+						alt={contact.name}
+						width="1081"
+						height="302"
+					/>
 					<span class="site-footer__hours">{contact.hours}</span>
 				</div>
 				<address class="site-footer__col">
@@ -217,9 +340,18 @@ const legal = [
 					<a href={`mailto:${contact.email}`}>{contact.email}</a>
 				</address>
 				<div class="site-footer__col">
-					<a class="site-footer__phone" href={`tel:${contact.phoneHref}`}>{contact.phone}</a>
+					<a
+						class="site-footer__phone"
+						href={`tel:${contact.phoneHref}`}>{contact.phone}</a
+					>
 					<div class="site-footer__social">
-						{social.map((s) => <a href={s.url} target="_blank" rel="noopener">{s.label}</a>)}
+						{
+							social.map((s) => (
+								<a href={s.url} target="_blank" rel="noopener">
+									{s.label}
+								</a>
+							))
+						}
 					</div>
 				</div>
 			</div>
@@ -242,14 +374,23 @@ const legal = [
 				--cond: "Archivo", "Hanken Grotesk", sans-serif;
 			}
 
-			* { box-sizing: border-box; margin: 0; padding: 0; }
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
 			body {
 				background: var(--paper);
 				color: var(--ink);
 				font-family: var(--sans);
 				-webkit-font-smoothing: antialiased;
 			}
-			img { display: block; width: 100%; height: 100%; object-fit: cover; }
+			img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
 
 			/* ---------- HERO ---------- */
 			.hero {
@@ -278,10 +419,17 @@ const legal = [
 				color: var(--ink);
 				text-decoration: none;
 			}
-			.side-nav a:hover { color: var(--gold); }
+			.side-nav a:hover {
+				color: var(--gold);
+			}
 
-			.hero-portrait { overflow: hidden; background: #ddd; }
-			.hero-portrait img { filter: grayscale(1) contrast(1.05); }
+			.hero-portrait {
+				overflow: hidden;
+				background: #ddd;
+			}
+			.hero-portrait img {
+				filter: grayscale(1) contrast(1.05);
+			}
 
 			.hero-brand {
 				background: var(--gold);
@@ -331,9 +479,14 @@ const legal = [
 				text-transform: uppercase;
 				font-size: 0.72rem;
 				text-decoration: none;
-				transition: background 0.2s ease, color 0.2s ease;
+				transition:
+					background 0.2s ease,
+					color 0.2s ease;
 			}
-			.hero-brand__cta:hover { background: var(--ink); color: var(--gold); }
+			.hero-brand__cta:hover {
+				background: var(--ink);
+				color: var(--gold);
+			}
 
 			/* ---------- GALLERY STRIP ---------- */
 			.strip {
@@ -347,15 +500,24 @@ const legal = [
 				overflow: hidden;
 				background: #ccc;
 			}
-			.strip__item--tall { aspect-ratio: 3 / 4.2; }
+			.strip__item--tall {
+				aspect-ratio: 3 / 4.2;
+			}
 			.strip__item img {
 				filter: grayscale(1);
-				transition: filter 0.4s ease, transform 0.6s ease;
+				transition:
+					filter 0.4s ease,
+					transform 0.6s ease;
 			}
-			.strip__item:hover img { filter: grayscale(0); transform: scale(1.04); }
+			.strip__item:hover img {
+				filter: grayscale(0);
+				transform: scale(1.04);
+			}
 			.strip__item figcaption {
 				position: absolute;
-				left: 0; right: 0; bottom: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
 				padding: 0.6rem 0.8rem;
 				font-size: 0.72rem;
 				letter-spacing: 0.04em;
@@ -364,7 +526,9 @@ const legal = [
 				opacity: 0;
 				transition: opacity 0.3s ease;
 			}
-			.strip__item:hover figcaption { opacity: 1; }
+			.strip__item:hover figcaption {
+				opacity: 1;
+			}
 
 			.categories {
 				display: flex;
@@ -381,17 +545,28 @@ const legal = [
 				color: var(--ink);
 				text-decoration: none;
 			}
-			.categories__item:hover { color: var(--gold); }
+			.categories__item:hover {
+				color: var(--gold);
+			}
 
 			/* ---------- SERVICES ---------- */
-			.services { padding: clamp(3rem, 7vw, 6rem) clamp(1.5rem, 6vw, 5rem); }
-			.services__head { text-align: center; max-width: 50ch; margin: 0 auto 3rem; }
+			.services {
+				padding: clamp(3rem, 7vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+			}
+			.services__head {
+				text-align: center;
+				max-width: 50ch;
+				margin: 0 auto 3rem;
+			}
 			.services__head h2 {
 				font-family: var(--serif);
 				font-weight: 500;
 				font-size: clamp(2rem, 5vw, 3.4rem);
 			}
-			.services__head p { color: var(--muted); margin-top: 0.8rem; }
+			.services__head p {
+				color: var(--muted);
+				margin-top: 0.8rem;
+			}
 			.services__grid {
 				display: grid;
 				grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -405,16 +580,25 @@ const legal = [
 			}
 			.card__media img {
 				filter: grayscale(0.3);
-				transition: filter 0.4s ease, transform 0.6s ease;
+				transition:
+					filter 0.4s ease,
+					transform 0.6s ease;
 			}
-			.card:hover .card__media img { filter: grayscale(0); transform: scale(1.05); }
+			.card:hover .card__media img {
+				filter: grayscale(0);
+				transform: scale(1.05);
+			}
 			.card__title {
 				font-family: var(--serif);
 				font-weight: 500;
 				font-size: 1.25rem;
 				margin-bottom: 0.4rem;
 			}
-			.card__desc { color: var(--muted); font-size: 0.92rem; line-height: 1.55; }
+			.card__desc {
+				color: var(--muted);
+				font-size: 0.92rem;
+				line-height: 1.55;
+			}
 
 			/* ---------- FEATURE: PEPTAXEL ---------- */
 			.feature {
@@ -428,7 +612,9 @@ const legal = [
 				overflow: hidden;
 				padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 6vw, 5rem);
 			}
-			.feature__inner { position: relative; }
+			.feature__inner {
+				position: relative;
+			}
 			.feature__eyebrow {
 				text-transform: uppercase;
 				letter-spacing: 0.26em;
@@ -444,7 +630,10 @@ const legal = [
 				line-height: 1.04;
 				letter-spacing: -0.01em;
 			}
-			.feature__title span { font-style: italic; color: var(--gold); }
+			.feature__title span {
+				font-style: italic;
+				color: var(--gold);
+			}
 			.feature__lead {
 				font-size: clamp(1rem, 1.4vw, 1.15rem);
 				line-height: 1.65;
@@ -467,9 +656,17 @@ const legal = [
 				color: #8f8a80;
 				margin-bottom: 0.4rem;
 			}
-			.feature__price dd { font-family: var(--serif); font-size: 1.7rem; }
-			.feature__price .is-strike { text-decoration: line-through; color: #8f8a80; }
-			.feature__price .is-accent { color: var(--gold); }
+			.feature__price dd {
+				font-family: var(--serif);
+				font-size: 1.7rem;
+			}
+			.feature__price .is-strike {
+				text-decoration: line-through;
+				color: #8f8a80;
+			}
+			.feature__price .is-accent {
+				color: var(--gold);
+			}
 			.feature__cta {
 				display: inline-block;
 				margin-top: 2.4rem;
@@ -482,9 +679,14 @@ const legal = [
 				text-transform: uppercase;
 				font-size: 0.78rem;
 				text-decoration: none;
-				transition: background 0.2s ease, color 0.2s ease;
+				transition:
+					background 0.2s ease,
+					color 0.2s ease;
 			}
-			.feature__cta:hover { background: transparent; color: var(--gold); }
+			.feature__cta:hover {
+				background: transparent;
+				color: var(--gold);
+			}
 			.feature__media {
 				position: relative;
 				aspect-ratio: 4 / 5;
@@ -497,7 +699,9 @@ const legal = [
 				border: 1px solid rgba(198, 160, 44, 0.5);
 				pointer-events: none;
 			}
-			.feature__media img { filter: grayscale(0.15); }
+			.feature__media img {
+				filter: grayscale(0.15);
+			}
 
 			/* ---------- VALUES ---------- */
 			.values {
@@ -509,7 +713,9 @@ const legal = [
 				padding: clamp(1.6rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem);
 				border-right: 1px solid var(--border, #e0e0e0);
 			}
-			.values__item:last-child { border-right: 0; }
+			.values__item:last-child {
+				border-right: 0;
+			}
 			.values__num {
 				font-family: var(--cond);
 				font-weight: 700;
@@ -539,11 +745,13 @@ const legal = [
 				background: #ddd;
 			}
 			.collab__media img {
-				object-position: center top;
+				object-position: 15% top;
 				filter: grayscale(1);
 				transition: filter 0.5s ease;
 			}
-			.collab:hover .collab__media img { filter: grayscale(0); }
+			.collab:hover .collab__media img {
+				filter: grayscale(0);
+			}
 			.collab__eyebrow {
 				text-transform: uppercase;
 				letter-spacing: 0.28em;
@@ -564,7 +772,11 @@ const legal = [
 				color: var(--muted);
 				margin-top: 0.5rem;
 			}
-			.collab__desc { margin-top: 1.4rem; max-width: 52ch; line-height: 1.65; }
+			.collab__desc {
+				margin-top: 1.4rem;
+				max-width: 52ch;
+				line-height: 1.65;
+			}
 
 			/* ---------- FOOTER ---------- */
 			.site-footer {
@@ -578,7 +790,12 @@ const legal = [
 				gap: 1.5rem 2rem;
 				padding: 2.4rem clamp(1.5rem, 5vw, 4rem);
 			}
-			.site-footer__col { display: flex; flex-direction: column; gap: 0.35rem; font-style: normal; }
+			.site-footer__col {
+				display: flex;
+				flex-direction: column;
+				gap: 0.35rem;
+				font-style: normal;
+			}
 			.site-footer__logo {
 				width: auto;
 				height: auto;
@@ -587,17 +804,31 @@ const legal = [
 				object-fit: contain;
 				margin-bottom: 0.4rem;
 			}
-			.site-footer__hours, .site-footer__col > span { color: var(--muted); }
-			.site-footer__col a { color: var(--ink); text-decoration: none; }
-			.site-footer__col a:hover { color: var(--gold); }
+			.site-footer__hours,
+			.site-footer__col > span {
+				color: var(--muted);
+			}
+			.site-footer__col a {
+				color: var(--ink);
+				text-decoration: none;
+			}
+			.site-footer__col a:hover {
+				color: var(--gold);
+			}
 			.site-footer__phone {
 				font-family: var(--serif);
 				font-size: 1.4rem;
 				color: var(--ink);
 				text-decoration: none;
 			}
-			.site-footer__phone:hover { color: var(--gold); }
-			.site-footer__social { display: flex; gap: 1rem; margin-top: 0.3rem; }
+			.site-footer__phone:hover {
+				color: var(--gold);
+			}
+			.site-footer__social {
+				display: flex;
+				gap: 1rem;
+				margin-top: 0.3rem;
+			}
 			.site-footer__social a {
 				text-transform: uppercase;
 				letter-spacing: 0.08em;
@@ -614,29 +845,62 @@ const legal = [
 				color: var(--muted);
 				font-size: 0.72rem;
 			}
-			.site-footer__legal { display: flex; gap: 1.4rem; }
-			.site-footer__legal a { color: var(--muted); text-decoration: none; }
-			.site-footer__legal a:hover { color: var(--gold); }
+			.site-footer__legal {
+				display: flex;
+				gap: 1.4rem;
+			}
+			.site-footer__legal a {
+				color: var(--muted);
+				text-decoration: none;
+			}
+			.site-footer__legal a:hover {
+				color: var(--gold);
+			}
 
 			/* ---------- RESPONSIVE ---------- */
 			@media (max-width: 860px) {
-				.feature { grid-template-columns: 1fr; }
-				.feature__media { aspect-ratio: 16 / 9; }
-				.values { grid-template-columns: repeat(2, 1fr); }
-				.values__item:nth-child(2) { border-right: 0; }
-				.collab { grid-template-columns: 1fr; }
-				.collab__media { aspect-ratio: 16 / 10; max-height: 360px; }
+				.feature {
+					grid-template-columns: 1fr;
+				}
+				.feature__media {
+					aspect-ratio: 16 / 9;
+				}
+				.values {
+					grid-template-columns: repeat(2, 1fr);
+				}
+				.values__item:nth-child(2) {
+					border-right: 0;
+				}
+				.collab {
+					grid-template-columns: 1fr;
+				}
+				.collab__media {
+					aspect-ratio: 16 / 10;
+					max-height: 360px;
+				}
 			}
 			@media (max-width: 760px) {
 				.hero {
 					grid-template-columns: 36px 1fr;
 					grid-template-rows: auto auto;
 				}
-				.hero-portrait { grid-column: 2; min-height: 320px; }
-				.hero-brand { grid-column: 1 / -1; }
-				.side-nav { grid-row: 1; }
-				.strip { grid-template-columns: repeat(2, 1fr); }
-				.strip__item, .strip__item--tall { aspect-ratio: 3 / 3.6; }
+				.hero-portrait {
+					grid-column: 2;
+					min-height: 320px;
+				}
+				.hero-brand {
+					grid-column: 1 / -1;
+				}
+				.side-nav {
+					grid-row: 1;
+				}
+				.strip {
+					grid-template-columns: repeat(2, 1fr);
+				}
+				.strip__item,
+				.strip__item--tall {
+					aspect-ratio: 3 / 3.6;
+				}
 			}
 		</style>
 	</body>
