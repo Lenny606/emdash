@@ -1,0 +1,335 @@
+---
+// Prestige Beauty Salon — redesign reproduction of the Stitch screen
+// (project 3154449087977601884 / screen e7c06097…).
+//
+// Self-contained editorial landing page. Server-rendered.
+// Photography uses grayscale picsum.photos placeholders — swap these for
+// real salon imagery (or wire to an EmDash collection) before going live.
+
+const sideNav = ["Služby", "Ošetření", "Galerie", "O nás", "Kontakt"];
+
+const gallery = [
+	{ seed: "prestige-skin", alt: "Detail péče o pleť", tall: false },
+	{ seed: "prestige-towel", alt: "Portrét s ručníkem", tall: true },
+	{ seed: "prestige-bw", alt: "Černobílý portrét", tall: false },
+	{ seed: "prestige-profile", alt: "Profil modelky", tall: true },
+];
+
+const categories = ["Ošetření", "Hledá", "Autenticky", "Elegance", "Intimní"];
+
+const img = (seed: string, w: number, h: number) =>
+	`https://picsum.photos/seed/${seed}/${w}/${h}?grayscale`;
+---
+
+<!doctype html>
+<html lang="cs">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="robots" content="noindex, nofollow" />
+		<title>Prestige Beauty Salon — Prague's Premier Salon</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Archivo:wght@600..900&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<!-- ===== HERO ===== -->
+		<header class="hero">
+			<nav class="side-nav" aria-label="Hlavní navigace">
+				<ul>
+					{sideNav.map((item) => <li><a href="#">{item}</a></li>)}
+				</ul>
+			</nav>
+
+			<figure class="hero-portrait">
+				<img src={img("prestige-hero", 900, 1200)} alt="Modelka — Prestige Beauty Salon" />
+			</figure>
+
+			<div class="hero-brand">
+				<h1>Prestige</h1>
+				<p class="hero-brand__sub">Beauty Salon</p>
+				<p class="hero-brand__tag">Prague's Premier Salon</p>
+			</div>
+		</header>
+
+		<!-- ===== EDITORIAL GALLERY STRIP ===== -->
+		<section class="strip" aria-label="Galerie ošetření">
+			{
+				gallery.map((g) => (
+					<figure class={g.tall ? "strip__item strip__item--tall" : "strip__item"}>
+						<img src={img(g.seed, 600, g.tall ? 820 : 700)} alt={g.alt} />
+					</figure>
+				))
+			}
+		</section>
+
+		<nav class="categories" aria-label="Kategorie">
+			{categories.map((c) => <a href="#" class="categories__item">{c}</a>)}
+		</nav>
+
+		<!-- ===== NEON FEATURE ===== -->
+		<section class="feature">
+			<div class="feature__glow" aria-hidden="true"></div>
+			<div class="feature__inner">
+				<p class="feature__eyebrow">Novinka v salonu</p>
+				<h2 class="feature__title">
+					Peptaxel: <span>Přírodní</span> mikrojehličkování s peptidy
+				</h2>
+				<p class="feature__lead">
+					Regenerace pleti novou generací peptidového séra. Viditelně pevnější,
+					rozjasněná a hydratovaná pleť už po první návštěvě.
+				</p>
+				<a href="#" class="feature__cta">Objednat termín</a>
+			</div>
+			<div class="feature__products" aria-hidden="true">
+				<span></span><span></span><span></span>
+			</div>
+		</section>
+
+		<!-- ===== FOOTER ===== -->
+		<footer class="site-footer">
+			<span class="site-footer__name">Prestige Beauty Salon</span>
+			<span class="site-footer__addr">Pařížská 12, 110 00 Praha 1</span>
+			<a class="site-footer__phone" href="tel:+420212345678">+420 212 345 678</a>
+		</footer>
+
+		<style>
+			:root {
+				--ink: #111111;
+				--paper: #ffffff;
+				--gold: #c6a02c;
+				--muted: #6b6b6b;
+				--serif: "Bodoni Moda", Georgia, serif;
+				--sans: "Hanken Grotesk", system-ui, sans-serif;
+				--cond: "Archivo", "Hanken Grotesk", sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				background: var(--paper);
+				color: var(--ink);
+				font-family: var(--sans);
+				-webkit-font-smoothing: antialiased;
+			}
+			img {
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			/* ---------- HERO ---------- */
+			.hero {
+				display: grid;
+				grid-template-columns: 48px 1fr 1fr;
+				min-height: clamp(440px, 60vw, 680px);
+			}
+			.side-nav {
+				border-right: 1px solid var(--ink);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.side-nav ul {
+				list-style: none;
+				writing-mode: vertical-rl;
+				transform: rotate(180deg);
+				display: flex;
+				gap: 2rem;
+			}
+			.side-nav a {
+				font-family: var(--sans);
+				font-size: 0.7rem;
+				font-weight: 600;
+				letter-spacing: 0.22em;
+				text-transform: uppercase;
+				color: var(--ink);
+				text-decoration: none;
+			}
+			.side-nav a:hover { color: var(--gold); }
+
+			.hero-portrait {
+				overflow: hidden;
+				background: #ddd;
+			}
+			.hero-portrait img { filter: grayscale(1) contrast(1.05); }
+
+			.hero-brand {
+				background: var(--gold);
+				color: var(--ink);
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				padding: clamp(1.5rem, 5vw, 4rem);
+			}
+			.hero-brand h1 {
+				font-family: var(--serif);
+				font-weight: 500;
+				font-size: clamp(3rem, 9vw, 7rem);
+				line-height: 0.9;
+				letter-spacing: -0.01em;
+			}
+			.hero-brand__sub {
+				font-family: var(--serif);
+				font-size: clamp(1rem, 2.4vw, 1.7rem);
+				letter-spacing: 0.5em;
+				text-transform: uppercase;
+				margin-top: 0.6rem;
+			}
+			.hero-brand__tag {
+				font-family: var(--serif);
+				font-style: italic;
+				font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+				margin-top: 1.2rem;
+				opacity: 0.85;
+			}
+
+			/* ---------- GALLERY STRIP ---------- */
+			.strip {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				align-items: start;
+			}
+			.strip__item {
+				aspect-ratio: 3 / 3.4;
+				overflow: hidden;
+				background: #ccc;
+			}
+			.strip__item--tall { aspect-ratio: 3 / 4.2; }
+			.strip__item img {
+				filter: grayscale(1);
+				transition: filter 0.4s ease, transform 0.6s ease;
+			}
+			.strip__item:hover img {
+				filter: grayscale(0);
+				transform: scale(1.04);
+			}
+
+			.categories {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-around;
+				gap: 1rem 2rem;
+				padding: 1.6rem clamp(1rem, 4vw, 3rem);
+				border-top: 1px solid var(--ink);
+				border-bottom: 1px solid var(--ink);
+			}
+			.categories__item {
+				font-family: var(--serif);
+				font-size: clamp(1rem, 2vw, 1.5rem);
+				color: var(--ink);
+				text-decoration: none;
+			}
+			.categories__item:hover { color: var(--gold); }
+
+			/* ---------- NEON FEATURE ---------- */
+			.feature {
+				position: relative;
+				background: #050505;
+				color: #fff;
+				overflow: hidden;
+				padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+			}
+			.feature__glow {
+				position: absolute;
+				inset: 0;
+				background:
+					radial-gradient(60% 50% at 12% 20%, rgba(0, 229, 255, 0.35), transparent 60%),
+					radial-gradient(55% 60% at 88% 80%, rgba(255, 0, 200, 0.4), transparent 60%);
+				filter: blur(8px);
+			}
+			.feature__inner {
+				position: relative;
+				max-width: 60ch;
+			}
+			.feature__eyebrow {
+				font-family: var(--sans);
+				text-transform: uppercase;
+				letter-spacing: 0.3em;
+				font-size: 0.72rem;
+				color: #00e5ff;
+				margin-bottom: 1.2rem;
+			}
+			.feature__title {
+				font-family: var(--cond);
+				font-weight: 800;
+				text-transform: uppercase;
+				font-size: clamp(2.4rem, 8vw, 5.5rem);
+				line-height: 0.92;
+				letter-spacing: -0.01em;
+			}
+			.feature__title span { color: #ff2fce; }
+			.feature__lead {
+				font-family: var(--sans);
+				font-size: clamp(1rem, 1.4vw, 1.15rem);
+				line-height: 1.6;
+				color: #cfcfcf;
+				margin-top: 1.6rem;
+			}
+			.feature__cta {
+				display: inline-block;
+				margin-top: 2rem;
+				padding: 0.85rem 2.2rem;
+				border: 1px solid #fff;
+				color: #fff;
+				font-weight: 600;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				font-size: 0.8rem;
+				text-decoration: none;
+				transition: background 0.2s ease, color 0.2s ease;
+			}
+			.feature__cta:hover { background: #fff; color: #050505; }
+
+			.feature__products {
+				position: absolute;
+				right: clamp(1rem, 5vw, 4rem);
+				bottom: clamp(1rem, 4vw, 3rem);
+				display: flex;
+				gap: 1rem;
+			}
+			.feature__products span {
+				width: clamp(28px, 5vw, 52px);
+				height: clamp(70px, 12vw, 130px);
+				border-radius: 40px;
+				background: linear-gradient(160deg, rgba(255, 255, 255, 0.25), rgba(255, 47, 206, 0.35));
+				box-shadow: 0 0 24px rgba(255, 47, 206, 0.4);
+			}
+
+			/* ---------- FOOTER ---------- */
+			.site-footer {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				align-items: center;
+				gap: 0.5rem 2rem;
+				padding: 1.4rem clamp(1.5rem, 5vw, 4rem);
+				font-size: 0.8rem;
+			}
+			.site-footer__name { font-weight: 600; }
+			.site-footer__addr { color: var(--muted); }
+			.site-footer__phone { color: var(--ink); text-decoration: none; }
+			.site-footer__phone:hover { color: var(--gold); }
+
+			/* ---------- RESPONSIVE ---------- */
+			@media (max-width: 760px) {
+				.hero {
+					grid-template-columns: 36px 1fr;
+					grid-template-rows: auto auto;
+				}
+				.hero-portrait { grid-column: 2; }
+				.hero-brand { grid-column: 1 / -1; }
+				.side-nav { grid-row: 1; }
+				.strip { grid-template-columns: repeat(2, 1fr); }
+				.strip__item, .strip__item--tall { aspect-ratio: 3 / 3.6; }
+			}
+		</style>
+	</body>
+</html>
