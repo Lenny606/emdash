@@ -47,14 +47,40 @@ const peptaxel = {
 	saving: "3 700 Kč",
 };
 
+// Value propositions
+const values = [
+	"Viditelně mladší pleť",
+	"Profesionální péče",
+	"Individuální přístup",
+	"Přirozená krása",
+];
+
+// Collaboration
+const michalek = {
+	name: "Jindřich Michálek",
+	role: "Fitness trenér a nutriční poradce",
+	desc: "Spolupracujeme s Jindřichem Michálkem — propojujeme péči o pleť a tělo s individuálním tréninkem a výživovým poradenstvím pro dlouhodobé výsledky.",
+	image: `${CDN}/200000195-2527725279/image-crop-200000182-0.png?ph=cbcde18247`,
+};
+
 const contact = {
 	name: "Prestige Beauty Salon",
 	address: "Husitská 106/1, 130 00 Praha 3-Žižkov",
 	phone: "+420 799 022 333",
 	phoneHref: "+420799022333",
 	email: "info@prestigebeautysalon.cz",
-	hours: "Po–Pá 9:00–20:00 · So–Ne dle objednávek",
+	hours: "Po–Pá 9:00–20:00 · So–Ne a svátky dle objednávek",
 };
+
+const social = [
+	{ label: "Facebook", url: "https://www.facebook.com/prestigebeautysalon.cz" },
+	{ label: "Instagram", url: "https://www.instagram.com/salonprestigebeautycz" },
+];
+
+const legal = [
+	{ label: "Obchodní podmínky", url: "#" },
+	{ label: "Zásady cookies", url: "#" },
+];
 ---
 
 <!doctype html>
@@ -109,6 +135,18 @@ const contact = {
 			{categories.map((c) => <a href="#sluzby" class="categories__item">{c}</a>)}
 		</nav>
 
+		<!-- ===== VALUES ===== -->
+		<section class="values" aria-label="Proč Prestige">
+			{
+				values.map((v, i) => (
+					<div class="values__item">
+						<span class="values__num">{String(i + 1).padStart(2, "0")}</span>
+						<p class="values__text">{v}</p>
+					</div>
+				))
+			}
+		</section>
+
 		<!-- ===== SERVICES GRID ===== -->
 		<section class="services" id="sluzby">
 			<header class="services__head">
@@ -132,11 +170,10 @@ const contact = {
 
 		<!-- ===== NEON FEATURE: PEPTAXEL ===== -->
 		<section class="feature">
-			<div class="feature__glow" aria-hidden="true"></div>
 			<div class="feature__inner">
 				<p class="feature__eyebrow">Akční nabídka — 3 ošetření za cenu 2</p>
 				<h2 class="feature__title">
-					Peptaxel: <span>Přírodní</span> mikrojehličkování s peptidy
+					Peptaxel: <span>přírodní</span> mikrojehličkování s peptidy
 				</h2>
 				<p class="feature__lead">
 					Mikrojehličkování s mořskou houbou a peptidy pro viditelně mladší,
@@ -154,17 +191,43 @@ const contact = {
 			</figure>
 		</section>
 
+		<!-- ===== COLLABORATION ===== -->
+		<section class="collab">
+			<figure class="collab__media">
+				<img src={michalek.image} alt={michalek.name} loading="lazy" />
+			</figure>
+			<div class="collab__body">
+				<p class="collab__eyebrow">Spolupráce</p>
+				<h2 class="collab__name">{michalek.name}</h2>
+				<p class="collab__role">{michalek.role}</p>
+				<p class="collab__desc">{michalek.desc}</p>
+			</div>
+		</section>
+
 		<!-- ===== FOOTER ===== -->
 		<footer class="site-footer">
-			<div class="site-footer__col">
-				<span class="site-footer__name">{contact.name}</span>
-				<span class="site-footer__hours">{contact.hours}</span>
+			<div class="site-footer__top">
+				<div class="site-footer__col">
+					<span class="site-footer__name">{contact.name}</span>
+					<span class="site-footer__hours">{contact.hours}</span>
+				</div>
+				<address class="site-footer__col">
+					<span>{contact.address}</span>
+					<a href={`mailto:${contact.email}`}>{contact.email}</a>
+				</address>
+				<div class="site-footer__col">
+					<a class="site-footer__phone" href={`tel:${contact.phoneHref}`}>{contact.phone}</a>
+					<div class="site-footer__social">
+						{social.map((s) => <a href={s.url} target="_blank" rel="noopener">{s.label}</a>)}
+					</div>
+				</div>
 			</div>
-			<address class="site-footer__col">
-				<span>{contact.address}</span>
-				<a href={`mailto:${contact.email}`}>{contact.email}</a>
-			</address>
-			<a class="site-footer__phone" href={`tel:${contact.phoneHref}`}>{contact.phone}</a>
+			<div class="site-footer__bottom">
+				<span>&copy; {new Date().getFullYear()} {contact.name}</span>
+				<nav class="site-footer__legal">
+					{legal.map((l) => <a href={l.url}>{l.label}</a>)}
+				</nav>
+			</div>
 		</footer>
 
 		<style>
@@ -352,103 +415,171 @@ const contact = {
 			}
 			.card__desc { color: var(--muted); font-size: 0.92rem; line-height: 1.55; }
 
-			/* ---------- NEON FEATURE ---------- */
+			/* ---------- FEATURE: PEPTAXEL ---------- */
 			.feature {
 				position: relative;
 				display: grid;
 				grid-template-columns: 1.1fr 0.9fr;
-				gap: clamp(2rem, 5vw, 4rem);
+				gap: clamp(2rem, 5vw, 4.5rem);
 				align-items: center;
-				background: #050505;
-				color: #fff;
+				background: var(--ink);
+				color: var(--paper);
 				overflow: hidden;
 				padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 6vw, 5rem);
-			}
-			.feature__glow {
-				position: absolute;
-				inset: 0;
-				background:
-					radial-gradient(60% 50% at 12% 20%, rgba(0, 229, 255, 0.32), transparent 60%),
-					radial-gradient(55% 60% at 88% 80%, rgba(255, 0, 200, 0.38), transparent 60%);
-				filter: blur(8px);
 			}
 			.feature__inner { position: relative; }
 			.feature__eyebrow {
 				text-transform: uppercase;
-				letter-spacing: 0.24em;
+				letter-spacing: 0.26em;
 				font-size: 0.72rem;
 				font-weight: 600;
-				color: #00e5ff;
-				margin-bottom: 1.2rem;
+				color: var(--gold);
+				margin-bottom: 1.4rem;
 			}
 			.feature__title {
-				font-family: var(--cond);
-				font-weight: 800;
-				text-transform: uppercase;
-				font-size: clamp(2.2rem, 6vw, 4.6rem);
-				line-height: 0.92;
+				font-family: var(--serif);
+				font-weight: 500;
+				font-size: clamp(2rem, 5.5vw, 4rem);
+				line-height: 1.04;
 				letter-spacing: -0.01em;
 			}
-			.feature__title span { color: #ff2fce; }
+			.feature__title span { font-style: italic; color: var(--gold); }
 			.feature__lead {
 				font-size: clamp(1rem, 1.4vw, 1.15rem);
-				line-height: 1.6;
-				color: #cfcfcf;
+				line-height: 1.65;
+				color: #cfcac0;
 				margin-top: 1.6rem;
 				max-width: 48ch;
 			}
 			.feature__price {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 2rem;
-				margin-top: 2rem;
+				gap: 2.4rem;
+				margin-top: 2.2rem;
+				padding-top: 1.8rem;
+				border-top: 1px solid rgba(255, 255, 255, 0.18);
 			}
 			.feature__price dt {
 				font-size: 0.7rem;
 				text-transform: uppercase;
 				letter-spacing: 0.12em;
-				color: #9a9a9a;
-				margin-bottom: 0.3rem;
+				color: #8f8a80;
+				margin-bottom: 0.4rem;
 			}
-			.feature__price dd { font-family: var(--serif); font-size: 1.6rem; }
-			.feature__price .is-strike { text-decoration: line-through; color: #9a9a9a; }
-			.feature__price .is-accent { color: #ff2fce; }
+			.feature__price dd { font-family: var(--serif); font-size: 1.7rem; }
+			.feature__price .is-strike { text-decoration: line-through; color: #8f8a80; }
+			.feature__price .is-accent { color: var(--gold); }
 			.feature__cta {
 				display: inline-block;
-				margin-top: 2.2rem;
-				padding: 0.85rem 2.2rem;
-				border: 1px solid #fff;
-				color: #fff;
+				margin-top: 2.4rem;
+				padding: 0.9rem 2.4rem;
+				background: var(--gold);
+				border: 1px solid var(--gold);
+				color: var(--ink);
 				font-weight: 600;
 				letter-spacing: 0.08em;
 				text-transform: uppercase;
-				font-size: 0.8rem;
+				font-size: 0.78rem;
 				text-decoration: none;
 				transition: background 0.2s ease, color 0.2s ease;
 			}
-			.feature__cta:hover { background: #fff; color: #050505; }
+			.feature__cta:hover { background: transparent; color: var(--gold); }
 			.feature__media {
 				position: relative;
 				aspect-ratio: 4 / 5;
 				overflow: hidden;
-				border-radius: 4px;
-				box-shadow: 0 0 50px rgba(255, 47, 206, 0.3);
 			}
+			.feature__media::after {
+				content: "";
+				position: absolute;
+				inset: 0;
+				border: 1px solid rgba(198, 160, 44, 0.5);
+				pointer-events: none;
+			}
+			.feature__media img { filter: grayscale(0.15); }
+
+			/* ---------- VALUES ---------- */
+			.values {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				border-bottom: 1px solid var(--ink);
+			}
+			.values__item {
+				padding: clamp(1.6rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem);
+				border-right: 1px solid var(--border, #e0e0e0);
+			}
+			.values__item:last-child { border-right: 0; }
+			.values__num {
+				font-family: var(--cond);
+				font-weight: 700;
+				font-size: 0.9rem;
+				color: var(--gold);
+				letter-spacing: 0.1em;
+			}
+			.values__text {
+				font-family: var(--serif);
+				font-size: clamp(1.1rem, 2vw, 1.6rem);
+				line-height: 1.2;
+				margin-top: 0.8rem;
+			}
+
+			/* ---------- COLLABORATION ---------- */
+			.collab {
+				display: grid;
+				grid-template-columns: 0.8fr 1.2fr;
+				gap: clamp(2rem, 5vw, 4rem);
+				align-items: center;
+				padding: clamp(3rem, 7vw, 6rem) clamp(1.5rem, 6vw, 5rem);
+				background: var(--bg-secondary, #f9f9f9);
+			}
+			.collab__media {
+				aspect-ratio: 4 / 5;
+				overflow: hidden;
+				background: #ddd;
+			}
+			.collab__media img {
+				object-position: center top;
+				filter: grayscale(1);
+				transition: filter 0.5s ease;
+			}
+			.collab:hover .collab__media img { filter: grayscale(0); }
+			.collab__eyebrow {
+				text-transform: uppercase;
+				letter-spacing: 0.28em;
+				font-size: 0.7rem;
+				font-weight: 600;
+				color: var(--gold);
+				margin-bottom: 1rem;
+			}
+			.collab__name {
+				font-family: var(--serif);
+				font-weight: 500;
+				font-size: clamp(2rem, 5vw, 3.2rem);
+				line-height: 1;
+			}
+			.collab__role {
+				font-family: var(--serif);
+				font-style: italic;
+				color: var(--muted);
+				margin-top: 0.5rem;
+			}
+			.collab__desc { margin-top: 1.4rem; max-width: 52ch; line-height: 1.65; }
 
 			/* ---------- FOOTER ---------- */
 			.site-footer {
+				border-top: 1px solid var(--ink);
+				font-size: 0.82rem;
+			}
+			.site-footer__top {
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: space-between;
-				align-items: center;
-				gap: 1rem 2rem;
-				padding: 1.6rem clamp(1.5rem, 5vw, 4rem);
-				font-size: 0.82rem;
-				border-top: 1px solid var(--ink);
+				gap: 1.5rem 2rem;
+				padding: 2.4rem clamp(1.5rem, 5vw, 4rem);
 			}
-			.site-footer__col { display: flex; flex-direction: column; gap: 0.2rem; font-style: normal; }
+			.site-footer__col { display: flex; flex-direction: column; gap: 0.35rem; font-style: normal; }
 			.site-footer__name { font-weight: 600; }
-			.site-footer__hours, .site-footer__col span { color: var(--muted); }
+			.site-footer__hours, .site-footer__col > span { color: var(--muted); }
 			.site-footer__col a { color: var(--ink); text-decoration: none; }
 			.site-footer__col a:hover { color: var(--gold); }
 			.site-footer__phone {
@@ -458,11 +589,35 @@ const contact = {
 				text-decoration: none;
 			}
 			.site-footer__phone:hover { color: var(--gold); }
+			.site-footer__social { display: flex; gap: 1rem; margin-top: 0.3rem; }
+			.site-footer__social a {
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 0.72rem;
+				font-weight: 600;
+			}
+			.site-footer__bottom {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				gap: 0.5rem 2rem;
+				padding: 1rem clamp(1.5rem, 5vw, 4rem);
+				border-top: 1px solid var(--border, #e0e0e0);
+				color: var(--muted);
+				font-size: 0.72rem;
+			}
+			.site-footer__legal { display: flex; gap: 1.4rem; }
+			.site-footer__legal a { color: var(--muted); text-decoration: none; }
+			.site-footer__legal a:hover { color: var(--gold); }
 
 			/* ---------- RESPONSIVE ---------- */
 			@media (max-width: 860px) {
 				.feature { grid-template-columns: 1fr; }
 				.feature__media { aspect-ratio: 16 / 9; }
+				.values { grid-template-columns: repeat(2, 1fr); }
+				.values__item:nth-child(2) { border-right: 0; }
+				.collab { grid-template-columns: 1fr; }
+				.collab__media { aspect-ratio: 16 / 10; max-height: 360px; }
 			}
 			@media (max-width: 760px) {
 				.hero {
