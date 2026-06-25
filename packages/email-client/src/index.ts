@@ -25,6 +25,9 @@ export function emailClientPlugin(): PluginDescriptor {
 		storage: {
 			subscribers: { indexes: ["email", "createdAt"] },
 		},
+		// Block Kit settings page for editing SMTP config in the admin.
+		// The "/settings" path is handled by the `admin` route in sandbox-entry.ts.
+		adminPages: [{ path: "/settings", label: "Email (SMTP)", icon: "mail" }],
 	};
 }
 
