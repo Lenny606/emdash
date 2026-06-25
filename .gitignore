@@ -20,3 +20,6 @@ coverage/
 # Backups
 data.db.backup
 seed/seed_backup.json
+
+# Scratch files
+test-smtp.js
