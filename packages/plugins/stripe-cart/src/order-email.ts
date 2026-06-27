@@ -27,6 +27,8 @@ export interface OrderEmailData {
 	status?: string;
 	test?: boolean;
 	createdAt?: string;
+	/** Podepsaný odkaz na daňový doklad (přidá se do potvrzení zákazníkovi). */
+	invoiceUrl?: string;
 }
 
 export interface RenderedEmail {
@@ -124,9 +126,14 @@ export function renderCustomerOrderEmail(order: OrderEmailData): RenderedEmail {
 		`${itemsText(order)}\n\n` +
 		`Celkem: ${money(total(order), order.currency)}\n` +
 		(order.id ? `\nČíslo objednávky: ${order.id}\n` : "") +
+		(order.invoiceUrl ? `\nDaňový doklad: ${order.invoiceUrl}\n` : "") +
 		`\nO odeslání vás budeme informovat.`;
 
-	return { subject, text, html: htmlShell("Potvrzení objednávky", intro, order) };
+	const invoiceRow = order.invoiceUrl
+		? `<p style="margin:16px 0 0;"><a href="${esc(order.invoiceUrl)}" style="color:#635bff;">Zobrazit / stáhnout daňový doklad</a></p>`
+		: "";
+
+	return { subject, text, html: htmlShell("Potvrzení objednávky", intro, order, invoiceRow) };
 }
 
 /** New-order notification sent to the shop operator (admin). */

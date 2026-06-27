@@ -8,6 +8,7 @@ import {
 import { createPublicPageContext } from "emdash/page";
 import LiveSearch from "emdash/ui/search";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
+import { LEGAL, legalHref } from "../config/legal.ts";
 import "../styles/global.css";
 
 interface Props {
@@ -110,13 +111,34 @@ const pageCtx = createPublicPageContext({
 					</a>
 					{siteTagline && <p class="footer-tagline">{siteTagline}</p>}
 				</div>
+				<nav class="footer-legal" aria-label="Právní informace">
+					<a href={legalHref("terms")}>Obchodní podmínky</a>
+					<a href={legalHref("privacy")}>Ochrana osobních údajů</a>
+					<a href={legalHref("complaints")}>Reklamační řád</a>
+					<a href={legalHref("withdrawal")}>Odstoupení od smlouvy</a>
+				</nav>
 			</div>
 			<div class="footer-bottom">
 				<div class="footer-container">
+					<p class="footer-seller">
+						{LEGAL.seller.name} · IČO: {LEGAL.seller.ico} · {LEGAL.vatPayer ? `DIČ: ${LEGAL.seller.dic}` : "Neplátce DPH"}<br />
+						{LEGAL.seller.address} · {LEGAL.seller.email}
+					</p>
 					<p>&copy; {new Date().getFullYear()} {siteTitle}. VŠECHNA PRÁVA VYHRAZENA.</p>
 				</div>
 			</div>
 		</footer>
+
+		<div class="cookie-bar" id="cookie-bar" hidden role="dialog" aria-label="Souhlas s cookies">
+			<p class="cookie-bar__text">
+				Používáme nezbytné cookies pro fungování webu a volitelné cookies pro
+				analýzu. Více v <a href={legalHref("privacy")}>zásadách zpracování osobních údajů</a>.
+			</p>
+			<div class="cookie-bar__actions">
+				<button type="button" data-cookie="reject" class="cookie-bar__btn cookie-bar__btn--ghost">Jen nezbytné</button>
+				<button type="button" data-cookie="accept" class="cookie-bar__btn">Přijmout vše</button>
+			</div>
+		</div>
 
 		<EmDashBodyEnd page={pageCtx} />
 
@@ -142,11 +164,83 @@ const pageCtx = createPublicPageContext({
 					menuToggle.textContent = navLinks.classList.contains("active") ? "ZAVŘÍT" : "MENU";
 				});
 			}
+
+			// Cookie consent. Stored in localStorage as "accepted" | "rejected".
+			// Non-essential scripts should check window.__cookieConsent === "accepted"
+			// (or listen for the "cookie-consent" event) before loading.
+			(function () {
+				const KEY = "cookie-consent";
+				const bar = document.getElementById("cookie-bar");
+				const saved = localStorage.getItem(KEY);
+				window.__cookieConsent = saved || "pending";
+				if (!saved && bar) bar.hidden = false;
+				function choose(value) {
+					localStorage.setItem(KEY, value);
+					window.__cookieConsent = value;
+					if (bar) bar.hidden = true;
+					document.dispatchEvent(new CustomEvent("cookie-consent", { detail: value }));
+				}
+				bar?.querySelectorAll("[data-cookie]").forEach((btn) => {
+					btn.addEventListener("click", () => {
+						choose(btn.getAttribute("data-cookie") === "accept" ? "accepted" : "rejected");
+					});
+				});
+			})();
 		</script>
 	</body>
 </html>
 
 <style>
+	.footer-legal {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.25rem;
+		margin-top: 1rem;
+	}
+	.footer-legal a {
+		font-size: 0.85rem;
+		opacity: 0.85;
+	}
+	.footer-seller {
+		font-size: 0.8rem;
+		opacity: 0.7;
+		margin: 0 0 0.5rem;
+		line-height: 1.5;
+	}
+	.cookie-bar {
+		position: fixed;
+		left: 1rem;
+		right: 1rem;
+		bottom: 1rem;
+		max-width: 48rem;
+		margin: 0 auto;
+		background: #1a1a1a;
+		color: #fff;
+		border-radius: 0.75rem;
+		padding: 1rem 1.25rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem 1.5rem;
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+		z-index: 1000;
+	}
+	.cookie-bar[hidden] { display: none; }
+	.cookie-bar__text { margin: 0; font-size: 0.85rem; flex: 1 1 16rem; line-height: 1.5; }
+	.cookie-bar__text a { color: #fff; text-decoration: underline; }
+	.cookie-bar__actions { display: flex; gap: 0.5rem; }
+	.cookie-bar__btn {
+		cursor: pointer;
+		border: 0;
+		border-radius: 0.4rem;
+		padding: 0.5rem 1rem;
+		font-size: 0.85rem;
+		background: #fff;
+		color: #1a1a1a;
+	}
+	.cookie-bar__btn--ghost { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); }
+
 	.logo-link img {
 		height: 48px;
 		width: auto;

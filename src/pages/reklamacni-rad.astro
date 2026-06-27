@@ -1,0 +1,25 @@
+---
+import LegalPage from "../components/LegalPage.astro";
+import { LEGAL } from "../config/legal.ts";
+
+const s = LEGAL.seller;
+---
+
+<LegalPage title="Reklamační řád" description="Postup uplatnění práv z vadného plnění.">
+	<h2>1. Obecná ustanovení</h2>
+	<p>PLACEHOLDER — rozsah odpovědnosti prodávajícího za vady, zákonná záruka pro spotřebitele.</p>
+
+	<h2>2. Uplatnění reklamace</h2>
+	<p>Reklamaci uplatněte u prodávajícího:</p>
+	<address>
+		<strong>{s.name}</strong><br />
+		{s.address}<br />
+		E-mail: {s.email} · Tel.: {s.phone}
+	</address>
+
+	<h2>3. Lhůta pro vyřízení</h2>
+	<p>PLACEHOLDER — reklamace bude vyřízena bez zbytečného odkladu, nejpozději do 30 dnů.</p>
+
+	<h2>4. Vyřízení reklamace</h2>
+	<p>PLACEHOLDER — způsoby vyřízení (oprava, výměna, sleva, odstoupení), náklady na dopravu.</p>
+</LegalPage>

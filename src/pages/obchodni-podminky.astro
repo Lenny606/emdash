@@ -1,0 +1,54 @@
+---
+import LegalPage from "../components/LegalPage.astro";
+import { LEGAL, legalHref } from "../config/legal.ts";
+
+const s = LEGAL.seller;
+---
+
+<LegalPage
+	title="Obchodní podmínky"
+	description="Všeobecné obchodní podmínky internetového obchodu."
+>
+	<h2>1. Úvodní ustanovení a identifikace prodávajícího</h2>
+	<p>
+		Tyto všeobecné obchodní podmínky (dále jen „obchodní podmínky") upravují
+		vzájemná práva a povinnosti mezi prodávajícím a kupujícím vzniklé na základě
+		kupní smlouvy uzavřené prostřednictvím internetového obchodu.
+	</p>
+	<address>
+		<strong>{s.name}</strong><br />
+		{s.address}<br />
+		IČO: {s.ico}{LEGAL.vatPayer ? <span> · DIČ: {s.dic}</span> : <span> · Neplátce DPH</span>}<br />
+		E-mail: {s.email} · Tel.: {s.phone}
+	</address>
+
+	<h2>2. Objednávka a uzavření kupní smlouvy</h2>
+	<p>PLACEHOLDER — popis objednávkového procesu, potvrzení objednávky, okamžik uzavření smlouvy.</p>
+
+	<h2>3. Cena zboží a platební podmínky</h2>
+	<p>PLACEHOLDER — ceny {LEGAL.vatPayer ? "jsou uvedeny včetně DPH" : "jsou konečné (prodávající není plátcem DPH)"}, způsoby platby, splatnost.</p>
+
+	<h2>4. Dodací podmínky</h2>
+	<p>PLACEHOLDER — způsoby a ceny dopravy, dodací lhůty, převzetí zboží.</p>
+
+	<h2>5. Odstoupení od smlouvy</h2>
+	<p>
+		Kupující spotřebitel má právo odstoupit od smlouvy ve lhůtě 14 dnů. Podrobnosti
+		a formulář najdete na stránce <a href={legalHref("withdrawal")}>Odstoupení od smlouvy</a>.
+	</p>
+
+	<h2>6. Práva z vadného plnění (reklamace)</h2>
+	<p>
+		Postup uplatnění reklamace upravuje <a href={legalHref("complaints")}>Reklamační řád</a>.
+	</p>
+
+	<h2>7. Ochrana osobních údajů</h2>
+	<p>
+		Zpracování osobních údajů popisují <a href={legalHref("privacy")}>Zásady zpracování osobních údajů</a>.
+	</p>
+
+	<h2>8. Závěrečná ustanovení</h2>
+	<p>PLACEHOLDER — řešení sporů, mimosoudní řešení (ČOI), účinnost podmínek.</p>
+
+	<p><small>Verze podmínek: {LEGAL.termsVersion}</small></p>
+</LegalPage>

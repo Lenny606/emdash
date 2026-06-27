@@ -1,0 +1,31 @@
+---
+// Daňový doklad. Data + vykreslení řeší plugin stripe-cart (route `invoice`),
+// který ověří podepsaný token (?t=) a vrátí hotové HTML dokladu. Tady ho jen
+// proxyujeme jako samostatnou (tisknutelnou) stránku.
+const id = Astro.params.id ?? "";
+const token = Astro.url.searchParams.get("t") ?? "";
+
+const apiUrl = new URL("/_emdash/api/plugins/stripe-cart/invoice", Astro.url.origin);
+apiUrl.searchParams.set("id", id);
+apiUrl.searchParams.set("t", token);
+
+let html: string | undefined;
+let error = "Doklad není dostupný.";
+try {
+	const res = await fetch(apiUrl);
+	const json = await res.json().catch(() => ({}));
+	html = json?.data?.html;
+	if (json?.data?.error) error = String(json.data.error);
+} catch {
+	error = "Doklad se nepodařilo načíst.";
+}
+
+if (!html) {
+	return new Response(error, {
+		status: 404,
+		headers: { "content-type": "text/plain; charset=utf-8" },
+	});
+}
+
+return new Response(html, { headers: { "content-type": "text/html; charset=utf-8" } });
+---

@@ -1,0 +1,37 @@
+---
+import LegalPage from "../components/LegalPage.astro";
+import { LEGAL } from "../config/legal.ts";
+
+const s = LEGAL.seller;
+---
+
+<LegalPage
+	title="Ochrana osobních údajů"
+	description="Zásady zpracování osobních údajů (GDPR)."
+>
+	<h2>1. Správce osobních údajů</h2>
+	<address>
+		<strong>{s.name}</strong><br />
+		{s.address}<br />
+		IČO: {s.ico}<br />
+		E-mail: {s.email} · Tel.: {s.phone}
+	</address>
+
+	<h2>2. Jaké údaje zpracováváme</h2>
+	<p>PLACEHOLDER — identifikační a kontaktní údaje (jméno, adresa, e-mail, telefon), údaje o objednávkách a platbách.</p>
+
+	<h2>3. Účel a právní základ zpracování</h2>
+	<p>PLACEHOLDER — plnění kupní smlouvy, plnění právních povinností (účetnictví), oprávněný zájem, případně souhlas.</p>
+
+	<h2>4. Doba uchování</h2>
+	<p>PLACEHOLDER — po dobu nezbytnou k plnění smlouvy a dle zákonných lhůt (např. účetní doklady).</p>
+
+	<h2>5. Příjemci a zpracovatelé</h2>
+	<p>PLACEHOLDER — platební brána (Stripe), poskytovatel e-mailu, dopravce, hosting.</p>
+
+	<h2>6. Vaše práva</h2>
+	<p>PLACEHOLDER — právo na přístup, opravu, výmaz, omezení, přenositelnost, námitku a podání stížnosti u ÚOOÚ.</p>
+
+	<h2>7. Cookies</h2>
+	<p>PLACEHOLDER — používání nezbytných a volitelných cookies; nastavení lze změnit v cookie liště.</p>
+</LegalPage>

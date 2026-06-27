@@ -1,0 +1,47 @@
+---
+import LegalPage from "../components/LegalPage.astro";
+import { LEGAL } from "../config/legal.ts";
+
+const s = LEGAL.seller;
+---
+
+<LegalPage
+	title="Odstoupení od smlouvy"
+	description="Poučení o právu na odstoupení od smlouvy do 14 dnů a vzorový formulář."
+>
+	<h2>Poučení o právu odstoupit od smlouvy</h2>
+	<p>
+		Máte právo odstoupit od smlouvy bez udání důvodu ve lhůtě 14 dnů ode dne převzetí
+		zboží. Pro odstoupení nás kontaktujte na {s.email} nebo využijte níže uvedený formulář.
+	</p>
+	<p>PLACEHOLDER — důsledky odstoupení, vrácení peněz, náklady na vrácení zboží, výjimky.</p>
+
+	<h2>Vzorový formulář pro odstoupení od smlouvy</h2>
+	<div class="withdrawal-form">
+		<p>Adresát:</p>
+		<address>
+			<strong>{s.name}</strong><br />
+			{s.address}<br />
+			E-mail: {s.email}
+		</address>
+		<p>
+			Oznamuji, že tímto odstupuji od smlouvy o nákupu tohoto zboží:<br />
+			……………………………………………………………………<br /><br />
+			Datum objednání / převzetí: ……………………………<br />
+			Jméno a příjmení spotřebitele: ……………………………<br />
+			Adresa spotřebitele: ……………………………………………<br />
+			Číslo objednávky / dokladu: ……………………………<br /><br />
+			Podpis (pouze pokud je formulář zasílán v listinné podobě): ………………<br />
+			Datum: ……………………
+		</p>
+	</div>
+</LegalPage>
+
+<style>
+	.withdrawal-form {
+		border: 1px dashed #bbb;
+		border-radius: 0.5rem;
+		padding: 1rem 1.25rem;
+		background: #fafafa;
+	}
+</style>

@@ -1,0 +1,48 @@
+---
+import Base from "../layouts/Base.astro";
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<Base title={title} pageTitle={title} description={description}>
+	<article class="legal-page">
+		<div class="legal-placeholder" role="note">
+			⚠️ PLACEHOLDER — vzorová kostra dokumentu. Před zveřejněním doplň a nech
+			projít právní revizí.
+		</div>
+		<h1>{title}</h1>
+		<slot />
+	</article>
+</Base>
+
+<style>
+	.legal-page {
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 1rem;
+		line-height: 1.7;
+	}
+	.legal-placeholder {
+		background: #fff3cd;
+		color: #856404;
+		border: 1px solid #ffe69c;
+		border-radius: 0.5rem;
+		padding: 0.75rem 1rem;
+		margin-bottom: 1.5rem;
+		font-size: 0.9rem;
+	}
+	.legal-page :global(h2) {
+		margin-top: 2rem;
+	}
+	.legal-page :global(address) {
+		font-style: normal;
+		background: #f6f6f6;
+		padding: 1rem;
+		border-radius: 0.5rem;
+	}
+</style>

@@ -7,6 +7,7 @@ import {
 	renderCustomerOrderEmail,
 	type OrderEmailData,
 } from "./order-email";
+import { renderInvoiceHtml, type InvoiceConfig } from "./invoice";
 
 /**
  * Stripe cart plugin — runtime definition.
@@ -105,6 +106,8 @@ const checkoutInput = z.object({
 		)
 		.min(1, "Cart is empty"),
 	email: z.string().email().optional(),
+	// Souhlas s obchodními podmínkami a GDPR (povinný, viz checkout stránka).
+	consent: z.boolean().optional(),
 });
 
 // ---------------------------------------------------------------------------
@@ -123,6 +126,13 @@ interface OrderItem {
 	quantity: number;
 }
 
+interface OrderConsent {
+	/** Verze obchodních podmínek odsouhlasená zákazníkem. */
+	termsVersion: string;
+	/** ISO čas udělení souhlasu. */
+	consentedAt: string;
+}
+
 interface OrderRecord {
 	sessionId: string;
 	status: OrderStatus;
@@ -131,6 +141,10 @@ interface OrderRecord {
 	currency: string;
 	items: OrderItem[];
 	amountTotal?: number;
+	/** Záznam souhlasu s VOP/GDPR (důkaz). */
+	consent?: OrderConsent;
+	/** Pořadové číslo daňového dokladu, přidělené při přechodu na `paid`. */
+	invoiceNumber?: string;
 	createdAt: string;
 	updatedAt: string;
 }
@@ -204,6 +218,12 @@ async function sendOrderEmails(ctx: PluginContext, order: OrderEmailData): Promi
 	}
 	const config = await resolveConfig(ctx);
 
+	// Signed link to the customer's invoice (e-mails can't carry attachments).
+	if (order.id && !order.invoiceUrl) {
+		const inv = resolveInvoiceConfig(order.currency);
+		order.invoiceUrl = await invoiceUrlFor(order.id, config.siteOrigin, inv.tokenSecret);
+	}
+
 	if (order.email) {
 		try {
 			const mail = renderCustomerOrderEmail(order);
@@ -225,6 +245,88 @@ async function sendOrderEmails(ctx: PluginContext, order: OrderEmailData): Promi
 			ctx.log.warn("Admin order notification failed", { err: String(err), order: order.id });
 		}
 	}
+}
+
+// ---------------------------------------------------------------------------
+// Invoice (daňový doklad) — numbering, signed link, rendering.
+// Seller/VAT config comes from env (LEGAL_*) to keep the plugin sandbox
+// decoupled from src/config/legal.ts; keep the two in sync.
+// ---------------------------------------------------------------------------
+
+/** Terms version recorded with each order's consent. */
+function termsVersion(): string {
+	return readEnv("LEGAL_TERMS_VERSION") ?? "2026-01";
+}
+
+/** Resolve seller identity + VAT mode for the invoice from env. */
+function resolveInvoiceConfig(currency: string): InvoiceConfig & { tokenSecret: string } {
+	return {
+		seller: {
+			name: readEnv("LEGAL_SELLER_NAME") ?? "PLACEHOLDER s.r.o.",
+			ico: readEnv("LEGAL_SELLER_ICO") ?? "00000000",
+			dic: readEnv("LEGAL_SELLER_DIC") ?? "CZ00000000",
+			address: readEnv("LEGAL_SELLER_ADDRESS") ?? "Ulice 1, 110 00 Praha 1",
+			email: readEnv("LEGAL_SELLER_EMAIL") ?? "info@example.cz",
+			phone: readEnv("LEGAL_SELLER_PHONE") ?? "+420 000 000 000",
+			note: readEnv("LEGAL_SELLER_NOTE") ?? undefined,
+		},
+		vatPayer: (readEnv("LEGAL_VAT_PAYER") ?? "false") === "true",
+		vatRate: Number(readEnv("LEGAL_VAT_RATE") ?? "21") || 21,
+		// HMAC secret for the invoice link; falls back so dev keeps working.
+		tokenSecret:
+			readEnv("INVOICE_TOKEN_SECRET") ??
+			readEnv("STRIPE_WEBHOOK_SECRET") ??
+			readEnv("STRIPE_SECRET_KEY") ??
+			"dev-insecure-invoice-secret",
+		currency,
+	} as InvoiceConfig & { tokenSecret: string };
+}
+
+/** Next sequential invoice number like "2026-0001" (per-year counter in KV). */
+async function nextInvoiceNumber(ctx: PluginContext): Promise<string> {
+	const year = new Date().getFullYear();
+	const key = `state:invoiceSeq:${year}`;
+	const current = (await ctx.kv.get<number>(key)) ?? 0;
+	const next = current + 1;
+	await ctx.kv.set(key, next);
+	return `${year}-${String(next).padStart(4, "0")}`;
+}
+
+/** base64url(HMAC-SHA256(orderId)) — signs the public invoice link. */
+async function invoiceToken(orderId: string, secret: string): Promise<string> {
+	const enc = new TextEncoder();
+	const key = await crypto.subtle.importKey(
+		"raw",
+		enc.encode(secret),
+		{ name: "HMAC", hash: "SHA-256" },
+		false,
+		["sign"],
+	);
+	const sig = await crypto.subtle.sign("HMAC", key, enc.encode(orderId));
+	let bin = "";
+	for (const b of new Uint8Array(sig)) bin += String.fromCharCode(b);
+	return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+/** Constant-time-ish token check. */
+async function verifyInvoiceToken(orderId: string, token: string, secret: string): Promise<boolean> {
+	const expected = await invoiceToken(orderId, secret);
+	if (expected.length !== token.length) return false;
+	let diff = 0;
+	for (let i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ token.charCodeAt(i);
+	return diff === 0;
+}
+
+/** Build the absolute, signed invoice URL for a paid order. */
+async function invoiceUrlFor(
+	orderId: string,
+	siteOrigin: string | undefined,
+	secret: string,
+): Promise<string | undefined> {
+	const origin = (siteOrigin ?? "").replace(/\/$/, "");
+	if (!origin) return undefined;
+	const token = await invoiceToken(orderId, secret);
+	return `${origin}/faktura/${encodeURIComponent(orderId)}?t=${token}`;
 }
 
 /** Build the full orders page for the given filter. */
@@ -319,6 +421,13 @@ async function ordersListBlocks(ctx: PluginContext, filter: string): Promise<unk
 						{ label: "Vytvořeno", value: formatDate(data.createdAt) },
 						{ label: "Aktualizováno", value: formatDate(data.updatedAt) },
 						{ label: "Testovací", value: data.test ? "Ano" : "Ne" },
+						{ label: "Číslo dokladu", value: data.invoiceNumber ?? "—" },
+						{
+							label: "Souhlas s podmínkami",
+							value: data.consent
+								? `verze ${data.consent.termsVersion} · ${formatDate(data.consent.consentedAt)}`
+								: "—",
+						},
 					],
 				},
 				{
@@ -405,7 +514,16 @@ export default definePlugin({
 					return { error: "Chybí EMDASH_SITE_URL — nelze sestavit návratové adresy." };
 				}
 
-				const { items, email } = routeCtx.input;
+				const { items, email, consent } = routeCtx.input;
+
+				// Consent with terms/GDPR is mandatory (recorded with the order).
+				if (!consent) {
+					return { error: "Pro dokončení objednávky je nutný souhlas s obchodními podmínkami." };
+				}
+				const consentRecord: OrderConsent = {
+					termsVersion: termsVersion(),
+					consentedAt: new Date().toISOString(),
+				};
 
 				// Resolve every line item against the CMS — the price authority.
 				const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
@@ -473,6 +591,7 @@ export default definePlugin({
 				if (testMode) {
 					const sessionId = `test_${newId()}`;
 					const orderId = newId();
+					const invoiceNumber = await nextInvoiceNumber(ctx);
 					await ctx.storage.orders!.put(orderId, {
 						sessionId,
 						status: "paid",
@@ -481,6 +600,8 @@ export default definePlugin({
 						currency: config.currency,
 						items: orderItems,
 						amountTotal: orderItems.reduce((sum, i) => sum + i.unitAmount * i.quantity, 0),
+						consent: consentRecord,
+						invoiceNumber,
 						createdAt: new Date().toISOString(),
 						updatedAt: new Date().toISOString(),
 					});
@@ -517,13 +638,15 @@ export default definePlugin({
 					return { error: `Stripe: ${err instanceof Error ? err.message : String(err)}` };
 				}
 
-				// Record a pending order; the webhook flips it to `paid`.
+				// Record a pending order; the webhook flips it to `paid` and assigns
+				// the invoice number then.
 				await ctx.storage.orders!.put(newId(), {
 					sessionId: session.id,
 					status: "pending",
 					email: email ?? null,
 					currency: config.currency,
 					items: orderItems,
+					consent: consentRecord,
 					createdAt: new Date().toISOString(),
 					updatedAt: new Date().toISOString(),
 				});
@@ -575,11 +698,15 @@ export default definePlugin({
 						const wasPaid = prev.status === "paid";
 						const email = session.customer_details?.email ?? prev.email ?? null;
 						const amountTotal = session.amount_total ?? undefined;
+						// Assign the invoice number on the first transition to paid.
+						let invoiceNumber = prev.invoiceNumber;
+						if (!wasPaid && !invoiceNumber) invoiceNumber = await nextInvoiceNumber(ctx);
 						await ctx.storage.orders!.put(record.id, {
 							...prev,
 							status: "paid",
 							email,
 							amountTotal,
+							invoiceNumber,
 							updatedAt: new Date().toISOString(),
 						});
 						ctx.log.info(`Order paid: ${session.id}`, { amountTotal: session.amount_total });
@@ -602,6 +729,45 @@ export default definePlugin({
 
 				// 200 so Stripe stops retrying handled events.
 				return { received: true };
+			},
+		},
+
+		// Public: render the tax document (invoice) for a paid order, gated by an
+		// HMAC token in the URL (?id=...&t=...). Returns { html } for the Astro
+		// page at /faktura/[id] to output. Never exposes unpaid/foreign orders.
+		invoice: {
+			public: true,
+			handler: async (routeCtx: { request: Request }, ctx: PluginContext) => {
+				const url = new URL(routeCtx.request.url);
+				const id = url.searchParams.get("id") ?? "";
+				const token = url.searchParams.get("t") ?? "";
+				if (!id || !token) return { error: "Chybí identifikátor dokladu." };
+
+				const inv = resolveInvoiceConfig((await resolveConfig(ctx)).currency);
+				if (!(await verifyInvoiceToken(id, token, inv.tokenSecret))) {
+					return { error: "Neplatný odkaz na doklad." };
+				}
+
+				const order = (await ctx.storage.orders!.get(id)) as OrderRecord | null;
+				if (!order) return { error: "Doklad nenalezen." };
+				if (order.status !== "paid") {
+					return { error: "Doklad je k dispozici až po zaplacení objednávky." };
+				}
+
+				const html = renderInvoiceHtml(
+					{
+						invoiceNumber: order.invoiceNumber ?? id,
+						orderId: id,
+						createdAt: order.createdAt,
+						email: order.email,
+						currency: order.currency,
+						items: order.items,
+						amountTotal: order.amountTotal,
+						test: order.test,
+					},
+					inv,
+				);
+				return { html };
 			},
 		},
 
