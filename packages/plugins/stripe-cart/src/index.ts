@@ -29,6 +29,9 @@ export function stripeCartPlugin(): PluginDescriptor {
 		storage: {
 			orders: { indexes: ["sessionId", "status", "email", "createdAt"] },
 		},
+		// Block Kit admin page listing orders, with status changes and deletion.
+		// The "/orders" path is handled by the `admin` route in sandbox-entry.ts.
+		adminPages: [{ path: "/orders", label: "Objednávky", icon: "shopping-cart" }],
 	};
 }
 

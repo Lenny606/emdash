@@ -99,6 +99,225 @@ const checkoutInput = z.object({
 	email: z.string().email().optional(),
 });
 
+// ---------------------------------------------------------------------------
+// Admin (Block Kit) — orders list with status changes + deletion.
+// Mounted at /_emdash/admin/plugins/stripe-cart/orders (see `adminPages`).
+// ---------------------------------------------------------------------------
+
+const ORDERS_PAGE = "/orders";
+
+type OrderStatus = "pending" | "paid" | "refunded" | "cancelled";
+
+interface OrderItem {
+	productId: string;
+	title: string;
+	unitAmount: number;
+	quantity: number;
+}
+
+interface OrderRecord {
+	sessionId: string;
+	status: OrderStatus;
+	test?: boolean;
+	email?: string | null;
+	currency: string;
+	items: OrderItem[];
+	amountTotal?: number;
+	createdAt: string;
+	updatedAt: string;
+}
+
+const STATUS_LABELS: Record<OrderStatus, string> = {
+	pending: "Čeká na platbu",
+	paid: "Zaplaceno",
+	refunded: "Refundováno",
+	cancelled: "Stornováno",
+};
+
+const ALL_STATUSES: OrderStatus[] = ["pending", "paid", "refunded", "cancelled"];
+
+/** Filter tabs shown above the list. "all" maps to an unfiltered query. */
+const FILTERS: Array<{ value: string; label: string }> = [
+	{ value: "all", label: "Vše" },
+	{ value: "paid", label: "Zaplacené" },
+	{ value: "pending", label: "Čekající" },
+	{ value: "refunded", label: "Refundované" },
+	{ value: "cancelled", label: "Stornované" },
+];
+
+/** Most recent N orders rendered per view. Pagination can come later. */
+const LIST_LIMIT = 100;
+
+function isOrderStatus(v: unknown): v is OrderStatus {
+	return typeof v === "string" && (ALL_STATUSES as string[]).includes(v);
+}
+
+function normalizeFilter(v: unknown): string {
+	return typeof v === "string" && FILTERS.some((f) => f.value === v) ? v : "all";
+}
+
+/** Minor units (e.g. 59000) -> "590,00 Kč". */
+function formatMoney(minorUnits: number, currency: string): string {
+	const amount = (Number(minorUnits) || 0) / 100;
+	try {
+		return new Intl.NumberFormat("cs-CZ", {
+			style: "currency",
+			currency: currency.toUpperCase(),
+		}).format(amount);
+	} catch {
+		return `${amount.toFixed(2)} ${currency.toUpperCase()}`;
+	}
+}
+
+function formatDate(iso: string): string {
+	const d = new Date(iso);
+	return Number.isNaN(d.getTime()) ? String(iso) : d.toLocaleString("cs-CZ");
+}
+
+/** Authoritative order total: the recorded amount, else summed from items. */
+function orderTotal(order: OrderRecord): number {
+	if (typeof order.amountTotal === "number") return order.amountTotal;
+	return (order.items ?? []).reduce((sum, i) => sum + i.unitAmount * i.quantity, 0);
+}
+
+/** Build the full orders page for the given filter. */
+async function ordersListBlocks(ctx: PluginContext, filter: string): Promise<unknown[]> {
+	const orders = ctx.storage.orders!;
+	const currency = (await resolveConfig(ctx)).currency;
+
+	// Headline stats over the whole collection (independent of the filter).
+	const [totalCount, paidCount, pendingCount] = await Promise.all([
+		orders.count(),
+		orders.count({ status: "paid" }),
+		orders.count({ status: "pending" }),
+	]);
+	// No orderBy here: only single-field indexes exist, so combining a `status`
+	// filter with a `createdAt` ordering isn't supported — we sort in memory.
+	const paid = await orders.query({ where: { status: "paid" }, limit: 1000 });
+	const revenue = paid.items.reduce(
+		(sum: number, row: { data: unknown }) => sum + orderTotal(row.data as OrderRecord),
+		0,
+	);
+
+	// The filtered list itself. "all" can order by the createdAt index directly;
+	// a status filter uses the status index and is sorted newest-first in memory.
+	const result =
+		filter === "all"
+			? await orders.query({ orderBy: { createdAt: "desc" }, limit: LIST_LIMIT })
+			: await orders.query({ where: { status: filter }, limit: LIST_LIMIT });
+	const rows = (result.items as Array<{ id: string; data: OrderRecord }>)
+		.slice()
+		.sort((a, b) => (a.data.createdAt < b.data.createdAt ? 1 : -1));
+
+	const blocks: unknown[] = [
+		{ type: "header", text: "Objednávky" },
+		{
+			type: "stats",
+			items: [
+				{ label: "Objednávky", value: totalCount },
+				{ label: "Zaplacené", value: paidCount },
+				{ label: "Čekající", value: pendingCount },
+				{ label: "Obrat (zaplaceno)", value: formatMoney(revenue, currency) },
+			],
+		},
+		{
+			type: "actions",
+			elements: FILTERS.map((f) => ({
+				type: "button",
+				action_id: "filter",
+				label: f.label,
+				style: f.value === filter ? "primary" : "secondary",
+				value: { filter: f.value },
+			})),
+		},
+	];
+
+	if (rows.length === 0) {
+		blocks.push({
+			type: "banner",
+			description: "Žádné objednávky v tomto filtru.",
+			variant: "default",
+		});
+		return blocks;
+	}
+
+	for (const { id, data } of rows) {
+		const total = orderTotal(data);
+		const label =
+			`${formatDate(data.createdAt)} · ${data.email || "—"} · ` +
+			`${formatMoney(total, data.currency || currency)} · ${STATUS_LABELS[data.status] ?? data.status}` +
+			(data.test ? " · TEST" : "");
+
+		// Status buttons for every status except the current one, plus delete.
+		const statusButtons = ALL_STATUSES.filter((s) => s !== data.status).map((s) => ({
+			type: "button",
+			action_id: "set_status",
+			label: `→ ${STATUS_LABELS[s]}`,
+			style: s === "paid" ? "primary" : "secondary",
+			value: { id, status: s, filter },
+		}));
+
+		blocks.push({
+			type: "accordion",
+			label,
+			default_open: false,
+			blocks: [
+				{
+					type: "fields",
+					fields: [
+						{ label: "ID objednávky", value: id },
+						{ label: "Stripe session", value: data.sessionId ?? "—" },
+						{ label: "E-mail", value: data.email || "—" },
+						{ label: "Stav", value: STATUS_LABELS[data.status] ?? data.status },
+						{ label: "Vytvořeno", value: formatDate(data.createdAt) },
+						{ label: "Aktualizováno", value: formatDate(data.updatedAt) },
+						{ label: "Testovací", value: data.test ? "Ano" : "Ne" },
+					],
+				},
+				{
+					type: "table",
+					page_action_id: "noop",
+					empty_text: "Bez položek.",
+					columns: [
+						{ key: "title", label: "Položka" },
+						{ key: "quantity", label: "Ks", format: "number" },
+						{ key: "unit", label: "Cena/ks" },
+						{ key: "sum", label: "Celkem" },
+					],
+					rows: (data.items ?? []).map((it) => ({
+						title: it.title,
+						quantity: it.quantity,
+						unit: formatMoney(it.unitAmount, data.currency || currency),
+						sum: formatMoney(it.unitAmount * it.quantity, data.currency || currency),
+					})),
+				},
+				{
+					type: "actions",
+					elements: [
+						...statusButtons,
+						{
+							type: "button",
+							action_id: "delete_order",
+							label: "Smazat",
+							style: "danger",
+							value: { id, filter },
+							confirm: {
+								title: "Smazat objednávku?",
+								text: "Tuto akci nelze vrátit zpět.",
+								confirm: "Smazat",
+								deny: "Zrušit",
+								style: "danger",
+							},
+						},
+					],
+				},
+			],
+		});
+	}
+
+	return blocks;
+}
+
 export default definePlugin({
 	routes: {
 		// Public: storefront bootstrap (publishable key is safe to expose).
@@ -307,6 +526,76 @@ export default definePlugin({
 
 				// 200 so Stripe stops retrying handled events.
 				return { received: true };
+			},
+		},
+
+		// Block Kit admin page (/orders) — lists orders, changes their status,
+		// and deletes them. Reads/writes the plugin `orders` storage collection.
+		admin: {
+			handler: async (
+				routeCtx: { input?: unknown },
+				ctx: PluginContext,
+			): Promise<{ blocks: unknown[]; toast?: { message: string; type: string } }> => {
+				const interaction = (routeCtx.input ?? {}) as {
+					type?: string;
+					page?: string;
+					action_id?: string;
+					value?: Record<string, unknown>;
+				};
+				const orders = ctx.storage.orders!;
+
+				if (interaction.type === "page_load" && interaction.page === ORDERS_PAGE) {
+					return { blocks: await ordersListBlocks(ctx, "all") };
+				}
+
+				if (interaction.type === "block_action") {
+					const value = (interaction.value ?? {}) as Record<string, unknown>;
+					const filter = normalizeFilter(value.filter);
+
+					if (interaction.action_id === "filter") {
+						return { blocks: await ordersListBlocks(ctx, filter) };
+					}
+
+					if (interaction.action_id === "set_status") {
+						const id = typeof value.id === "string" ? value.id : "";
+						const status = value.status;
+						if (id && isOrderStatus(status)) {
+							const data = (await orders.get(id)) as OrderRecord | null;
+							if (data) {
+								await orders.put(id, {
+									...data,
+									status,
+									updatedAt: new Date().toISOString(),
+								});
+								return {
+									blocks: await ordersListBlocks(ctx, filter),
+									toast: { message: `Stav změněn na „${STATUS_LABELS[status]}".`, type: "success" },
+								};
+							}
+						}
+						return {
+							blocks: await ordersListBlocks(ctx, filter),
+							toast: { message: "Objednávku se nepodařilo aktualizovat.", type: "error" },
+						};
+					}
+
+					if (interaction.action_id === "delete_order") {
+						const id = typeof value.id === "string" ? value.id : "";
+						const deleted = id ? await orders.delete(id) : false;
+						return {
+							blocks: await ordersListBlocks(ctx, filter),
+							toast: deleted
+								? { message: "Objednávka smazána.", type: "success" }
+								: { message: "Objednávka nenalezena.", type: "error" },
+						};
+					}
+
+					// Unknown / no-op action (e.g. the item-table page action) — just
+					// re-render the current view.
+					return { blocks: await ordersListBlocks(ctx, filter) };
+				}
+
+				return { blocks: await ordersListBlocks(ctx, "all") };
 			},
 		},
 	},
