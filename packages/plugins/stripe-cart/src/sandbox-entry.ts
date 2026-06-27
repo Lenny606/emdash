@@ -2,6 +2,11 @@ import { definePlugin } from "emdash";
 import type { PluginContext } from "emdash";
 import { z } from "astro/zod";
 import Stripe from "stripe";
+import {
+	renderAdminOrderEmail,
+	renderCustomerOrderEmail,
+	type OrderEmailData,
+} from "./order-email";
 
 /**
  * Stripe cart plugin — runtime definition.
@@ -32,6 +37,8 @@ interface CartConfig {
 	siteOrigin?: string;
 	successPath: string;
 	cancelPath: string;
+	/** Recipient for new-order notifications (the shop operator). */
+	adminEmail?: string;
 }
 
 /**
@@ -64,6 +71,7 @@ async function resolveConfig(ctx: PluginContext): Promise<CartConfig> {
 		siteOrigin: (await kv("siteOrigin")) ?? readEnv("EMDASH_SITE_URL") ?? readEnv("SITE_URL"),
 		successPath: (await kv("successPath")) ?? readEnv("CART_SUCCESS_PATH") ?? "/checkout/success",
 		cancelPath: (await kv("cancelPath")) ?? readEnv("CART_CANCEL_PATH") ?? "/checkout/cancel",
+		adminEmail: (await kv("adminEmail")) ?? readEnv("CART_ADMIN_EMAIL") ?? readEnv("EMAIL_FROM"),
 	};
 }
 
@@ -178,6 +186,45 @@ function formatDate(iso: string): string {
 function orderTotal(order: OrderRecord): number {
 	if (typeof order.amountTotal === "number") return order.amountTotal;
 	return (order.items ?? []).reduce((sum, i) => sum + i.unitAmount * i.quantity, 0);
+}
+
+/**
+ * Send the order confirmation (to the customer) and a new-order notification
+ * (to the shop operator). Called once when an order becomes `paid`.
+ *
+ * Best-effort: every send is isolated in try/catch so a mail failure never
+ * breaks checkout or the Stripe webhook. With no SMTP configured the
+ * email-client plugin falls back to a JSON transport, so locally these are
+ * logged rather than delivered.
+ */
+async function sendOrderEmails(ctx: PluginContext, order: OrderEmailData): Promise<void> {
+	if (!ctx.email) {
+		ctx.log.warn("No email provider available — skipping order e-mails", { order: order.id });
+		return;
+	}
+	const config = await resolveConfig(ctx);
+
+	if (order.email) {
+		try {
+			const mail = renderCustomerOrderEmail(order);
+			await ctx.email.send({ to: order.email, ...mail });
+			ctx.log.info("Order confirmation e-mail sent", { to: order.email, order: order.id });
+		} catch (err) {
+			ctx.log.warn("Order confirmation e-mail failed", { err: String(err), order: order.id });
+		}
+	} else {
+		ctx.log.warn("Order has no customer e-mail — confirmation skipped", { order: order.id });
+	}
+
+	if (config.adminEmail) {
+		try {
+			const mail = renderAdminOrderEmail(order);
+			await ctx.email.send({ to: config.adminEmail, ...mail });
+			ctx.log.info("New-order notification sent to admin", { to: config.adminEmail, order: order.id });
+		} catch (err) {
+			ctx.log.warn("Admin order notification failed", { err: String(err), order: order.id });
+		}
+	}
 }
 
 /** Build the full orders page for the given filter. */
@@ -425,7 +472,8 @@ export default definePlugin({
 				// resolved from the CMS, so the whole flow is exercised except Stripe.
 				if (testMode) {
 					const sessionId = `test_${newId()}`;
-					await ctx.storage.orders!.put(newId(), {
+					const orderId = newId();
+					await ctx.storage.orders!.put(orderId, {
 						sessionId,
 						status: "paid",
 						test: true,
@@ -437,6 +485,16 @@ export default definePlugin({
 						updatedAt: new Date().toISOString(),
 					});
 					ctx.log.warn("CART_TEST_MODE: bypassing Stripe, simulated paid order", { sessionId });
+					await sendOrderEmails(ctx, {
+						id: orderId,
+						sessionId,
+						status: "paid",
+						test: true,
+						email: email ?? null,
+						currency: config.currency,
+						items: orderItems,
+						amountTotal: orderItems.reduce((sum, i) => sum + i.unitAmount * i.quantity, 0),
+					});
 					return {
 						url: `${origin}${config.successPath}?session_id=${sessionId}&test=1`,
 						sessionId,
@@ -511,14 +569,32 @@ export default definePlugin({
 					});
 					const record = existing.items[0];
 					if (record) {
+						const prev = record.data as OrderRecord;
+						// Only the first pending -> paid transition fires e-mails, so a
+						// retried/duplicate webhook delivery won't double-send.
+						const wasPaid = prev.status === "paid";
+						const email = session.customer_details?.email ?? prev.email ?? null;
+						const amountTotal = session.amount_total ?? undefined;
 						await ctx.storage.orders!.put(record.id, {
-							...(record.data as Record<string, unknown>),
+							...prev,
 							status: "paid",
-							email: session.customer_details?.email ?? (record.data as any).email ?? null,
-							amountTotal: session.amount_total,
+							email,
+							amountTotal,
 							updatedAt: new Date().toISOString(),
 						});
 						ctx.log.info(`Order paid: ${session.id}`, { amountTotal: session.amount_total });
+						if (!wasPaid) {
+							await sendOrderEmails(ctx, {
+								id: record.id,
+								sessionId: prev.sessionId,
+								status: "paid",
+								test: prev.test,
+								email,
+								currency: prev.currency,
+								items: prev.items,
+								amountTotal,
+							});
+						}
 					} else {
 						ctx.log.warn(`Webhook for unknown session: ${session.id}`);
 					}

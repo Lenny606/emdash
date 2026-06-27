@@ -24,7 +24,8 @@ export function stripeCartPlugin(): PluginDescriptor {
 		options: {},
 		// read:content -> look up authoritative product prices via ctx.content.get()
 		// network:fetch -> documents the outbound Stripe API access (advisory in trusted mode)
-		capabilities: ["read:content", "network:fetch"],
+		// email:send -> send order confirmation/notification via ctx.email.send()
+		capabilities: ["read:content", "network:fetch", "email:send"],
 		allowedHosts: ["api.stripe.com"],
 		storage: {
 			orders: { indexes: ["sessionId", "status", "email", "createdAt"] },
