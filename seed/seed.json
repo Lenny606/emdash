@@ -260,6 +260,11 @@
         },
         {
           "type": "custom",
+          "label": "Obchod",
+          "url": "/obchod"
+        },
+        {
+          "type": "custom",
           "label": "O projektu",
           "url": "/about"
         }
