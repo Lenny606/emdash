@@ -33,7 +33,9 @@ const formatPrice = (value: number) =>
 		<ul class="shop__grid">
 			{sorted.map((product) => (
 				<li class="product">
-					<h2 class="product__title">{product.data.title}</h2>
+					<h2 class="product__title">
+						<a href={`/obchod/${product.id}`} class="product__link">{product.data.title}</a>
+					</h2>
 					{product.data.description && (
 						<p class="product__desc">{product.data.description}</p>
 					)}
@@ -137,6 +139,8 @@ const formatPrice = (value: number) =>
 	.shop__grid { list-style: none; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
 	.product { border: 1px solid #e3e3e3; border-radius: 0.5rem; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
 	.product__title { font-size: 1.1rem; margin: 0; }
+	.product__link { transition: color 0.2s ease; }
+	.product__link:hover { color: #635bff; opacity: 1; text-decoration: underline; }
 	.product__desc { color: #666; font-size: 0.9rem; margin: 0; flex: 1; }
 	.product__row { display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; }
 	.product__price { font-weight: 700; }

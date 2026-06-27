@@ -1,0 +1,434 @@
+---
+import { getEmDashEntry, getSiteSettings, getSeoMeta } from "emdash";
+import { Image } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import { resolveStarterSiteIdentity } from "../../utils/site-identity";
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect("/404");
+
+const { entry: product, cacheHint } = await getEmDashEntry("products", slug);
+if (!product) return Astro.redirect("/404");
+
+Astro.cache.set(cacheHint);
+
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+const seo = getSeoMeta(product, {
+	siteTitle,
+	siteUrl: Astro.url.origin,
+	path: `/obchod/${slug}`,
+});
+
+const formatPrice = (value: number) =>
+	new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK" }).format(value);
+---
+
+<Base 
+	title={`${product.data.title} — ${siteTitle}`} 
+	pageTitle={product.data.title} 
+	description={product.data.description} 
+	content={{ collection: "products", id: product.data.id, slug }}
+>
+	<section class="shop-detail">
+		<div class="product-detail">
+			<div class="product-detail__media" {...product.edit.image}>
+				{product.data.image ? (
+					<Image image={product.data.image} class="product-detail__img" />
+				) : (
+					<div class="product-detail__placeholder image-placeholder">
+						<span>Žádný obrázek</span>
+					</div>
+				)}
+			</div>
+
+			<div class="product-detail__info">
+				<h1 class="product-detail__title" {...product.edit.title}>{product.data.title}</h1>
+				<div class="product-detail__price-tag" {...product.edit.price}>
+					{formatPrice(Number(product.data.price))}
+				</div>
+				{product.data.description && (
+					<p class="product-detail__desc" {...product.edit.description}>{product.data.description}</p>
+				)}
+
+				<div class="product-detail__actions">
+					<div class="qty-selector">
+						<button type="button" class="qty-btn" id="qty-dec" aria-label="Snížit množství">—</button>
+						<input type="number" id="qty-val" value="1" min="1" max="99" class="qty-input" />
+						<button type="button" class="qty-btn" id="qty-inc" aria-label="Zvýšit množství">+</button>
+					</div>
+					<button
+						type="button"
+						class="product-detail__add"
+						id="add-btn"
+						data-product-id={product.data.id}
+						data-title={product.data.title}
+						data-price={product.data.price}
+					>
+						Přidat do košíku
+					</button>
+				</div>
+
+				<div class="toast-notification" id="toast" hidden>
+					<span class="toast-message">✓ Produkt byl přidán do košíku!</span>
+				</div>
+
+				<div class="product-detail__back">
+					<a href="/obchod">← Zpět do obchodu</a>
+				</div>
+			</div>
+		</div>
+
+		<aside class="cart" data-cart hidden>
+			<h2>Košík</h2>
+			<ul class="cart__items" data-cart-items></ul>
+			<div class="cart__footer">
+				<strong>Celkem: <span data-cart-total>0 Kč</span></strong>
+				<a class="cart__checkout" href="/checkout" data-checkout>Přejít k pokladně</a>
+			</div>
+		</aside>
+	</section>
+</Base>
+
+<script>
+	type Line = { productId: string; title: string; price: number; quantity: number };
+
+	const CART_KEY = "emdash-cart";
+	const fmt = new Intl.NumberFormat("cs-CZ", { style: "currency", currency: "CZK" });
+	const $ = <T extends Element>(sel: string) => document.querySelector<T>(sel);
+
+	function loadCart(): Map<string, Line> {
+		try {
+			const raw = localStorage.getItem(CART_KEY);
+			if (!raw) return new Map();
+			const lines = JSON.parse(raw) as Line[];
+			return new Map(lines.map((l) => [l.productId, l]));
+		} catch {
+			return new Map();
+		}
+	}
+	function saveCart(cart: Map<string, Line>) {
+		localStorage.setItem(CART_KEY, JSON.stringify(Array.from(cart.values())));
+	}
+
+	const cart = loadCart();
+
+	const cartEl = $<HTMLElement>("[data-cart]");
+	const itemsEl = $<HTMLUListElement>("[data-cart-items]");
+	const totalEl = $<HTMLElement>("[data-cart-total]");
+
+	function render() {
+		if (!itemsEl || !totalEl || !cartEl) return;
+		itemsEl.innerHTML = "";
+		let total = 0;
+		for (const line of cart.values()) {
+			total += line.price * line.quantity;
+			const li = document.createElement("li");
+			li.textContent = `${line.title} × ${line.quantity} — ${fmt.format(line.price * line.quantity)}`;
+			itemsEl.appendChild(li);
+		}
+		totalEl.textContent = fmt.format(total);
+		cartEl.hidden = cart.size === 0;
+	}
+
+	// Quantity selector logic
+	const decBtn = $("#qty-dec");
+	const incBtn = $("#qty-inc");
+	const qtyInput = $<HTMLInputElement>("#qty-val");
+
+	if (decBtn && incBtn && qtyInput) {
+		decBtn.addEventListener("click", () => {
+			const val = Math.max(1, parseInt(qtyInput.value) - 1);
+			qtyInput.value = val.toString();
+		});
+		incBtn.addEventListener("click", () => {
+			const val = Math.min(99, parseInt(qtyInput.value) + 1);
+			qtyInput.value = val.toString();
+		});
+		qtyInput.addEventListener("change", () => {
+			let val = parseInt(qtyInput.value);
+			if (isNaN(val) || val < 1) val = 1;
+			if (val > 99) val = 99;
+			qtyInput.value = val.toString();
+		});
+	}
+
+	// Add to cart click logic
+	const addBtn = $<HTMLButtonElement>("#add-btn");
+	const toastEl = $("#toast");
+
+	if (addBtn) {
+		addBtn.addEventListener("click", () => {
+			const productId = addBtn.dataset.productId!;
+			const qty = qtyInput ? parseInt(qtyInput.value) : 1;
+			const existing = cart.get(productId);
+			if (existing) {
+				existing.quantity += qty;
+			} else {
+				cart.set(productId, {
+					productId,
+					title: addBtn.dataset.title ?? "Produkt",
+					price: Number(addBtn.dataset.price ?? 0),
+					quantity: qty,
+				});
+			}
+			saveCart(cart);
+			render();
+
+			// Show Toast
+			if (toastEl) {
+				toastEl.removeAttribute("hidden");
+				toastEl.classList.add("toast-notification--show");
+				setTimeout(() => {
+					toastEl.classList.remove("toast-notification--show");
+					setTimeout(() => {
+						toastEl.setAttribute("hidden", "true");
+					}, 300);
+				}, 2500);
+			}
+		});
+	}
+
+	render();
+</script>
+
+<style>
+	.shop-detail {
+		max-width: 60rem;
+		margin: 0 auto;
+		padding: 2rem 1rem;
+	}
+
+	.product-detail {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+		margin-bottom: 3rem;
+		align-items: start;
+	}
+
+	.product-detail__media {
+		border: 1px solid var(--border-color);
+		background-color: var(--bg-secondary);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+		aspect-ratio: 1;
+	}
+
+	.product-detail__img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.product-detail__placeholder {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--muted-color);
+		font-family: var(--font-body), sans-serif;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+
+	.product-detail__info {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.product-detail__title {
+		font-family: var(--font-heading), serif;
+		font-size: 2.5rem;
+		margin: 0;
+		line-height: 1.1;
+	}
+
+	.product-detail__price-tag {
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: var(--text-color);
+	}
+
+	.product-detail__desc {
+		font-family: var(--font-body), sans-serif;
+		color: var(--muted-color);
+		font-size: 1rem;
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	.product-detail__actions {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+		margin-top: 1rem;
+	}
+
+	.qty-selector {
+		display: flex;
+		border: 1px solid var(--border-primary);
+		align-items: center;
+	}
+
+	.qty-btn {
+		background: none;
+		border: none;
+		padding: 0.5rem 1rem;
+		font-size: 1rem;
+		cursor: pointer;
+		font-weight: bold;
+		color: var(--text-color);
+		transition: background-color 0.2s;
+	}
+
+	.qty-btn:hover {
+		background-color: var(--bg-secondary);
+	}
+
+	.qty-input {
+		width: 3rem;
+		text-align: center;
+		border: none;
+		border-left: 1px solid var(--border-color);
+		border-right: 1px solid var(--border-color);
+		padding: 0.5rem 0;
+		font-size: 1rem;
+		margin: 0;
+		-moz-appearance: textfield;
+		background: none;
+		color: var(--text-color);
+	}
+
+	.qty-input::-webkit-outer-spin-button,
+	.qty-input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	.product-detail__add {
+		cursor: pointer;
+		border: 0;
+		padding: 0.75rem 2rem;
+		background: var(--border-primary);
+		color: var(--bg-color);
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		font-size: 0.85rem;
+		transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+	}
+
+	.product-detail__add:hover {
+		opacity: 0.9;
+		transform: scale(1.02);
+	}
+
+	.product-detail__add:active {
+		transform: scale(0.98);
+	}
+
+	.toast-notification {
+		background-color: #2ecc71;
+		color: #ffffff;
+		padding: 0.75rem 1.25rem;
+		border-radius: 0.25rem;
+		font-family: var(--font-body), sans-serif;
+		font-weight: 600;
+		font-size: 0.9rem;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		display: inline-block;
+	}
+
+	.toast-notification--show {
+		opacity: 1;
+	}
+
+	.product-detail__back {
+		margin-top: 1rem;
+		font-family: var(--font-body), sans-serif;
+		font-size: 0.9rem;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+	}
+
+	.product-detail__back a {
+		border-bottom: 1px solid transparent;
+		padding-bottom: 0.25rem;
+	}
+
+	.product-detail__back a:hover {
+		border-bottom-color: var(--border-primary);
+		opacity: 1;
+	}
+
+	.cart {
+		position: sticky;
+		bottom: 1rem;
+		margin-top: 3rem;
+		border: 1px solid var(--border-color);
+		padding: 1.5rem;
+		background: var(--bg-secondary);
+	}
+
+	.cart h2 {
+		font-family: var(--font-heading), serif;
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.cart__items {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 1.5rem;
+		display: grid;
+		gap: 0.5rem;
+		font-family: var(--font-body), sans-serif;
+	}
+
+	.cart__items li {
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 0.25rem;
+	}
+
+	.cart__footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		font-family: var(--font-body), sans-serif;
+	}
+
+	.cart__checkout {
+		background: #635bff;
+		color: #fff;
+		border: none;
+		padding: 0.5rem 1rem;
+		text-decoration: none;
+		font-weight: bold;
+		font-size: 0.85rem;
+		transition: background-color 0.2s ease;
+	}
+
+	.cart__checkout:hover {
+		background: #5247e0;
+		opacity: 1;
+	}
+
+	@media (max-width: 768px) {
+		.product-detail {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.product-detail__title {
+			font-size: 2rem;
+		}
+	}
+</style>
